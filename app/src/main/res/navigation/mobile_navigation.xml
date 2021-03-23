@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="mz.org.selv.mobile.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_requisition"
+        android:name="mz.org.selv.mobile.ui.requisition.RequisitionFragment"
+        android:label="@string/menu_requisition"
+        tools:layout="@layout/fragment_requisition" />
+
+    <fragment
+        android:id="@+id/nav_stockmanagement"
+        android:name="mz.org.selv.mobile.ui.stockmanagement.StockManagementFragment"
+        android:label="@string/menu_stockmanagement"
+        tools:layout="@layout/fragment_stockmanagement" />
+
+    <fragment
+        android:id="@+id/nav_sync"
+        android:name="mz.org.selv.mobile.ui.sync.SyncFragment"
+        android:label="@string/menu_sync"
+        tools:layout="@layout/fragment_sync" />
+
+    <fragment
+        android:id="@+id/nav_shipment"
+        android:name="mz.org.selv.mobile.ui.shipments.ShipmentFragment"
+        android:label="@string/menu_shipment"
+        tools:layout="@layout/fragment_shipment" />
+</navigation>

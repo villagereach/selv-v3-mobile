@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">SELV - Mobile</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">SELV Mobile</string>
+    <string name="nav_header_subtitle">www.selv.org.mz</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Inicio</string>
+    <string name="menu_requisition">Requisicoes</string>
+    <string name="menu_stockmanagement">Gestao de Stock</string>
+    <string name="menu_shipment">Aviamentos</string>
+    <string name="menu_sync">Sincronizacao</string>
+
+    <string name="string_sync_metadata">Configuracoes e Metadados</string>
+    <string name="string_sync_data">Dados de Apliciacao</string>
+    <string name="string_sync_delete">Apagar tudo e Sincronizar</string>
+
+    <string name="string_receive">Entradas</string>
+    <string name="string_issue">Saidas</string>
+    <string name="string_inventory">Inventario</string>
+    <string name="string_soh">Stock Disponivel</string>
+    <string name="string_adjustments">Ajustes</string>
+
+    <!-- -->
+    <string name="string_last_sync">Ultima Sincronizacao: </string>
+
+    <!-- -->
+    <string name="string_ok">Ultima Sincronizacao: </string>
+
+
+</resources>
