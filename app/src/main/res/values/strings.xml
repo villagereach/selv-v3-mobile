@@ -29,5 +29,15 @@
     <!-- -->
     <string name="string_ok">Ultima Sincronizacao: </string>
 
+    <string name="string_product">Produto</string>
+    <string name="string_expiration_date">Data de Validade</string>
+    <string name="string_lot">Lote</string>
+    <string name="string_source">Origem</string>
+    <string name="string_destination">Destino</string>
+    <string name="string_quantity">Quantidade</string>
+    <string name="string_reason">Motivo</string>
+    <string name="string_date">Data</string>
+    <string name="string_comments">Comentarios</string>
+
 
 </resources>

@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class Database {
     public final static String DATABASE_NAME = "SELV_MOBILE";
-    public final static int  DATABASE_VERSION = 6;
+    public final static int  DATABASE_VERSION = 18;
 
     public static  class User implements BaseColumns {
 
@@ -37,11 +37,20 @@ public class Database {
     }
 
     public static  class Orderable implements BaseColumns {
-        public static String COLUMN_CODE = "code";
-        public static String COLUMN_NAME = "name";
+        public static String COLUMN_CODE = "productCode";
+        public static String COLUMN_NAME = "fullProductName";
         public static String COLUMN_UUID = "id";
         public static String TABLE_NAME = "orderable";
         public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_NAME, COLUMN_UUID};
+    }
+
+    public static  class Lot implements BaseColumns {
+        public static String COLUMN_CODE = "lotCode";
+        public static String COLUMN_EXPIRATION_DATE = "expirationDate";
+        public static String COLUMN_UUID = "id";
+        public static String COLUMN_ORDERABLE_ID = "tradeItemId";
+        public static String TABLE_NAME = "lot";
+        public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_EXPIRATION_DATE, COLUMN_UUID, COLUMN_ORDERABLE_ID};
     }
 
     public static  class ProgramOrderable implements BaseColumns {
@@ -51,11 +60,13 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID};
     }
 
-    public static  class FacilityTypeApprovedProduct implements BaseColumns {
+    public static  class FacilityTypeApprovedProductAndProgram implements BaseColumns {
         public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
         public static String COLUMN_NAME_ORDERABLE_ID = "orderableid";
-        public static String TABLE_NAME = "facility_type_approved_product";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_FACILITY_TYPE_ID};
+        public static String COLUMN_NAME_PROGRAM_ID = "programId";
+        public static String COLUMN_NAME_UUID = "id";
+        public static String TABLE_NAME = "facility_type_approved_product_program";
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID , COLUMN_NAME_UUID, COLUMN_NAME_FACILITY_TYPE_ID};
     }
 
     public static  class ProcessingPeriod implements BaseColumns {
@@ -75,7 +86,7 @@ public class Database {
         public static  String COLUMN_ACTIVE = "active";
         public static String COLUMN_DESCRIPTION = "description";
         public static String TABLE_NAME = "program";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_CODE, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_CODE, COLUMN_DESCRIPTION, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
     }
 
     public static  class Requisition implements BaseColumns {
@@ -89,9 +100,13 @@ public class Database {
         public static  String COLUMN_STATUS =  "status";
         public static  String COLUMN_LAST_SYNC =  "last_sync";
         public static  String COLUMN_ACTIVE = "active";
+        public static  String COLUMN_FACILITY_ID = "facilityid";
         public static String COLUMN_DESCRIPTION = "description";
+        public static  String COLUMN_OCCURRED_DATE = "facilityid";
+        public static String COLUMN_PROGRAM_ID = "programid";
+        public static  String COLUMN_SIGNATURE = "signature";
         public static String TABLE_NAME = "program";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_CODE, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_SIGNATURE, COLUMN_OCCURRED_DATE,COLUMN_FACILITY_ID ,COLUMN_CODE, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
     }
 
     public static  class ReasonCategory implements BaseColumns {
@@ -103,8 +118,8 @@ public class Database {
     }
 
     public static  class Reason implements BaseColumns {
-        public static String COLUMN_NAME_CATEGORY = "category";
-        public static String COLUMN_NAME_TYPE = "type";
+        public static String COLUMN_NAME_CATEGORY = "reasonCategory";
+        public static String COLUMN_NAME_TYPE = "reasonType";
         public static String COLUMN_NAME_NAME = "name";
         public static String COLUMN_NAME_UUID = "id";
         public static String TABLE_NAME = "Reason";
@@ -220,10 +235,7 @@ public class Database {
 
     public Cursor select(Class<? extends Table> table, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
         Table entity = newInstance(table);
-
-
         Cursor cursor = sqLiteDatabase.query(entity.getTableName(), entity.getColumnNames(), selection, selectionArgs, groupBy, having, orderBy);
-
         return cursor;
     }
 

@@ -39,7 +39,6 @@ public class FacilityType implements Table {
         cv.put(Database.FacilityType.COLUMN_CODE, code);
         cv.put(Database.FacilityType.COLUMN_NAME, name);
         cv.put(Database.FacilityType.COLUMN_UUID, id);
-
         return cv;
     }
 

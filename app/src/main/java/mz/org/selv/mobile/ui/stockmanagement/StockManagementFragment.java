@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.card.MaterialCardView;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.database.Database;
 
 public class StockManagementFragment extends Fragment {
 
@@ -26,24 +28,95 @@ public class StockManagementFragment extends Fragment {
                 new ViewModelProvider(this).get(StockManagementViewModel.class);
         View root = inflater.inflate(R.layout.fragment_stockmanagement, container, false);
         final MaterialCardView cvInventory = root.findViewById(R.id.cv_stockmanagement_inventory);
+        final MaterialCardView cvReceive = root.findViewById(R.id.cv_stockmanagement_receive);
+        final MaterialCardView cvIssue = root.findViewById(R.id.cv_stockmanagement_issue);
+        final MaterialCardView cvAdjustment = root.findViewById(R.id.cv_stockmanagement_adjustments);
+        final MaterialCardView cvStockOnHand = root.findViewById(R.id.cv_stockmanagement_soh);
+
 
         //onclick events
         cvInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getParentFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "inventory");
+                ProgramListFragment programListFragment = new ProgramListFragment();
+                programListFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().
-                        replace(R.id.nav_host_fragment, ProgramListFragment.class, null)
+                        replace(R.id.nav_host_fragment, programListFragment, null)
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
             }
         });
-        stockManagementViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+        cvAdjustment.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s){
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "adjustment");
+                FragmentManager fragmentManager = getParentFragmentManager();
+                ProgramListFragment programListFragment = new ProgramListFragment();
+                programListFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        replace(R.id.nav_host_fragment, programListFragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
+
+        cvIssue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "issue");
+                FragmentManager fragmentManager = getParentFragmentManager();
+                ProgramListFragment programListFragment = new ProgramListFragment();
+                programListFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        replace(R.id.nav_host_fragment, programListFragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        cvReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "receive");
+                FragmentManager fragmentManager = getParentFragmentManager();
+                ProgramListFragment programListFragment = new ProgramListFragment();
+                programListFragment.setArguments(bundle);
+                fragmentManager.beginTransaction().
+                        replace(R.id.nav_host_fragment, programListFragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        cvStockOnHand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("action", "soh");
+                ProgramListFragment programListFragment = new ProgramListFragment();
+                programListFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getParentFragmentManager();
+
+                fragmentManager.beginTransaction().
+                        replace(R.id.nav_host_fragment, programListFragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
         return root;
     }
 }

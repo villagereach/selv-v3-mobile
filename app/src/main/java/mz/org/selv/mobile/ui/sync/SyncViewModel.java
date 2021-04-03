@@ -2,6 +2,7 @@ package mz.org.selv.mobile.ui.sync;
 
 import android.app.Application;
 import android.content.Context;
+import android.telephony.emergency.EmergencyNumber;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import mz.org.selv.mobile.database.Database;
+import mz.org.selv.mobile.model.Entity;
 import mz.org.selv.mobile.service.openlmis.ReferenceDataService;
 import mz.org.selv.mobile.service.openlmis.SyncEntities;
 
@@ -37,29 +39,22 @@ public class SyncViewModel extends AndroidViewModel {
     public SyncViewModel(@NonNull Application application) {
         super(application);
     }
+    private Entity entity;
 
-    private enum Entity {
-        PROGRAM,
-        ORDERABLES,
-        FACILITY_TYPE_APPROVED_PRODUCTS,
-        FACILITY_TYPE,
-        REASON,
-        VALID_REASONS
-    }
 
-    private Map<Enum, Boolean> syncStatus = new HashMap<>();
-    private Map<Enum, JSONArray> entitiesMap = new HashMap<>();
+    private Map<Integer, Integer> syncStatus = new HashMap<>();
+    private Map<Integer, JSONArray> entitiesMap = new HashMap<>();
 
     public void sync(int type){
         switch (type){
             case 1: // sync metadata
                 syncEntities(Entity.PROGRAM, "https://test.selv.org.mz/api/programs");
                 syncEntities(Entity.ORDERABLES, "https://test.selv.org.mz/api/orderables");
+                syncEntities(Entity.LOTS, "https://test.selv.org.mz/api/lots");
                 syncEntities(Entity.FACILITY_TYPE_APPROVED_PRODUCTS, "https://test.selv.org.mz/api/facilityTypeApprovedProducts");
                 syncEntities(Entity.FACILITY_TYPE, "https://test.selv.org.mz/api/facilityTypes");
-                syncEntities(Entity.REASON, "https://test.selv.org.mz/api/programs");
-                syncEntities(Entity.VALID_REASONS, "https://test.selv.org.mz/api/programs");
-
+                syncEntities(Entity.REASON, "https://test.selv.org.mz/api/stockCardLineItemReasons");
+                syncEntities(Entity.VALID_REASONS, "https://test.selv.org.mz/api/validReasons");
                 break;
 
             case 2: // sync data
@@ -71,9 +66,9 @@ public class SyncViewModel extends AndroidViewModel {
     }
 
 
-    public void syncEntities(Enum entity, String uri){
-        System.out.println(syncStatus);
-        syncStatus.put(entity, false);
+    public void syncEntities(int entity, String uri){
+
+        syncStatus.put(entity, 0);
 
         requestQueue = Volley.newRequestQueue(getApplication().getApplicationContext());
 
@@ -81,31 +76,34 @@ public class SyncViewModel extends AndroidViewModel {
             @Override
             public void onResponse(String response) {
                 if (!response.equals(null)) {
+//                    System.out.println(response);
                     try{
                         //since sometimes we receive an array and other a an object
-                        if(entity == Entity.ORDERABLES || entity == Entity.FACILITY_TYPE_APPROVED_PRODUCTS || entity == Entity.FACILITY_TYPE){
+                        if(entity == Entity.ORDERABLES || entity == Entity.FACILITY_TYPE_APPROVED_PRODUCTS || entity == Entity.FACILITY_TYPE || entity == Entity.LOTS){
                             JSONObject jsonResponse = new JSONObject(response);
-                            syncStatus.put(entity, true);
+                            syncStatus.put(entity, 1);
                             entitiesMap.put(entity, jsonResponse.getJSONArray("content"));
                             saveEntities();
 
                         } else if(entity == Entity.PROGRAM){
                             JSONArray jsonResponse = new JSONArray(response);
-                            syncStatus.put(entity, true);
+                            syncStatus.put(entity, 1);
                             entitiesMap.put(entity, jsonResponse);
                             saveEntities();
                         } else {
                             JSONArray jsonResponse = new JSONArray(response);
-                            syncStatus.put(entity, true);
+                            syncStatus.put(entity, 1);
                             entitiesMap.put(entity, jsonResponse);
                             saveEntities();
                         }
                         //       progressDialog.dismiss();
                     } catch (JSONException ex){
+                        syncStatus.put(entity, -1);
                         ex.printStackTrace();
                     }
                 } else {
-                    System.out.println("Empty...");
+                    syncStatus.put(entity, -1);
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -120,7 +118,7 @@ public class SyncViewModel extends AndroidViewModel {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 //String credentials = String.format("%s:%s", "admin", "password");
-                String auth = "Bearer 53fb48d7-3ad4-4766-9acc-efa25cff5080";
+                String auth = "Bearer d30c7a48-de23-4f49-81e9-8b639833b37f";
                 //String auth = "Bearer 9f81cba6-0462-42e7-8e32-9fbbd2941b57";
                 params.put("Authorization", auth);
                 return params;
@@ -139,18 +137,14 @@ public class SyncViewModel extends AndroidViewModel {
     }
 
     public int saveEntities(){
-
-        System.out.println(syncStatus);
-        if(!syncStatus.containsValue(false)){
-            System.out.println("finished");
-            for(Map.Entry<Enum, JSONArray> entry: entitiesMap.entrySet()){
-                System.out.println("working....");
+        if(!(syncStatus.containsValue(-1) || syncStatus.containsValue(0))){
+            SyncEntities syncEntities = new SyncEntities(getApplication());
+            for(Map.Entry<Integer, JSONArray> entry: entitiesMap.entrySet()){
+                syncEntities.saveEntities(entry.getKey(), entry.getValue());
             }
         } else {
             System.out.println("not finished");
         }
-       // SyncEntities syncEntities = new SyncEntities(getApplication());
-      //  syncEntities.saveEntities(1, entitiesJson);
         return 1;
     }
 }

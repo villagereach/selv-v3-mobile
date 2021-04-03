@@ -20,12 +20,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.Orderable.COLUMN_NAME+" text," +
             Database.Orderable.COLUMN_UUID+" text)";
 
+    public static final String CREATE_TABLE_LOT = "" +
+            "create table "+Database.Lot.TABLE_NAME+" (" +
+            Database.Lot.COLUMN_CODE+" text," +
+            Database.Lot.COLUMN_EXPIRATION_DATE+" text," +
+            Database.Lot.COLUMN_ORDERABLE_ID+" text," +
+            Database.Lot.COLUMN_UUID+" text)";
+
     public static final String CREATE_TABLE_PROGRAM = "" +
             "create table "+Database.Program.TABLE_NAME+" (" +
             Database.Program.COLUMN_CODE+" text," +
             Database.Program.COLUMN_NAME+" text," +
             Database.Program.COLUMN_DESCRIPTION+" text,"+
             Database.Program.COLUMN_ACTIVE+" text,"+
+            Database.Program.COLUMN_LAST_SYNC+" text,"+
             Database.Program.COLUMN_STATUS+" text,"+
             Database.Program.COLUMN_UUID+" text)";
 
@@ -55,9 +63,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.FacilityType.COLUMN_UUID+" text)";
 
     public static final String CREATE_TABLE_FACILITY_TYPE_APPROVED_PRODUCT = "" +
-            "create table "+Database.FacilityTypeApprovedProduct.TABLE_NAME+" (" +
-            Database.FacilityTypeApprovedProduct.COLUMN_NAME_FACILITY_TYPE_ID+" text," +
-            Database.FacilityTypeApprovedProduct.COLUMN_NAME_ORDERABLE_ID+" text)";
+            "create table "+ Database.FacilityTypeApprovedProductAndProgram.TABLE_NAME+" (" +
+            Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_FACILITY_TYPE_ID+" text," +
+            Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_PROGRAM_ID+" text," +
+            Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_UUID+" text," +
+            Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_ORDERABLE_ID+" text)";
 
     public static final String CREATE_TABLE_STOCK_CARD_LINE_ITEM = "" +
             "create table "+Database.Facility.TABLE_NAME+" (" +
@@ -88,8 +98,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Drop Database
     public static final String DROP_TABLE_FACILITY = "drop table if exists "+Database.Facility.TABLE_NAME;
     public static final String DROP_TABLE_FACILITY_TYPE = "drop table if exists "+Database.FacilityType.TABLE_NAME;
-    public static final String DROP_TABLE_FACILITY_TYPE_APPROVED_PRODUCT = "drop table if exists "+Database.FacilityTypeApprovedProduct.TABLE_NAME;
+    public static final String DROP_TABLE_FACILITY_TYPE_APPROVED_PRODUCT = "drop table if exists "+ Database.FacilityTypeApprovedProductAndProgram.TABLE_NAME;
     public static final String DROP_TABLE_ORDERABLE = "drop table if exists "+Database.Orderable.TABLE_NAME;
+    public static final String DROP_TABLE_LOT = "drop table if exists "+Database.Lot.TABLE_NAME;
     public static final String DROP_TABLE_PROGRAM = "drop table if exists "+Database.Program.TABLE_NAME;
     public static final String DROP_TABLE_VALID_REASONS = "drop table if exists "+Database.ValidReasons.TABLE_NAME;
     public static final String DROP_TABLE_PROGRAM_ORDERABLE= "drop table if exists "+Database.ProgramOrderable.TABLE_NAME;
@@ -111,9 +122,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // CREATE TABLES
         db.execSQL(CREATE_TABLE_FACILITY);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
-        System.out.println(CREATE_TABLE_PROGRAM);
         db.execSQL(CREATE_TABLE_PROGRAM);
         db.execSQL(CREATE_TABLE_ORDERABLE);
+        db.execSQL(CREATE_TABLE_LOT);
         db.execSQL(CREATE_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(CREATE_TABLE_REASON);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);
@@ -134,6 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_FACILITY_TYPE);
         db.execSQL(DROP_TABLE_PROGRAM);
         db.execSQL(DROP_TABLE_ORDERABLE);
+        db.execSQL(DROP_TABLE_LOT);
         db.execSQL(DROP_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(DROP_TABLE_REASON);
         db.execSQL(DROP_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);
@@ -143,6 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
         db.execSQL(CREATE_TABLE_PROGRAM);
         db.execSQL(CREATE_TABLE_ORDERABLE);
+        db.execSQL(CREATE_TABLE_LOT);
         db.execSQL(CREATE_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(CREATE_TABLE_REASON);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);

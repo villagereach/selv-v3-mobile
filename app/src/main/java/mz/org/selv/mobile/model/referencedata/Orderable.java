@@ -2,6 +2,7 @@ package mz.org.selv.mobile.model.referencedata;
 
 import android.content.ContentValues;
 
+import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 
 public class Orderable implements Table {
@@ -35,16 +36,20 @@ public class Orderable implements Table {
 
         @Override
         public String getTableName() {
-                return null;
+                return Database.Orderable.TABLE_NAME;
         }
 
         @Override
         public ContentValues getContentValues() {
-                return null;
+                ContentValues cv = new ContentValues();
+                cv.put(Database.Orderable.COLUMN_CODE, code);
+                cv.put(Database.Orderable.COLUMN_NAME, name);
+                cv.put(Database.Orderable.COLUMN_UUID, uuid);
+                return cv;
         }
 
         @Override
         public String[] getColumnNames() {
-                return new String[0];
+                return Database.Orderable.ALL_COLUMNS;
         }
 }

@@ -12,7 +12,7 @@ public class Program implements Table {
     private String description;
     private String uuid;
     private String status; // synced not synced
-    private boolean active;
+    private String active;
 
     public String getName() {
         return name;
@@ -54,11 +54,11 @@ public class Program implements Table {
         this.status = status;
     }
 
-    public boolean isActive() {
+    public String isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(String active) {
         this.active = active;
     }
 
