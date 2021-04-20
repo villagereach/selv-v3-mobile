@@ -1,16 +1,17 @@
 package mz.org.selv.mobile.model.stockmanagement;
 
 import android.content.ContentValues;
-import android.provider.BaseColumns;
 
+import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 
 public class PhysicalInventoryLineItem implements Table {
     private String id;
     private String physicalInventoryId;
-    private int quanity;
+    private int physicalStock;
     private String orderableId;
     private String lotId;
+    private int previousStockOnHand;
 
     public String getId() {
         return id;
@@ -28,12 +29,20 @@ public class PhysicalInventoryLineItem implements Table {
         this.physicalInventoryId = physicalInventoryId;
     }
 
-    public int getQuanity() {
-        return quanity;
+    public int getPreviousStockOnHand() {
+        return previousStockOnHand;
     }
 
-    public void setQuanity(int quanity) {
-        this.quanity = quanity;
+    public void setPreviousStockOnHand(int previousStockOnHand) {
+        this.previousStockOnHand = previousStockOnHand;
+    }
+
+    public int getPhysicalStock() {
+        return physicalStock;
+    }
+
+    public void setPhysicalStock(int physicalStock) {
+        this.physicalStock = physicalStock;
     }
 
     public String getOrderableId() {
@@ -54,16 +63,22 @@ public class PhysicalInventoryLineItem implements Table {
 
     @Override
     public String getTableName() {
-        return null;
+        return Database.PhysicalInventoryLineItem.TABLE_NAME;
     }
 
     @Override
     public ContentValues getContentValues() {
-        return null;
+        ContentValues cv = new ContentValues();
+        cv.put(Database.PhysicalInventoryLineItem.COLUMN_LOT_ID, lotId);
+        cv.put(Database.PhysicalInventoryLineItem.COLUMN_ORDERABLE_ID, orderableId);
+        cv.put(Database.PhysicalInventoryLineItem.COLUMN_PHYSICAL_INVENTORY_ID, physicalInventoryId);
+        cv.put(Database.PhysicalInventoryLineItem.COLUMN_PHYSICAL_STOCK, physicalStock);
+        cv.put(Database.PhysicalInventoryLineItem.COLUMN_PREVIOUS_STOCK_ON_HAND, previousStockOnHand);
+        return cv;
     }
 
     @Override
     public String[] getColumnNames() {
-        return new String[0];
+        return Database.PhysicalInventoryLineItem.ALL_COLUMNS;
     }
 }

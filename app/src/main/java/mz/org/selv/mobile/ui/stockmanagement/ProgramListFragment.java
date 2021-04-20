@@ -1,6 +1,5 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import mz.org.selv.mobile.R;
-import mz.org.selv.mobile.StockEventFragment;
+import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.ui.adapters.ProgramListAdapter;
 
 public class ProgramListFragment extends Fragment {
@@ -60,9 +59,15 @@ public class ProgramListFragment extends Fragment {
         lvProgramList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Program program = (Program) lvProgramList.getAdapter().getItem(position);
+                //programListViewModel.getProgramId().setValue(program.getUuid());
+
                 if (action.equals("receive") || action.equals("issue") || action.equals("adjustment")) {
+
                     Bundle bundle = new Bundle();
                     bundle.putString("action", action);
+                    bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("programId", program.getUuid());
                     StockEventFragment stockEventFragment = new StockEventFragment();
                     stockEventFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getParentFragmentManager();
@@ -72,8 +77,20 @@ public class ProgramListFragment extends Fragment {
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();
+                } else if(action.equals("inventory")){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action", action);
+                    bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("programId", program.getUuid());
+                    InventoryListFragment inventoryListFragment = new InventoryListFragment();
+                    inventoryListFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction().
+                            replace(R.id.nav_host_fragment, inventoryListFragment, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
                 }
-
             }
 
         });

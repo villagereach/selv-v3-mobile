@@ -9,5 +9,8 @@ public class Entity {
     public final static int REASON = 6;
     public final static int VALID_REASONS = 7;
     public final static int LOTS = 8;
+    public final static int VALID_SOURCE = 10;
+    public final static int VALID_DESTINATION = 11;
+    public final static int TRADE_ITEMS = 9;
 }
 

@@ -30,6 +30,7 @@
     <string name="string_ok">Ultima Sincronizacao: </string>
 
     <string name="string_product">Produto</string>
+    <string name="string_program">Programa</string>
     <string name="string_expiration_date">Data de Validade</string>
     <string name="string_lot">Lote</string>
     <string name="string_source">Origem</string>
@@ -38,6 +39,19 @@
     <string name="string_reason">Motivo</string>
     <string name="string_date">Data</string>
     <string name="string_comments">Comentarios</string>
+    <string name="string_vvm">Estagio VVM</string>
+    <string name="string_save">Salvar</string>
+    <string name="string_cancel">Cancelar</string>
+    <string name="string_add">Adicionar</string>
+
+    <string name="string_physicalstock">Stock Fisico</string>
+    <string name="string_balance">Balanco</string>
+    <string name="string_create">Criar</string>
+
+    <string-array name="string_array_vvm">
+        <item>Estagio 1</item>
+        <item>Estagio 2</item>
+    </string-array>
 
 
 </resources>

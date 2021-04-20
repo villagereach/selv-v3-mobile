@@ -1,5 +1,6 @@
-package mz.org.selv.mobile;
+package mz.org.selv.mobile.ui.stockmanagement;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import mz.org.selv.mobile.ui.stockmanagement.StockEventDialog;
+import mz.org.selv.mobile.R;
 
 public class StockEventFragment extends Fragment {
 
@@ -39,7 +40,12 @@ public class StockEventFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+
                 StockEventDialog stockEventDialog = StockEventDialog.newInstance();
+                stockEventDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_SELVMobile_StockEventDialog);
+                stockEventDialog.setArguments(getArguments());
+
                 stockEventDialog.show(getActivity().getSupportFragmentManager(), "tag");
             }
         });

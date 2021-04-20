@@ -55,7 +55,7 @@ public class Lot implements Table {
         cv.put(Database.Lot.COLUMN_CODE, lotCode);
         cv.put(Database.Lot.COLUMN_EXPIRATION_DATE, expirationDate);
         cv.put(Database.Lot.COLUMN_UUID, id);
-        cv.put(Database.Lot.COLUMN_ORDERABLE_ID, orderableId);
+        cv.put(Database.Lot.COLUMN_TRADE_ITEM_ID, orderableId);
         return cv;
     }
 

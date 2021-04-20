@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class Database {
     public final static String DATABASE_NAME = "SELV_MOBILE";
-    public final static int  DATABASE_VERSION = 18;
+    public final static int  DATABASE_VERSION = 20;
 
     public static  class User implements BaseColumns {
 
@@ -48,9 +48,9 @@ public class Database {
         public static String COLUMN_CODE = "lotCode";
         public static String COLUMN_EXPIRATION_DATE = "expirationDate";
         public static String COLUMN_UUID = "id";
-        public static String COLUMN_ORDERABLE_ID = "tradeItemId";
+        public static String COLUMN_TRADE_ITEM_ID = "tradeItemId";
         public static String TABLE_NAME = "lot";
-        public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_EXPIRATION_DATE, COLUMN_UUID, COLUMN_ORDERABLE_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_EXPIRATION_DATE, COLUMN_UUID, COLUMN_TRADE_ITEM_ID};
     }
 
     public static  class ProgramOrderable implements BaseColumns {
@@ -67,6 +67,13 @@ public class Database {
         public static String COLUMN_NAME_UUID = "id";
         public static String TABLE_NAME = "facility_type_approved_product_program";
         public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID , COLUMN_NAME_UUID, COLUMN_NAME_FACILITY_TYPE_ID};
+    }
+
+    public static  class TradeItem implements BaseColumns {
+        public static String COLUMN_ORDERABLE_ID = "orderbleId";
+        public static String COLUMN_TRADE_ITEM_ID = "id";
+        public static String TABLE_NAME = "tradeItem";
+        public static String[] ALL_COLUMNS = {COLUMN_TRADE_ITEM_ID, COLUMN_ORDERABLE_ID};
     }
 
     public static  class ProcessingPeriod implements BaseColumns {
@@ -109,6 +116,16 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_SIGNATURE, COLUMN_OCCURRED_DATE,COLUMN_FACILITY_ID ,COLUMN_CODE, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
     }
 
+    public static class PhysicalInventoryLineItem implements BaseColumns{
+        public static String COLUMN_ORDERABLE_ID = "orderbaleId";
+        public static String COLUMN_LOT_ID = "lotid";
+        public static String COLUMN_PHYSICAL_STOCK = "physicalStock";
+        public static String COLUMN_PREVIOUS_STOCK_ON_HAND = "previousStockOnHand";
+        public static String COLUMN_PHYSICAL_INVENTORY_ID = "physicalInventoryId";
+        public static String TABLE_NAME = "physicalInventoryLineItem";
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_PHYSICAL_STOCK, COLUMN_PREVIOUS_STOCK_ON_HAND,COLUMN_PHYSICAL_INVENTORY_ID};
+    }
+
     public static  class ReasonCategory implements BaseColumns {
 
     }
@@ -132,7 +149,7 @@ public class Database {
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
         public static String COLUMN_NAME_UUID = "id";
         public static String TABLE_NAME = "validreasons";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_UUID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_REASON_ID, COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_UUID};
     }
 
     public static  class StockCard implements BaseColumns {

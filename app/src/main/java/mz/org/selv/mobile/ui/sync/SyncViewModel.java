@@ -1,18 +1,13 @@
 package mz.org.selv.mobile.ui.sync;
 
 import android.app.Application;
-import android.content.Context;
-import android.telephony.emergency.EmergencyNumber;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,12 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.model.Entity;
-import mz.org.selv.mobile.service.openlmis.ReferenceDataService;
 import mz.org.selv.mobile.service.openlmis.SyncEntities;
 
 public class SyncViewModel extends AndroidViewModel {
@@ -48,6 +40,7 @@ public class SyncViewModel extends AndroidViewModel {
     public void sync(int type){
         switch (type){
             case 1: // sync metadata
+
                 syncEntities(Entity.PROGRAM, "https://test.selv.org.mz/api/programs");
                 syncEntities(Entity.ORDERABLES, "https://test.selv.org.mz/api/orderables");
                 syncEntities(Entity.LOTS, "https://test.selv.org.mz/api/lots");
@@ -55,6 +48,8 @@ public class SyncViewModel extends AndroidViewModel {
                 syncEntities(Entity.FACILITY_TYPE, "https://test.selv.org.mz/api/facilityTypes");
                 syncEntities(Entity.REASON, "https://test.selv.org.mz/api/stockCardLineItemReasons");
                 syncEntities(Entity.VALID_REASONS, "https://test.selv.org.mz/api/validReasons");
+                //syncEntities(Entity.VALID_SOURCE, "https://test.selv.org.mz/api/validSources");
+                //syncEntities(Entity.VALID_DESTINATION, "https://test.selv.org.mz/api/validDestinations");
                 break;
 
             case 2: // sync data
@@ -76,7 +71,6 @@ public class SyncViewModel extends AndroidViewModel {
             @Override
             public void onResponse(String response) {
                 if (!response.equals(null)) {
-//                    System.out.println(response);
                     try{
                         //since sometimes we receive an array and other a an object
                         if(entity == Entity.ORDERABLES || entity == Entity.FACILITY_TYPE_APPROVED_PRODUCTS || entity == Entity.FACILITY_TYPE || entity == Entity.LOTS){
@@ -96,7 +90,6 @@ public class SyncViewModel extends AndroidViewModel {
                             entitiesMap.put(entity, jsonResponse);
                             saveEntities();
                         }
-                        //       progressDialog.dismiss();
                     } catch (JSONException ex){
                         syncStatus.put(entity, -1);
                         ex.printStackTrace();
@@ -118,7 +111,7 @@ public class SyncViewModel extends AndroidViewModel {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 //String credentials = String.format("%s:%s", "admin", "password");
-                String auth = "Bearer d30c7a48-de23-4f49-81e9-8b639833b37f";
+                String auth = "Bearer 001ddbc1-dd76-4f90-8737-79a56af5aff2";
                 //String auth = "Bearer 9f81cba6-0462-42e7-8e32-9fbbd2941b57";
                 params.put("Authorization", auth);
                 return params;
@@ -130,9 +123,12 @@ public class SyncViewModel extends AndroidViewModel {
                 params.put("grant_type", "client_credentials");
                 params.put("username", "admin");
                 params.put("password", "password");
+                params.put("facilityId","8e498daf-cdff-48b2-971f-0c53ef66e14d");
+
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(stringRequest);
     }
 

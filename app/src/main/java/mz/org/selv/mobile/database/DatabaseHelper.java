@@ -24,8 +24,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "create table "+Database.Lot.TABLE_NAME+" (" +
             Database.Lot.COLUMN_CODE+" text," +
             Database.Lot.COLUMN_EXPIRATION_DATE+" text," +
-            Database.Lot.COLUMN_ORDERABLE_ID+" text," +
+            Database.Lot.COLUMN_TRADE_ITEM_ID +" text," +
             Database.Lot.COLUMN_UUID+" text)";
+
+    public static final String CREATE_TABLE_TRADE_ITEM = "" +
+            "create table "+Database.TradeItem.TABLE_NAME+" (" +
+            Database.TradeItem.COLUMN_ORDERABLE_ID+" text," +
+            Database.TradeItem.COLUMN_TRADE_ITEM_ID+" text)";
 
     public static final String CREATE_TABLE_PROGRAM = "" +
             "create table "+Database.Program.TABLE_NAME+" (" +
@@ -69,6 +74,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_UUID+" text," +
             Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_ORDERABLE_ID+" text)";
 
+    //physical inventor
+    //
+
+    public static final String CREATE_TABLE_PHYSICAL_INVENTORY = "" +
+            "create table "+Database.PhysicalInventory.TABLE_NAME+" (" +
+            Database.PhysicalInventory.COLUMN_OCCURRED_DATE+" text," +
+            Database.PhysicalInventory.COLUMN_SIGNATURE+" text," +
+            Database.PhysicalInventory.COLUMN_FACILITY_ID+" text," +
+            Database.PhysicalInventory.COLUMN_DESCRIPTION+" text," +
+            Database.PhysicalInventory.COLUMN_PROGRAM_ID+" text," +
+            Database.PhysicalInventory.COLUMN_STATUS+" text," +
+
+            Database.PhysicalInventory.COLUMN_UUID+" Text)";
+
+    public static final String CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM = "" +
+            "create table "+Database.PhysicalInventoryLineItem.TABLE_NAME+" (" +
+            Database.PhysicalInventoryLineItem.COLUMN_ORDERABLE_ID+" text," +
+            Database.PhysicalInventoryLineItem.COLUMN_LOT_ID+" text," +
+            Database.PhysicalInventoryLineItem.COLUMN_PHYSICAL_STOCK+" INTEGER," +
+            Database.PhysicalInventoryLineItem.COLUMN_PREVIOUS_STOCK_ON_HAND+" INTEGER," +
+            Database.PhysicalInventoryLineItem.COLUMN_PHYSICAL_INVENTORY_ID+" text)";
+
     public static final String CREATE_TABLE_STOCK_CARD_LINE_ITEM = "" +
             "create table "+Database.Facility.TABLE_NAME+" (" +
             Database.Facility.COLUMN_CODE+" text," +
@@ -101,12 +128,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DROP_TABLE_FACILITY_TYPE_APPROVED_PRODUCT = "drop table if exists "+ Database.FacilityTypeApprovedProductAndProgram.TABLE_NAME;
     public static final String DROP_TABLE_ORDERABLE = "drop table if exists "+Database.Orderable.TABLE_NAME;
     public static final String DROP_TABLE_LOT = "drop table if exists "+Database.Lot.TABLE_NAME;
+    public static final String DROP_TABLE_TRADE_ITEM = "drop table if exists "+Database.TradeItem.TABLE_NAME;
     public static final String DROP_TABLE_PROGRAM = "drop table if exists "+Database.Program.TABLE_NAME;
     public static final String DROP_TABLE_VALID_REASONS = "drop table if exists "+Database.ValidReasons.TABLE_NAME;
     public static final String DROP_TABLE_PROGRAM_ORDERABLE= "drop table if exists "+Database.ProgramOrderable.TABLE_NAME;
     public static final String DROP_TABLE_INVENTORY = "drop table if exists "+Database.PhysicalInventory.TABLE_NAME;
     public static final String DROP_TABLE_REASON = "drop table if exists "+Database.Reason.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_CARD = "drop table if exists "+Database.StockCard.TABLE_NAME;
+
+    public static final String DROP_TABLE_PHYSICAL_INVENTORY = "drop table if exists "+Database.PhysicalInventory.TABLE_NAME;
+    public static final String DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM = "drop table if exists "+Database.PhysicalInventoryLineItem.TABLE_NAME;
+
+
    // public static final String DROP_TABLE_STOCK_CARD_LINE_ITEM = "drop table if exists "+Database.StockCardLineItem.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_EVENT = "drop table if exists "+Database.StockEvent.TABLE_NAME;
   //  public static final String DROP_TABLE_STOCK_EVENT_LINE_ITEM = "drop table if exists "+Database.StockEventLineItem.TABLE_NAME;
@@ -124,11 +157,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
         db.execSQL(CREATE_TABLE_PROGRAM);
         db.execSQL(CREATE_TABLE_ORDERABLE);
+        db.execSQL(CREATE_TABLE_TRADE_ITEM);
         db.execSQL(CREATE_TABLE_LOT);
         db.execSQL(CREATE_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(CREATE_TABLE_REASON);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);
         db.execSQL(CREATE_TABLE_VALID_REASONS);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM);
 
       //  db.execSQL(CREATE_TABLE_STOCK_CARD_LINE_ITEM);
      //   db.execSQL(CREATE_TABLE_STOCK_EVENT);
@@ -146,19 +182,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_PROGRAM);
         db.execSQL(DROP_TABLE_ORDERABLE);
         db.execSQL(DROP_TABLE_LOT);
+        db.execSQL(DROP_TABLE_TRADE_ITEM);
         db.execSQL(DROP_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(DROP_TABLE_REASON);
         db.execSQL(DROP_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);
         db.execSQL(DROP_TABLE_VALID_REASONS);
+        db.execSQL(DROP_TABLE_PHYSICAL_INVENTORY);
+        db.execSQL(DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM);
         //create table
         db.execSQL(CREATE_TABLE_FACILITY);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
         db.execSQL(CREATE_TABLE_PROGRAM);
         db.execSQL(CREATE_TABLE_ORDERABLE);
         db.execSQL(CREATE_TABLE_LOT);
+        db.execSQL(CREATE_TABLE_TRADE_ITEM);
         db.execSQL(CREATE_TABLE_PROGRAM_ORDERABLE);
         db.execSQL(CREATE_TABLE_REASON);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE_APPROVED_PRODUCT);
         db.execSQL(CREATE_TABLE_VALID_REASONS);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM);
     }
 }

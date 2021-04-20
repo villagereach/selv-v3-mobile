@@ -1,9 +1,6 @@
 package mz.org.selv.mobile.service.openlmis;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -31,6 +28,7 @@ import mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProg
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.referencedata.Program;
+import mz.org.selv.mobile.model.referencedata.TradeItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
 
@@ -148,7 +146,7 @@ public class SyncEntities {
                     try {
                         System.out.println(entities.getJSONObject(i));
                         lot.setId(entities.getJSONObject(i).getString(Database.Lot.COLUMN_UUID));
-                        lot.setOrderableId(entities.getJSONObject(i).getString(Database.Lot.COLUMN_ORDERABLE_ID));
+                        lot.setOrderableId(entities.getJSONObject(i).getString(Database.Lot.COLUMN_TRADE_ITEM_ID));
                         lot.setLotCode(entities.getJSONObject(i).getString(Database.Lot.COLUMN_CODE));
                         lot.setExpirationDate(entities.getJSONObject(i).getString(Database.Lot.COLUMN_EXPIRATION_DATE));
                         result.add(lot);
@@ -162,12 +160,17 @@ public class SyncEntities {
                 try {
                     for (int i = 0; i < entities.length(); i++) {
                         FacilityTypeApprovedProductAndProgram productAndProgram = new FacilityTypeApprovedProductAndProgram();
+                        TradeItem tradeItem = new TradeItem();
                         productAndProgram.setId(entities.getJSONObject(i).getString(Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_UUID));
                         //due to JSON Format
                         productAndProgram.setOrderableId(entities.getJSONObject(i).getJSONObject("orderable").getString(Database.Orderable.COLUMN_UUID));
                         productAndProgram.setProgramId(entities.getJSONObject(i).getJSONObject("program").getString(Database.Program.COLUMN_UUID));
                         productAndProgram.setFacilityTypeId(entities.getJSONObject(i).getJSONObject("facilityType").getString(Database.FacilityType.COLUMN_UUID));
+                        tradeItem.setOrderableId(entities.getJSONObject(i).getJSONObject("orderable").getString(Database.Orderable.COLUMN_UUID));
+                        tradeItem.setTradeItemId(entities.getJSONObject(i).getJSONObject("orderable").getJSONObject("identifiers").getString("tradeItem"));
+
                         result.add(productAndProgram);
+                        result.add(tradeItem);
                     }
                 } catch (JSONException ex) {
                     ex.printStackTrace();
@@ -236,7 +239,7 @@ public class SyncEntities {
                 if (database.insert(entities.get(i)) < 0) {
                     inserted = false;
                 } else {
-                    System.out.println("inserted");
+                    //inserted
                 }
             }
         }

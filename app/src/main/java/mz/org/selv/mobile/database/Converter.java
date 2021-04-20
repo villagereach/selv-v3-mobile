@@ -7,14 +7,16 @@ import mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProg
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.referencedata.Program;
+import mz.org.selv.mobile.model.referencedata.TradeItem;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
+import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
 
 public class Converter {
 
-    public static Program cursorToProgram(Cursor cursor){
+    public static Program cursorToProgram(Cursor cursor) {
         Program program = new Program();
         program.setDescription(cursor.getString(cursor.getColumnIndex(Database.Program.COLUMN_DESCRIPTION)));
         program.setName(cursor.getString(cursor.getColumnIndex(Database.Program.COLUMN_NAME)));
@@ -24,7 +26,7 @@ public class Converter {
         return program;
     }
 
-    public static Facility cursorToFacility(Cursor cursor){
+    public static Facility cursorToFacility(Cursor cursor) {
         Facility facility = new Facility();
         facility.setCode(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_CODE)));
         facility.setName(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_NAME)));
@@ -33,7 +35,7 @@ public class Converter {
         return facility;
     }
 
-    public static Orderable cursorToOrderable(Cursor cursor){
+    public static Orderable cursorToOrderable(Cursor cursor) {
         Orderable orderable = new Orderable();
         orderable.setCode(cursor.getString(cursor.getColumnIndex(Database.Orderable.COLUMN_UUID)));
         orderable.setName(cursor.getString(cursor.getColumnIndex(Database.Orderable.COLUMN_NAME)));
@@ -41,23 +43,30 @@ public class Converter {
         return orderable;
     }
 
-    public static Lot cursorToLot(Cursor cursor){
+    public static Lot cursorToLot(Cursor cursor) {
         Lot lot = new Lot();
         lot.setLotCode(cursor.getString(cursor.getColumnIndex(Database.Lot.COLUMN_CODE)));
-        lot.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.Lot.COLUMN_ORDERABLE_ID)));
+        lot.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.Lot.COLUMN_TRADE_ITEM_ID)));
         lot.setExpirationDate(cursor.getString(cursor.getColumnIndex(Database.Lot.COLUMN_EXPIRATION_DATE)));
         lot.setId(cursor.getString(cursor.getColumnIndex(Database.Lot.COLUMN_UUID)));
         return lot;
     }
 
-    public static mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProgram cursorToFacilityTypeApprovedProduct(Cursor cursor){
+    public static TradeItem cursorToTradeItem(Cursor cursor) {
+        TradeItem tradeItem = new TradeItem();
+        tradeItem.setTradeItemId(cursor.getString(cursor.getColumnIndex(Database.TradeItem.COLUMN_TRADE_ITEM_ID)));
+        tradeItem.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.TradeItem.COLUMN_ORDERABLE_ID)));
+        return tradeItem;
+    }
+
+    public static FacilityTypeApprovedProductAndProgram cursorToFacilityTypeApprovedProduct(Cursor cursor) {
         FacilityTypeApprovedProductAndProgram fType = new mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProgram();
         fType.setFacilityTypeId(cursor.getString(cursor.getColumnIndex(Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_FACILITY_TYPE_ID)));
         fType.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.FacilityTypeApprovedProductAndProgram.COLUMN_NAME_ORDERABLE_ID)));
         return fType;
     }
 
-    public static Reason cursorToReason(Cursor cursor){
+    public static Reason cursorToReason(Cursor cursor) {
         Reason reason = new Reason();
         reason.setCategory(cursor.getString(cursor.getColumnIndex(Database.Reason.COLUMN_NAME_CATEGORY)));
         reason.setType(cursor.getString(cursor.getColumnIndex(Database.Reason.COLUMN_NAME_TYPE)));
@@ -66,7 +75,7 @@ public class Converter {
         return reason;
     }
 
-    public static PhysicalInventory cursorToInventory(Cursor cursor){
+    public static PhysicalInventory cursorToInventory(Cursor cursor) {
         PhysicalInventory inventory = new PhysicalInventory();
         inventory.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.PhysicalInventory.COLUMN_FACILITY_ID)));
         inventory.setOccurredDate(cursor.getString(cursor.getColumnIndex(Database.PhysicalInventory.COLUMN_OCCURRED_DATE)));
@@ -76,16 +85,24 @@ public class Converter {
         return inventory;
     }
 
-    public static PhysicalInventoryLineItem cursorToInventoryLineItem(Cursor cursor){
+    public static PhysicalInventoryLineItem cursorToInventoryLineItem(Cursor cursor) {
         PhysicalInventoryLineItem inventoryLineItem = new PhysicalInventoryLineItem();
         return inventoryLineItem;
     }
 
-    public static StockEvent cursorToStockEvent(Cursor cursor){
+    public static StockEvent cursorToStockEvent(Cursor cursor) {
         StockEvent event = new StockEvent();
         event.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_FACILITY_ID)));
         event.setProgramId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_PROGRAM_ID)));
         event.setId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_UUID)));
         return event;
+    }
+
+    public static ValidReasons cursorToValidReasons(Cursor cursor) {
+        ValidReasons validReasons = new ValidReasons();
+        validReasons.setFacilitytypeId(cursor.getString(cursor.getColumnIndex(Database.ValidReasons.COLUMN_NAME_FACILITY_TYPE_ID)));
+        validReasons.setProgramId(cursor.getString(cursor.getColumnIndex(Database.ValidReasons.COLUMN_NAME_PROGRAM_ID)));
+        validReasons.setReasonId(cursor.getString(cursor.getColumnIndex(Database.ValidReasons.COLUMN_NAME_REASON_ID)));
+        return validReasons;
     }
 }

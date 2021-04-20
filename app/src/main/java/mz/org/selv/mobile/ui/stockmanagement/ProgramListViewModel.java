@@ -15,10 +15,12 @@ import mz.org.selv.mobile.service.referencedata.ProgramService;
 
 public class ProgramListViewModel extends AndroidViewModel {
     ProgramService programService;
+    private MutableLiveData<String> programId;
 
     public ProgramListViewModel(@NonNull Application application) {
-        super(application);
 
+        super(application);
+        programId = new MutableLiveData<String>();
     }
 
     public ArrayList<Program> getPrograms(){
@@ -26,4 +28,11 @@ public class ProgramListViewModel extends AndroidViewModel {
         return programService.getPrograms();
     }
 
+    public MutableLiveData<String> getProgramId() {
+        if(programId == null){
+            programId = new MutableLiveData<String>();
+            System.out.println("New Live Data");
+        }
+        return programId;
+    }
 }
