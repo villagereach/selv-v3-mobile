@@ -67,7 +67,7 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveProduct(acProduct.getText().toString(), acLotNumber.getText().toString(), Integer.parseInt(etQuantity.getText().toString()), -1, null);
+                saveProduct(acProduct.getText().toString(), acLotNumber.getText().toString(), Integer.parseInt(etQuantity.getText().toString()), -1);
             }
         });
 
@@ -107,11 +107,17 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
 
 
     public interface DialogListener {
-        void addProduct(String orderableName, String lotCode, int quantity, int soh, List adjustments);
+        void addProduct(String orderableName, String lotCode, int quantity, int soh);
+        void addLineItemAdjustmets(String orderable, String lotCode, List adjustments);
     }
 
-    public void saveProduct(String orderableName, String lotCode, int quantity, int soh, List adjustments) {
+    public void saveProduct(String orderableName, String lotCode, int quantity, int soh) {
         DialogListener listener = (DialogListener) getParentFragment();
-        listener.addProduct(orderableName, lotCode, quantity, soh, adjustments);
+        listener.addProduct(orderableName, lotCode, quantity, soh);
+    }
+
+    public void saveAdjustment(String orderableName, String lotCode, int quantity, int soh) {
+        DialogListener listener = (DialogListener) getParentFragment();
+        listener.addProduct(orderableName, lotCode, quantity, soh);
     }
 }

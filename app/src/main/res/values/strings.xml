@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">SELV Mobile</string>
-    <string name="nav_header_subtitle">www.selv.org.mz</string>
+    <string name="nav_header_subtitle" translatable="false">www.selv.org.mz</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -47,7 +47,10 @@
     <string name="string_physicalstock">Stock Fisico</string>
     <string name="string_balance">Balanco</string>
     <string name="string_create">Criar</string>
-
+    <string name="string_signature">Assinatura</string>
+    <string name="string_return">Voltar</string>
+    <string name="string_proceed">Prosseguir</string>
+    <string name="string_status">Estado</string>
     <string-array name="string_array_vvm">
         <item>Estagio 1</item>
         <item>Estagio 2</item>

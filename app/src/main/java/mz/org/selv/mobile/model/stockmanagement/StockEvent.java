@@ -8,7 +8,16 @@ import mz.org.selv.mobile.database.Table;
 public class StockEvent implements Table {
     String facilityId;
     String programId;
+    String processedDate;
     String id;
+
+    public String getProcessedDate() {
+        return processedDate;
+    }
+
+    public void setProcessedDate(String processedDate) {
+        this.processedDate = processedDate;
+    }
 
     public String getId() {
         return id;
@@ -45,6 +54,7 @@ public class StockEvent implements Table {
         cv.put(Database.StockEvent.COLUMN_NAME_FACILITY_ID, facilityId);
         cv.put(Database.StockEvent.COLUMN_NAME_PROGRAM_ID, programId);
         cv.put(Database.StockEvent.COLUMN_NAME_UUID, id);
+        cv.put(Database.StockEvent.COLUMN_PROCESSED_DATE, processedDate);
         return cv;
     }
 

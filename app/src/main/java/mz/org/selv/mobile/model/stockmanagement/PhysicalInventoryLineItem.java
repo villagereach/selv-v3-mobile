@@ -2,6 +2,8 @@ package mz.org.selv.mobile.model.stockmanagement;
 
 import android.content.ContentValues;
 
+import java.util.List;
+
 import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 
@@ -12,6 +14,18 @@ public class PhysicalInventoryLineItem implements Table {
     private String orderableId;
     private String lotId;
     private int previousStockOnHand;
+
+    //thisd breaks the pattern will fix later
+    private List<PhysicalInventoryLineItemAdjustments> adjustmentLineItems;
+
+
+    public List<PhysicalInventoryLineItemAdjustments> getAdjustmentLineItems() {
+        return adjustmentLineItems;
+    }
+
+    public void setAdjustmentLineItems(List<PhysicalInventoryLineItemAdjustments> adjustmentLineItems) {
+        this.adjustmentLineItems = adjustmentLineItems;
+    }
 
     public String getId() {
         return id;

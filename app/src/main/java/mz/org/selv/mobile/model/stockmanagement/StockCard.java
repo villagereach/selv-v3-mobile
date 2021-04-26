@@ -12,7 +12,15 @@ public class StockCard implements Table {
     int stockOnHand;
     String programId;
     String facilityId;
+    String id;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrderableId() {
         return orderableId;
@@ -67,6 +75,7 @@ public class StockCard implements Table {
         cv.put(Database.StockCard.COLUMN_NAME_ORDERABLE_ID, orderableId);
         cv.put(Database.StockCard.COLUMN_NAME_STOCK_ON_HAND, stockOnHand);
         cv.put(Database.StockCard.COLUMN_NAME_PROGRAM_ID, programId);
+        cv.put(Database.StockCard.COLUMN_NAME_ID, id);
 
         return cv;
     }

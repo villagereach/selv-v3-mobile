@@ -111,7 +111,7 @@ public class SyncViewModel extends AndroidViewModel {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 //String credentials = String.format("%s:%s", "admin", "password");
-                String auth = "Bearer 001ddbc1-dd76-4f90-8737-79a56af5aff2";
+                String auth = "Bearer d1545b77-2faf-4246-bab8-ef3d61c79b3e";
                 //String auth = "Bearer 9f81cba6-0462-42e7-8e32-9fbbd2941b57";
                 params.put("Authorization", auth);
                 return params;
@@ -139,7 +139,7 @@ public class SyncViewModel extends AndroidViewModel {
                 syncEntities.saveEntities(entry.getKey(), entry.getValue());
             }
         } else {
-            System.out.println("not finished");
+            //System.out.println("not finished");
         }
         return 1;
     }

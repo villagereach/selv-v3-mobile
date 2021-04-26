@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class Database {
     public final static String DATABASE_NAME = "SELV_MOBILE";
-    public final static int  DATABASE_VERSION = 20;
+    public final static int  DATABASE_VERSION = 32;
 
     public static  class User implements BaseColumns {
 
@@ -101,30 +101,41 @@ public class Database {
     }
 
     public static  class PhysicalInventory implements BaseColumns {
-        public static  String COLUMN_NAME = "name";
-        public static  String COLUMN_CODE = "code";
         public static  String COLUMN_UUID =  "id";
         public static  String COLUMN_STATUS =  "status";
         public static  String COLUMN_LAST_SYNC =  "last_sync";
         public static  String COLUMN_ACTIVE = "active";
         public static  String COLUMN_FACILITY_ID = "facilityid";
         public static String COLUMN_DESCRIPTION = "description";
-        public static  String COLUMN_OCCURRED_DATE = "facilityid";
+        public static  String COLUMN_OCCURRED_DATE = "occurredDate";
         public static String COLUMN_PROGRAM_ID = "programid";
         public static  String COLUMN_SIGNATURE = "signature";
-        public static String TABLE_NAME = "program";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_SIGNATURE, COLUMN_OCCURRED_DATE,COLUMN_FACILITY_ID ,COLUMN_CODE, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
+        public static String TABLE_NAME = "physicalInventory";
+        public static String[] ALL_COLUMNS = {COLUMN_SIGNATURE, COLUMN_PROGRAM_ID, COLUMN_OCCURRED_DATE,COLUMN_FACILITY_ID , COLUMN_UUID, COLUMN_STATUS};
     }
 
     public static class PhysicalInventoryLineItem implements BaseColumns{
-        public static String COLUMN_ORDERABLE_ID = "orderbaleId";
+        public static String COLUMN_ORDERABLE_ID = "orderableId";
         public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_PHYSICAL_STOCK = "physicalStock";
         public static String COLUMN_PREVIOUS_STOCK_ON_HAND = "previousStockOnHand";
         public static String COLUMN_PHYSICAL_INVENTORY_ID = "physicalInventoryId";
+        public static String COLUMN_PHYSICAL_FACILITY_ID = "facilityId";
         public static String TABLE_NAME = "physicalInventoryLineItem";
-        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_PHYSICAL_STOCK, COLUMN_PREVIOUS_STOCK_ON_HAND,COLUMN_PHYSICAL_INVENTORY_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_PHYSICAL_FACILITY_ID,COLUMN_PHYSICAL_STOCK, COLUMN_PREVIOUS_STOCK_ON_HAND,COLUMN_PHYSICAL_INVENTORY_ID};
     }
+
+    public static class PhysicalInventoryLineItemAdjustment implements BaseColumns{
+        public static String COLUMN_QUANTITY = "quantity";
+        public static String COLUMN_REASON_ID = "reasonId";
+        public static String COLUMN_STOCK_CARD_LINE_ITEM_ID = "stockCardLineItem_id";
+        public static String COLUMN_STOCK_EVENT_LINE_ITEM_ID = "stockEventLineItemId";
+        public static String COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID = "physicalInventoryLineItemId";
+        public static String COLUMN_ID = "id";
+        public static String TABLE_NAME = "physicalInventoryLineItemAdjustment";
+        public static String[] ALL_COLUMNS = {COLUMN_QUANTITY, COLUMN_REASON_ID, COLUMN_STOCK_CARD_LINE_ITEM_ID,COLUMN_STOCK_EVENT_LINE_ITEM_ID, COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID,COLUMN_ID};
+    }
+
 
     public static  class ReasonCategory implements BaseColumns {
 
@@ -153,21 +164,71 @@ public class Database {
     }
 
     public static  class StockCard implements BaseColumns {
-        public static String COLUMN_NAME_ORDERABLE_ID = "orderbaleId";
+        public static String COLUMN_NAME_ORDERABLE_ID = "orderableId";
         public static String COLUMN_NAME_LOT_ID = "lotid";
         public static String COLUMN_NAME_STOCK_ON_HAND = "stockonhand";
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
+        public static String COLUMN_NAME_ID = "id";
         public static String COLUMN_NAME_FACILITY_ID = "facilityid";
         public static String TABLE_NAME = "stock_card";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID,COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_ID,COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID,COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
     }
 
     public static  class StockEvent implements BaseColumns {
-        public static String COLUMN_NAME_FACILITY_ID = "orderbaleId";
+        public static String COLUMN_NAME_FACILITY_ID = "orderableId";
         public static String COLUMN_NAME_UUID = "id";
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
         public static String TABLE_NAME = "stock_event";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
+        public static String COLUMN_PROCESSED_DATE = "processedDate";
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_PROCESSED_DATE,COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
+    }
+
+    public static class StockEventLineItem implements BaseColumns{
+        public static String COLUMN_ORDERABLE_ID = "orderableId";
+        public static String COLUMN_LOT_ID = "lotid";
+        public static String COLUMN_QUANTITY = "quantity";
+        public static String COLUMN_DESTINATION_ID = "destinationId";
+        public static String COLUMN_DESTINATION_FREE_TEXT = "destinationFreeText";
+        public static String COLUMN_EXTRA_DATA = "extraData";
+        public static String COLUMN_SOURCE_ID = "sourceId";
+        public static String COLUMN_SOURCE_FREE_TEXT = "sourceFreeText";
+        public static String COLUMN_REASON_FREE_TEXT = "reasonFreeText";
+        public static String COLUMN_REASON_ID = "reasonId";
+        public static String COLUMN_STOCK_EVENT_ID = "stockEventId";
+        public static String COLUMN_OCCURRED_DATE = "occurredDate";
+        public static String COLUMN_ID = "id";
+        public static String TABLE_NAME = "stockEventLineItem";
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID,COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
+                COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_REASON_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_STOCK_EVENT_ID};
+    }
+
+    public static class StockCardLineItem implements BaseColumns{
+        public static String COLUMN_ORDERABLE_ID = "orderableId";
+        public static String COLUMN_LOT_ID = "lotid";
+        public static String COLUMN_QUANTITY = "quantity";
+        public static String COLUMN_DESTINATION_ID = "destinationId";
+        public static String COLUMN_DESTINATION_FREE_TEXT = "destinationFreeText";
+        public static String COLUMN_EXTRA_DATA = "extraData";
+        public static String COLUMN_SOURCE_ID = "sourceId";
+        public static String COLUMN_SOURCE_FREE_TEXT = "sourceFreeText";
+        public static String COLUMN_REASON_FREE_TEXT = "reasonFreeText";
+        public static String COLUMN_REASON_ID = "reasonId";
+        public static String COLUMN_ORIGIN_EVENT_ID = "originEventId";
+        public static String COLUMN_OCCURRED_DATE = "occurredDate";
+        public static String COLUMN_ID = "id";
+        public static String COLUMN_STOCK_CARD_ID = "stockCardId";
+        public static String TABLE_NAME = "stockCardLineItem";
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID,COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
+                COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_REASON_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_ORIGIN_EVENT_ID};
+    }
+
+    public static class CalculatedStockOnHand implements BaseColumns{
+        public static String COLUMN_ID = "id";
+        public static String COLUMN_STOCK_CARD_ID = "stockCardId";
+        public static String COLUMN_STOCK_ON_HAND = "stockOnHand";
+        public static String COLUMN_OCCURRED_DATE = "occuredDate";
+        public static String TABLE_NAME = "calculatedStockOnHand";
+        public static String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE,COLUMN_STOCK_ON_HAND};
     }
 
     private DatabaseHelper databaseHelper;
@@ -187,7 +248,18 @@ public class Database {
         } catch (Exception ex) {
             Log.d("Error:", ex.getMessage());
         }
+    }
 
+    public void beginTransaction(){
+        sqLiteDatabase.beginTransaction();
+    }
+
+    public void endTransaction(){
+        sqLiteDatabase.endTransaction();
+    }
+
+    public void setTransactionSuccessful(){
+        sqLiteDatabase.setTransactionSuccessful();
     }
 
     public void close() {
@@ -270,6 +342,9 @@ public class Database {
 
         return null;
     }
+
+    //transaction methods
+
 }
 
 

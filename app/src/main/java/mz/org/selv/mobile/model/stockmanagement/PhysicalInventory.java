@@ -11,6 +11,24 @@ public class PhysicalInventory implements Table {
     String programId;
     String facilityId;
     String status;
+    String id;
+    String lastSyncDate;
+
+    public String getLastSyncDate() {
+        return lastSyncDate;
+    }
+
+    public void setLastSyncDate(String lastSyncDate) {
+        this.lastSyncDate = lastSyncDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOccurredDate() {
         return occurredDate;
@@ -59,7 +77,15 @@ public class PhysicalInventory implements Table {
 
     @Override
     public ContentValues getContentValues() {
-        return null;
+        ContentValues cv = new ContentValues();
+        cv.put(Database.PhysicalInventory.COLUMN_UUID, id);
+        cv.put(Database.PhysicalInventory.COLUMN_PROGRAM_ID, programId);
+        cv.put(Database.PhysicalInventory.COLUMN_FACILITY_ID, facilityId);
+        cv.put(Database.PhysicalInventory.COLUMN_OCCURRED_DATE, occurredDate);
+        cv.put(Database.PhysicalInventory.COLUMN_SIGNATURE, signature);
+        cv.put(Database.PhysicalInventory.COLUMN_STATUS, status);
+        //cv.put(Database.PhysicalInventory.COLUMN_LAST_SYNC, lastSyncDate);
+        return cv;
     }
 
     @Override

@@ -13,20 +13,27 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
+import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
+import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
+import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustments;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
+import mz.org.selv.mobile.service.stockmanagement.StockManagementService;
+import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
 
 public class InventoryViewModel extends AndroidViewModel {
     public InventoryViewModel(@NonNull Application application) {
         super(application);
         referenceDataService = new ReferenceDataService(getApplication());
+        stockManagementService = new StockManagementService(getApplication());
     }
 
     private MutableLiveData<List<JSONObject>> lineItems;
-    ReferenceDataService referenceDataService;
-
+    private ReferenceDataService referenceDataService;
+    private StockManagementService stockManagementService;
 
     public List getOrderables(String programId, String facilityTypeId) {
 
@@ -62,9 +69,7 @@ public class InventoryViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<JSONObject>> getLastLineUpdatedItem() {
-        System.out.println("creating live data");
         if (lineItems == null) {
-            System.out.println("null live data");
             lineItems = new MutableLiveData<>();
         }
         return lineItems;
@@ -77,10 +82,11 @@ public class InventoryViewModel extends AndroidViewModel {
         try {
             lineItem.put("lotCode", (lot.getLotCode()));
             lineItem.put("expirationDate", lot.getExpirationDate());
+            lineItem.put("lotId", lot.getId());
             lineItem.put("orderableId", orderable.getUuid());
             lineItem.put("physicalStock", quantity);
             lineItem.put("orderableName", orderable.getName());
-
+            lineItem.put("adjustments", adjustments);
             //if not available
             lineItem.put("stockOnHand", soh);
 
@@ -94,5 +100,41 @@ public class InventoryViewModel extends AndroidViewModel {
         }
         currentItems.add(lineItem);
         lineItems.setValue(currentItems);
+    }
+
+    public int saveInventory(String signature, String programId, String facilityId, String occuredDate, InventoryItemsAdapter lineItemsAdapter) {
+        List<PhysicalInventoryLineItem> lineItems = new ArrayList<>();
+        String inventoryId = UUID.randomUUID().toString();
+        PhysicalInventory inventory = new PhysicalInventory();
+        inventory.setSignature(signature);
+        inventory.setProgramId(programId);
+        inventory.setOccurredDate(occuredDate);
+        inventory.setFacilityId(facilityId);
+        inventory.setId(inventoryId);
+        for(int i = 0; i < lineItemsAdapter.getCount(); i++){
+            PhysicalInventoryLineItem lineItem = new PhysicalInventoryLineItem();
+            System.out.println(lineItemsAdapter.getItem(i).toString());
+            try{
+                lineItem.setOrderableId(lineItemsAdapter.getItem(i).getString("orderableId"));
+                lineItem.setLotId(lineItemsAdapter.getItem(i).getString("lotId"));
+                lineItem.setPhysicalStock(lineItemsAdapter.getItem(i).getInt("physicalStock"));
+
+                //lineItem.setPreviousStockOnHand();
+                lineItem.setPhysicalInventoryId(inventoryId);
+                lineItems.add(lineItem);
+            } catch (JSONException ex){
+                ex.printStackTrace();
+            }
+        }
+        if(lineItems.size() > 0) {
+            stockManagementService = new StockManagementService(getApplication());
+            stockManagementService.saveInventory(inventory, lineItems,  null);
+        }
+        return 1;
+    }
+
+    public void getInventoryLineItems(String programId, String facilityId){
+        getLastLineUpdatedItem().getValue();
+        lineItems.setValue(stockManagementService.getNewInventoryLineItem(programId, facilityId));
     }
 }

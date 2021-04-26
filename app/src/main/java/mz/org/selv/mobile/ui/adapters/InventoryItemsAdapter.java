@@ -42,22 +42,22 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
         TextView tvBalance = (TextView)convertView.findViewById(R.id.tv_stock_management_inventory_linte_item_stock_balance);
         Button btAdjustments = (Button) convertView.findViewById(R.id.bt_stock_management_inventory_linte_item_adjustments);
 
+        System.out.println("item"+lineItem);
         //tvBalance.setText(lineItem.);
         try{
             tvExpirationDate.setText(lineItem.getString("expirationDate"));
             tvLot.setText(lineItem.getString("lotCode"));
             tvProduct.setText(lineItem.getString("orderableName"));
-            tvPhysicalStock.setText(lineItem.getInt("physicalStock")+"");
+            tvPhysicalStock.setText(lineItem.getString("physicalStock"));
 
-
-            if (lineItem.getInt("stockOnHand") < 0){
+            if (lineItem.getString("stockOnHand").equals("")){
                 tvStockOnHand.setText("");
                 tvBalance.setText("");
                 btAdjustments.setText(R.string.string_adjustments);
                 btAdjustments.setEnabled(false);
             }
         } catch (JSONException ex){
-
+ex.printStackTrace();
         }
 
         return convertView;

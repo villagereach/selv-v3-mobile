@@ -38,6 +38,22 @@ public class ReferenceDataService {
         return programList;
     }
 
+    public Program getProgramById(String programId){
+        Database database = new Database(mContext);
+        database.open();
+        Program program = new Program();
+        Cursor cursor = database.select(Program.class, Database.Program.COLUMN_UUID+"=?", new String[]{programId}, null, null, null);
+        if(cursor != null &&  cursor.getCount() > 0){
+            if (cursor.moveToFirst()){
+                program = Converter.cursorToProgram(cursor);
+            }
+        }
+
+        cursor.close();
+        database.close();
+        return program;
+    }
+
     public List getFacilityTypeApprovedProducts(String programId, String facilityTypeId){
         Database db = new Database(mContext);
         db.open();
@@ -74,6 +90,19 @@ public class ReferenceDataService {
         Database db = new Database(mContext);
         db.open();
         Cursor cursor = db.select(Orderable.class, Database.Orderable.COLUMN_NAME +" = ?", new String[]{orderableName}, null, null, null);
+        if(cursor.moveToFirst()){
+            orderable = Converter.cursorToOrderable(cursor);
+        }
+        cursor.close();
+        db.close();
+        return orderable;
+    }
+
+    public Orderable getOrderableById(String orderableId){
+        Orderable orderable = null;
+        Database db = new Database(mContext);
+        db.open();
+        Cursor cursor = db.select(Orderable.class, Database.Orderable.COLUMN_UUID +" = ?", new String[]{orderableId}, null, null, null);
         if(cursor.moveToFirst()){
             orderable = Converter.cursorToOrderable(cursor);
         }
@@ -165,6 +194,19 @@ public class ReferenceDataService {
         Database database = new Database(mContext);
         database.open();
         Cursor cursor = database.select(Lot.class, Database.Lot.COLUMN_CODE+"=?", new String[]{code}, null, null, null);
+        if(cursor.moveToFirst()){
+            lot = Converter.cursorToLot(cursor);
+        }
+        cursor.close();
+        database.close();
+        return lot;
+    }
+
+    public Lot getLotById(String lotId){
+        Lot lot = new Lot();
+        Database database = new Database(mContext);
+        database.open();
+        Cursor cursor = database.select(Lot.class, Database.Lot.COLUMN_UUID+"=?", new String[]{lotId}, null, null, null);
         if(cursor.moveToFirst()){
             lot = Converter.cursorToLot(cursor);
         }

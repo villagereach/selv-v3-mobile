@@ -10,10 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
+
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:text="@string/string_program">
         </TextView>
         <TextView
@@ -21,6 +23,12 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             ></TextView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:id="@+id/bt_stock_management_inventory_add_product"
+            android:text="@string/string_add"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -35,22 +43,57 @@
             android:layout_height="wrap_content">
 
         </ListView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_stock_management_inventory_occurred_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/string_date"
+            android:visibility="gone"
+           >
+            <EditText
+                android:id="@+id/et_stock_management_inventory_occurred_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_stock_management_inventory_signature"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:hint="@string/string_signature"
+            >
+            <EditText
+                android:id="@+id/et_stock_management_inventory_signature"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="bottom"
+            android:id="@+id/bt_stock_management_inventory_save"
+            android:text="@string/string_proceed">
+
+        </Button>
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:layout_marginEnd="65dp"
-            android:id="@+id/bt_stock_management_inventory_save"
-            android:text="@string/string_save">
-
-        </Button>
+            android:visibility="gone"
+            android:id="@+id/bt_stock_management_inventory_return"
+            android:text="@string/string_return" />
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_stock_management_inventory_add_product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_input_add" />
 </FrameLayout>

@@ -8,9 +8,11 @@ import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.model.referencedata.TradeItem;
+import mz.org.selv.mobile.model.stockmanagement.CalculatedStockOnHand;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
+import mz.org.selv.mobile.model.stockmanagement.StockCard;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
 
@@ -83,6 +85,25 @@ public class Converter {
         inventory.setStatus(cursor.getString(cursor.getColumnIndex(Database.PhysicalInventory.COLUMN_STATUS)));
         inventory.setSignature(cursor.getString(cursor.getColumnIndex(Database.PhysicalInventory.COLUMN_SIGNATURE)));
         return inventory;
+    }
+
+
+    public static StockCard cursorToStockCard(Cursor cursor){
+        StockCard stockCard = new StockCard();
+        stockCard.setProgramId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_PROGRAM_ID)));
+        stockCard.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_ORDERABLE_ID)));
+        stockCard.setLotId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_LOT_ID)));
+        stockCard.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_FACILITY_ID)));
+        //stockCard.setStockOnHand(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_PROGRAM_ID)));
+        return stockCard;
+    }
+
+    public static CalculatedStockOnHand cursorToCalculatedStockOnHand(Cursor cursor){
+        CalculatedStockOnHand calculatedStockOnHand = new CalculatedStockOnHand();
+        calculatedStockOnHand.setOccuredDate(cursor.getString(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE)));
+        calculatedStockOnHand.setStockCardId(cursor.getString(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID)));
+        calculatedStockOnHand.setStockOnHand(cursor.getInt(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_STOCK_ON_HAND)));
+        return calculatedStockOnHand;
     }
 
     public static PhysicalInventoryLineItem cursorToInventoryLineItem(Cursor cursor) {

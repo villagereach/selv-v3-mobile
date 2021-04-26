@@ -1,10 +1,14 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +18,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
@@ -27,10 +33,18 @@ import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
 public class InventoryFragment extends Fragment  implements InventoryAddProductDialog.DialogListener{
     private InventoryViewModel inventoryViewModel;
     private InventoryAddProductDialogViewModel inventoryAddProductDialogViewModel;
-    private FloatingActionButton fbAddProduct;
+    private Button addProduct;
+    private Button btSaveInventory;
+    private TextInputLayout tilOccuredDate;
+    private TextInputLayout tilSignature;
+    private EditText etSignature;
+    private EditText etOccurredDate;
+    private Button btReturn;
     private String selectedProgram;
     private String selectedFacility;
     private ListView lvInventoryItems;
+    private int year, month, day;
+
     private InventoryItemsAdapter inventoryItemsAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,11 +55,21 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
         inventoryViewModel = new ViewModelProvider(this).get(InventoryViewModel.class);
 
 
+
+
         View root = inflater.inflate(R.layout.fragment_inventory, container, false);
         lvInventoryItems = (ListView) root.findViewById(R.id.lv_stock_management_inventory_line_items);
-        fbAddProduct = (FloatingActionButton) root.findViewById(R.id.fab_stock_management_inventory_add_product);
+        addProduct = (Button) root.findViewById(R.id.bt_stock_management_inventory_add_product);
+        btSaveInventory = (Button) root.findViewById(R.id.bt_stock_management_inventory_save) ;
+        btReturn = (Button) root.findViewById(R.id.bt_stock_management_inventory_return);
+        etOccurredDate = (EditText) root.findViewById(R.id.et_stock_management_inventory_occurred_date);
+        etSignature = (EditText) root.findViewById(R.id.et_stock_management_inventory_signature);
+        tilOccuredDate = (TextInputLayout) root.findViewById(R.id.til_stock_management_inventory_occurred_date);
+        tilSignature = (TextInputLayout) root.findViewById(R.id.til_stock_management_inventory_signature) ;
 
-        fbAddProduct.setOnClickListener(new View.OnClickListener() {
+        createInventory(selectedFacility, selectedProgram);
+
+        addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -67,21 +91,101 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
             }
         });
 
+        btSaveInventory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(lvInventoryItems.getVisibility() == View.VISIBLE){
+                    btSaveInventory.setText(R.string.string_save);
+                    btReturn.setVisibility(View.VISIBLE);
+                    lvInventoryItems.setVisibility(View.GONE);
+                    addProduct.setVisibility(View.GONE);
+                    tilOccuredDate.setVisibility(View.VISIBLE);
+                    tilSignature.setVisibility(View.VISIBLE);
+                } else {
+                    InventoryItemsAdapter lineItems = (InventoryItemsAdapter) lvInventoryItems.getAdapter();
+                    String date = etOccurredDate.getText().toString();
+                    String signature = etSignature.getText().toString();
+                    inventoryViewModel.saveInventory(signature, selectedProgram, selectedFacility, date, lineItems);
+
+                    //submit inventory
+                }
+            }
+        });
+
+        etOccurredDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etOccurredDate.getText().toString().equals("")){
+                    Calendar calendar = Calendar.getInstance();
+                    year = calendar.get(Calendar.YEAR);
+                    month = calendar.get(Calendar.MONTH);
+                    day = calendar.get(Calendar.DAY_OF_YEAR);
+                } else {
+                    year = Integer.parseInt(etOccurredDate.getText().toString().substring(6));
+                    month = Integer.parseInt(etOccurredDate.getText().toString().substring(3, 5))-1;
+                    day = Integer.parseInt(etOccurredDate.getText().toString().substring(0,2));
+                }
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        etOccurredDate.setText(dayOfMonth+"-"+(String.format("%02d",month+1))+"-"+year);
+                    }
+                }, year, month, day );
+                datePickerDialog.show();
+            }
+        });
+
+        btReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btSaveInventory.setText(R.string.string_proceed);
+                btReturn.setVisibility(View.GONE);
+                lvInventoryItems.setVisibility(View.VISIBLE);
+                addProduct.setVisibility(View.VISIBLE);
+                tilOccuredDate.setVisibility(View.GONE);
+                etOccurredDate.setText("");
+                etSignature.setText("");
+                tilSignature.setVisibility(View.GONE);
+            }
+        });
+
+        lvInventoryItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("Working");
+            }
+        });
+
         return root;
     }
 
-    public void addOrderableToList(String orderableName, String lotCode, int quantity, int soh, List adjustments) {
+    public void addInventoryLineItem(String orderableName, String lotCode, int quantity, int soh) {
        inventoryViewModel.updateInventoryLineItems(orderableName, lotCode, quantity, -1, null);
     }
+
+   // public void addInventoryLineItemAdjustments(String orderable, String lotCode, List adjustments){
+
+   // }
 
     public void updateInventoryItemList(List<JSONObject> lineItems){
         inventoryItemsAdapter = new InventoryItemsAdapter(getContext(), lineItems);
         lvInventoryItems.setAdapter(inventoryItemsAdapter);
     }
 
+    public void createInventory(String facilityId, String selectedProgramId){
+        inventoryViewModel.getInventoryLineItems(selectedProgramId, facilityId);
+
+    }
+
     @Override
-    public void addProduct(String orderableName, String lotCode, int quantity, int soh, List adjustments) {
-        addOrderableToList(orderableName, lotCode, quantity, soh, adjustments);
+    public void addProduct(String orderableName, String lotCode, int quantity, int soh) {
+        addInventoryLineItem(orderableName, lotCode, quantity, soh);
+    }
+
+    @Override
+    public void addLineItemAdjustmets(String orderable, String lotCode, List adjustments) {
+
     }
 
 }

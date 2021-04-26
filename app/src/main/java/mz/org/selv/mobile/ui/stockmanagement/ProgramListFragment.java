@@ -81,6 +81,7 @@ public class ProgramListFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("action", action);
                     bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("facilityId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
                     bundle.putString("programId", program.getUuid());
                     InventoryListFragment inventoryListFragment = new InventoryListFragment();
                     inventoryListFragment.setArguments(bundle);
