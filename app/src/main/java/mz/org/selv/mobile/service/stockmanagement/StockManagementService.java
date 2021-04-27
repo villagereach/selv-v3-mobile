@@ -193,8 +193,6 @@ public class StockManagementService {
 
                 }
             }
-
-
         }
 
         return false;
