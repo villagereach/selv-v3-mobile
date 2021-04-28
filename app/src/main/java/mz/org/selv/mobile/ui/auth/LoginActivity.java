@@ -1,4 +1,4 @@
-package mz.org.selv.mobile;
+package mz.org.selv.mobile.ui.auth;
 
 import static android.util.Base64.DEFAULT;
 import static mz.org.selv.mobile.BuildConfig.BASE_URL;
@@ -29,6 +29,9 @@ import com.android.volley.toolbox.Volley;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import mz.org.selv.mobile.MainActivity;
+import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.SelvApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         btLogIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), R.string.string_logging_in, Toast.LENGTH_SHORT).show();
                 EditText username = findViewById(R.id.tx_username);
                 EditText password = findViewById(R.id.tx_password);
                 obtainAccessToken(LoginActivity.this, username.getText().toString(), password.getText().toString());

@@ -42,7 +42,6 @@
     <string name="string_last_sync">Last sync</string>
     <string name="string_username">Username</string>
     <string name="string_password">Password</string>
-    <string name="string_logging_in">Logging in…</string>
     <string name="string_login_success">Login successful!</string>
     <string name="string_login_failed">Login failed.</string>
     <string name="string_forgot_password"><a href="https://test.selv.org.mz/#!/forgotPassword">Forgot password?</a></string>

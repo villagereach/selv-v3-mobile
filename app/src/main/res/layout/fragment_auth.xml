@@ -26,7 +26,10 @@
     android:inputType="textPersonName"
     android:text=""
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/tv_username"/>
+    app:layout_constraintTop_toBottomOf="@+id/tv_username"
+    android:autofillHints="@string/string_username">
+    <requestFocus/>
+  </EditText>
 
   <TextView
     android:id="@+id/tv_password"
@@ -48,7 +51,8 @@
     android:inputType="textPassword"
     android:text=""
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/tv_password"/>
+    app:layout_constraintTop_toBottomOf="@+id/tv_password"
+    android:autofillHints="@string/string_password"/>
 
   <TextView
     android:id="@+id/tv_forgot_password"
