@@ -34,7 +34,7 @@ public class AuthViewModel extends AndroidViewModel {
     super(application);
   }
 
-  void obtainAccessToken() {
+  void obtainAccessToken(String username, String password) {
     requestQueue = Volley.newRequestQueue(getApplication().getApplicationContext());
 
     StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
@@ -75,8 +75,8 @@ public class AuthViewModel extends AndroidViewModel {
       protected Map<String, String> getParams() throws AuthFailureError {
         Map<String, String> params = new HashMap<>();
         params.put("grant_type", "password");
-        params.put("username", "admin");
-        params.put("password", "password");
+        params.put("username", username);
+        params.put("password", password);
         return params;
       }
     };

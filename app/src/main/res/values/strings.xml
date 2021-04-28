@@ -59,5 +59,8 @@
         <item>Estagio 2</item>
     </string-array>
 
+    <string name="string_username">Nome de utilizador</string>
+    <string name="string_password">Palavra-passe</string>
+    <string name="string_forgot_password"><a href="https://test.selv.org.mz/#!/forgotPassword">Esqueceu-se da palavra-passe?</a></string>
 
 </resources>

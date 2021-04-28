@@ -6,6 +6,40 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <EditText
+    android:id="@+id/tx_username"
+    android:layout_width="359dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="32dp"
+    android:layout_marginStart="26dp"
+    android:ems="10"
+    android:inputType="textPersonName"
+    android:text="@string/string_username"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <EditText
+    android:id="@+id/tx_password"
+    android:layout_width="359dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="32dp"
+    android:layout_marginStart="26dp"
+    android:ems="10"
+    android:inputType="textPassword"
+    android:text="@string/string_password"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tx_username"/>
+
+  <TextView
+    android:id="@+id/tv_forgot_password"
+    android:layout_width="359dp"
+    android:layout_height="26dp"
+    android:layout_marginTop="32dp"
+    android:layout_marginStart="26dp"
+    android:text="@string/string_forgot_password"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tx_password"/>
+
   <Button
     android:id="@+id/bt_log_in"
     android:layout_width="359dp"
@@ -14,6 +48,6 @@
     android:layout_marginStart="26dp"
     android:text="@string/string_log_in"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toBottomOf="@+id/tv_forgot_password"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
