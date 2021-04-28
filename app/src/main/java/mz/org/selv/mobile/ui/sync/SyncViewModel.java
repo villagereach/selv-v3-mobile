@@ -1,6 +1,9 @@
 package mz.org.selv.mobile.ui.sync;
 
 import static android.util.Base64.DEFAULT;
+import static mz.org.selv.mobile.BuildConfig.BASE_URL;
+import static mz.org.selv.mobile.BuildConfig.CLIENT_ID;
+import static mz.org.selv.mobile.BuildConfig.CLIENT_SECRET;
 
 import android.app.Application;
 import android.content.Context;
@@ -26,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import mz.org.selv.mobile.BuildConfig;
 import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 import org.json.JSONArray;
@@ -40,9 +44,7 @@ import mz.org.selv.mobile.service.openlmis.SyncEntities;
 
 public class SyncViewModel extends AndroidViewModel {
 
-    private static final String ACCESS_TOKEN_URI = "https://test.selv.org.mz/api/oauth/token";
-    private static final String CLIENT_ID = "client";
-    private static final String CLIENT_SECRET = "secret";
+    private static final String ACCESS_TOKEN_URI = BASE_URL + "/api/oauth/token";
     private String accessToken;
     private boolean loggedIn = false;
 

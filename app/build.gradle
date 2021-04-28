@@ -20,6 +20,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"" + getBaseUrl() + "\"")
+            buildConfigField("String", "CLIENT_ID", "\"" + getClientId() + "\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"" + getClientSecret() + "\"")
+        }
+        debug {
+            buildConfigField("String", "BASE_URL", "\"" + getBaseUrl() + "\"")
+            buildConfigField("String", "CLIENT_ID", "\"" + getClientId() + "\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"" + getClientSecret() + "\"")
         }
     }
     compileOptions {
@@ -43,4 +51,46 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+def getBaseUrl() {
+    def baseUrl = System.getenv("BASE_URL")
+    if (baseUrl == null || baseUrl.length() == 0) {
+        def keysFile = file("keys.properties")
+        def keysProperties = new Properties()
+        keysProperties.load(new FileInputStream(keysFile))
+        baseUrl = keysProperties['BASE_URL']
+        if (baseUrl == null) {
+            logger.error("You need to either place appropriate keys.properties or set proper environment variable for BASE_URL")
+        }
+    }
+    return baseUrl
+}
+
+def getClientId() {
+    def clientId = System.getenv("CLIENT_ID")
+    if (clientId == null || clientId.length() == 0) {
+        def keysFile = file("keys.properties")
+        def keysProperties = new Properties()
+        keysProperties.load(new FileInputStream(keysFile))
+        clientId = keysProperties['CLIENT_ID']
+        if (clientId == null) {
+            logger.error("You need to either place appropriate keys.properties or set proper environment variable for CLIENT_ID")
+        }
+    }
+    return clientId
+}
+
+def getClientSecret() {
+    def clientSecret = System.getenv("CLIENT_SECRET")
+    if (clientSecret == null || clientSecret.length() == 0) {
+        def keysFile = file("keys.properties")
+        def keysProperties = new Properties()
+        keysProperties.load(new FileInputStream(keysFile))
+        clientSecret = keysProperties['CLIENT_SECRET']
+        if (clientSecret == null) {
+            logger.error("You need to either place appropriate keys.properties or set proper environment variables for CLIENT_SECRET")
+        }
+    }
+    return clientSecret
 }
