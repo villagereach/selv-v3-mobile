@@ -33,6 +33,10 @@ public class SyncFragment extends Fragment {
             }
         });
 
+        Button btLogIn = root.findViewById(R.id.bt_log_in);
+
+        btLogIn.setOnClickListener(v -> syncViewModel.obtainAccessToken());
+
         return root;
     }
 }

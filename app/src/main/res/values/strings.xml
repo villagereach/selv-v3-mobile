@@ -17,6 +17,8 @@
     <string name="string_sync_data">Dados de Apliciacao</string>
     <string name="string_sync_delete">Apagar tudo e Sincronizar</string>
 
+    <string name="string_log_in">Iniciar sessão</string>
+
     <string name="string_receive">Entradas</string>
     <string name="string_issue">Saidas</string>
     <string name="string_inventory">Inventario</string>

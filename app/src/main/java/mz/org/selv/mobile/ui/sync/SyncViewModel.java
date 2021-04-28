@@ -1,6 +1,10 @@
 package mz.org.selv.mobile.ui.sync;
 
+import static android.util.Base64.DEFAULT;
+
 import android.app.Application;
+import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,12 +13,21 @@ import androidx.lifecycle.AndroidViewModel;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
+import mz.org.selv.mobile.database.Database;
+import mz.org.selv.mobile.database.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +39,12 @@ import mz.org.selv.mobile.model.Entity;
 import mz.org.selv.mobile.service.openlmis.SyncEntities;
 
 public class SyncViewModel extends AndroidViewModel {
+
+    private static final String ACCESS_TOKEN_URI = "https://test.selv.org.mz/api/oauth/token";
+    private static final String CLIENT_ID = "client";
+    private static final String CLIENT_SECRET = "secret";
+    private String accessToken;
+    private boolean loggedIn = false;
 
     private RequestQueue requestQueue;
     public SyncViewModel(@NonNull Application application) {
@@ -40,7 +59,10 @@ public class SyncViewModel extends AndroidViewModel {
     public void sync(int type){
         switch (type){
             case 1: // sync metadata
-
+                if (!loggedIn) {
+                    System.out.println("CSA Not logged in");
+                    break;
+                }
                 syncEntities(Entity.PROGRAM, "https://test.selv.org.mz/api/programs");
                 syncEntities(Entity.ORDERABLES, "https://test.selv.org.mz/api/orderables");
                 syncEntities(Entity.LOTS, "https://test.selv.org.mz/api/lots");
@@ -110,9 +132,7 @@ public class SyncViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                //String credentials = String.format("%s:%s", "admin", "password");
-                String auth = "Bearer d1545b77-2faf-4246-bab8-ef3d61c79b3e";
-                //String auth = "Bearer 9f81cba6-0462-42e7-8e32-9fbbd2941b57";
+                String auth = "Bearer " + accessToken;
                 params.put("Authorization", auth);
                 return params;
             }
@@ -120,9 +140,6 @@ public class SyncViewModel extends AndroidViewModel {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("grant_type", "client_credentials");
-                params.put("username", "admin");
-                params.put("password", "password");
                 params.put("facilityId","8e498daf-cdff-48b2-971f-0c53ef66e14d");
 
                 return params;
@@ -142,5 +159,57 @@ public class SyncViewModel extends AndroidViewModel {
             //System.out.println("not finished");
         }
         return 1;
+    }
+
+    void obtainAccessToken() {
+        requestQueue = Volley.newRequestQueue(getApplication().getApplicationContext());
+
+        StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
+            new Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (response != null) {
+                        try {
+                            JSONObject responseObject = new JSONObject(response);
+                            accessToken = responseObject.getString("access_token");
+                            loggedIn = true;
+                            System.out.println("CSA Logged in successfully");
+                        } catch (JSONException ex){
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        loggedIn = false;
+                    }
+
+                }
+            },
+            new ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.e("error", "" + error);
+                }
+            }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String plainCreds = CLIENT_ID + ":" + CLIENT_SECRET;
+                String base64Creds = Base64
+                    .encodeToString(plainCreds.getBytes(StandardCharsets.UTF_8), DEFAULT);
+                headers.put("Authorization", "Basic " + base64Creds);
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("grant_type", "password");
+                params.put("username", "admin");
+                params.put("password", "");
+                return params;
+            }
+        };
+        requestQueue.add(loginRequest);
     }
 }

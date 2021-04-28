@@ -19,6 +19,7 @@
     <string name="string_sync_delete">Delete All and Sync</string>
     <string name="string_sync_data">Application Data</string>
     <string name="string_sync_metadata">Configuration and Metada</string>
+    <string name="string_log_in">Log in</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_shipment">Shipments</string>
     <string name="menu_stockmanagement">Stock Managmeent</string>
