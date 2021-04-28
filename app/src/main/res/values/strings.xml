@@ -61,6 +61,9 @@
 
     <string name="string_username">Nome de utilizador</string>
     <string name="string_password">Palavra-passe</string>
+    <string name="string_logging_in">Sessão iniciando…</string>
+    <string name="string_login_success">Sessão iniciada!</string>
+    <string name="string_login_failed">Sessão não iniciada.</string>
     <string name="string_forgot_password"><a href="https://test.selv.org.mz/#!/forgotPassword">Esqueceu-se da palavra-passe?</a></string>
 
 </resources>

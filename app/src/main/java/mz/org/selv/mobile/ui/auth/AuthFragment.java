@@ -17,9 +17,8 @@ import mz.org.selv.mobile.R;
 public class AuthFragment extends Fragment {
 
   private AuthViewModel authViewModel;
-  private EditText username;
-  private EditText password;
 
+  @Override
   public View onCreateView(@NonNull LayoutInflater inflater,
       ViewGroup container, Bundle savedInsanceState) {
     authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
@@ -29,9 +28,9 @@ public class AuthFragment extends Fragment {
     btLogIn.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        username = root.findViewById(R.id.tx_username);
-        password = root.findViewById(R.id.tx_password);
-        authViewModel.obtainAccessToken(username.getText().toString(), password.getText().toString());
+        EditText username = root.findViewById(R.id.tx_username);
+        EditText password = root.findViewById(R.id.tx_password);
+        authViewModel.obtainAccessToken(getContext(), username.getText().toString(), password.getText().toString());
       }
     });
 

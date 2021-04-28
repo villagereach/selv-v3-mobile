@@ -6,6 +6,8 @@ import static mz.org.selv.mobile.BuildConfig.CLIENT_ID;
 import static mz.org.selv.mobile.BuildConfig.CLIENT_SECRET;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Base64;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.SelvApplication;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +37,7 @@ public class AuthViewModel extends AndroidViewModel {
     super(application);
   }
 
-  void obtainAccessToken(String username, String password) {
+  void obtainAccessToken(Context context, String username, String password) {
     requestQueue = Volley.newRequestQueue(getApplication().getApplicationContext());
 
     StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
@@ -46,7 +49,11 @@ public class AuthViewModel extends AndroidViewModel {
                 JSONObject responseObject = new JSONObject(response);
                 String accessToken = responseObject.getString("access_token");
                 ((SelvApplication) getApplication()).setAccessToken(accessToken);
+                ((SelvApplication) getApplication()).setUsername(username);
+                ((SelvApplication) getApplication()).setPassword(password);
                 System.out.println("CSA Logged in successfully, token = " + accessToken);
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
               } catch (JSONException ex) {
                 ex.printStackTrace();
               }
