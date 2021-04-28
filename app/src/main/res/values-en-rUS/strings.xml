@@ -26,6 +26,7 @@
     <string name="menu_requisition">Requisition</string>
     <string name="action_settings">Definicoes</string>
     <string name="menu_home">Home</string>
+    <string name="menu_auth">Log in</string>
     <string name="string_status">Status</string>
     <string name="string_proceed">Procced</string>
     <string name="string_return">Return</string>

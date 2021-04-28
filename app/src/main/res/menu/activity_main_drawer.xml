@@ -25,5 +25,10 @@
             android:id="@+id/nav_sync"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_sync" />
+
+        <item
+          android:id="@+id/nav_auth"
+          android:icon="@drawable/ic_menu_gallery"
+          android:title="@string/menu_auth" />
     </group>
 </menu>

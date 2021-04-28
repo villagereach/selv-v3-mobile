@@ -6,6 +6,7 @@
         android:allowBackup="true"
         android:icon="@drawable/selv_logo"
         android:label="@string/app_name"
+        android:name=".SelvApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SELVMobile">
