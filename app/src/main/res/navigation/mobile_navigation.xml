@@ -34,10 +34,4 @@
         android:name="mz.org.selv.mobile.ui.shipments.ShipmentFragment"
         android:label="@string/menu_shipment"
         tools:layout="@layout/fragment_shipment" />
-
-    <fragment
-      android:id="@+id/nav_auth"
-      android:name="mz.org.selv.mobile.ui.auth.AuthFragment"
-      android:label="@string/menu_auth"
-      tools:layout="@layout/fragment_auth" />
 </navigation>
