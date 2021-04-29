@@ -11,7 +11,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
-import mz.org.selv.mobile.ui.auth.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,28 +20,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (((SelvApplication) getApplication()).getAccessToken() == null) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        } else {
-            setContentView(R.layout.activity_main);
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            NavigationView navigationView = findViewById(R.id.nav_view);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_requisition, R.id.nav_shipment, R.id.nav_stockmanagement,
-                R.id.nav_sync)
-                .setDrawerLayout(drawer)
-                .build();
-            NavController navController = Navigation
-                .findNavController(this, R.id.nav_host_fragment);
-            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-            NavigationUI.setupWithNavController(navigationView, navController);
-        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+            R.id.nav_home, R.id.nav_requisition, R.id.nav_shipment, R.id.nav_stockmanagement,
+            R.id.nav_sync)
+            .setDrawerLayout(drawer)
+            .build();
+        NavController navController = Navigation
+            .findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
     }
 
     @Override

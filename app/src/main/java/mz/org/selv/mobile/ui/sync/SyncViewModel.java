@@ -1,6 +1,10 @@
 package mz.org.selv.mobile.ui.sync;
 
+import static mz.org.selv.mobile.auth.LoginHelper.APP_SHARED_PREFS;
+
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,7 +18,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
-import mz.org.selv.mobile.SelvApplication;
 import mz.org.selv.mobile.model.Entity;
 import mz.org.selv.mobile.service.openlmis.SyncEntities;
 import org.json.JSONArray;
@@ -105,7 +108,8 @@ public class SyncViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                String auth = "Bearer " + ((SelvApplication) getApplication()).getAccessToken();
+                SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+                String auth = "Bearer " + sharedPrefs.getString("accessToken", "");
                 params.put("Authorization", auth);
                 return params;
             }
