@@ -31,6 +31,7 @@ import org.json.JSONObject;
 public class LoginHelper {
 
     private static final String ACCESS_TOKEN_URI = BASE_URL + "/api/oauth/token";
+    public static final String KEY_ACCESS_TOKEN = "access_token";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
     public static final String APP_SHARED_PREFS = "selv_mobile_prefs";
@@ -52,10 +53,10 @@ public class LoginHelper {
                         try {
                             Toast.makeText(appContext, R.string.string_login_success, Toast.LENGTH_SHORT).show();
                             JSONObject responseObject = new JSONObject(response);
-                            String accessToken = responseObject.getString("access_token");
+                            String accessToken = responseObject.getString(KEY_ACCESS_TOKEN);
                             SharedPreferences sharedPrefs = appContext.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                             Editor editor = sharedPrefs.edit();
-                            editor.putString("accessToken", accessToken);
+                            editor.putString(KEY_ACCESS_TOKEN, accessToken);
                             editor.putString(KEY_USERNAME, username);
                             editor.putString(KEY_PASSWORD, password);
                             editor.apply();

@@ -34,4 +34,10 @@
         android:name="mz.org.selv.mobile.ui.shipments.ShipmentFragment"
         android:label="@string/menu_shipment"
         tools:layout="@layout/fragment_shipment" />
+
+    <activity
+      android:id="@+id/nav_log_out"
+      android:name="mz.org.selv.mobile.LoginActivity"
+      android:label="@string/menu_log_out"
+      tools:layout="@layout/activity_login" />
 </navigation>

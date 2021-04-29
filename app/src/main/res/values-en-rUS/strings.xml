@@ -8,7 +8,7 @@
     <string name="menu_stockmanagement">Stock Managmeent</string>
     <string name="menu_shipment">Shipments</string>
     <string name="menu_sync">Sync</string>
-    <string name="menu_auth">Log in</string>
+    <string name="menu_log_out">Log out</string>
 
     <string name="string_log_in">Log in</string>
 

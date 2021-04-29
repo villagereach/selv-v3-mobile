@@ -1,6 +1,7 @@
 package mz.org.selv.mobile.ui.sync;
 
 import static mz.org.selv.mobile.auth.LoginHelper.APP_SHARED_PREFS;
+import static mz.org.selv.mobile.auth.LoginHelper.KEY_ACCESS_TOKEN;
 
 import android.app.Application;
 import android.content.Context;
@@ -109,7 +110,7 @@ public class SyncViewModel extends AndroidViewModel {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
                 SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-                String auth = "Bearer " + sharedPrefs.getString("accessToken", "");
+                String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
                 params.put("Authorization", auth);
                 return params;
             }

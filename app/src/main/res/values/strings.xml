@@ -12,7 +12,7 @@
     <string name="menu_stockmanagement">Gestao de Stock</string>
     <string name="menu_shipment">Aviamentos</string>
     <string name="menu_sync">Sincronizacao</string>
-    <string name="menu_auth">Iniciar sessão</string>
+    <string name="menu_log_out">Terminar sessão</string>
 
     <string name="string_log_in">Iniciar sessão</string>
 
