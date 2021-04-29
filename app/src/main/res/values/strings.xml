@@ -3,9 +3,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">SELV Mobile</string>
-    <string name="nav_header_subtitle" translatable="false">www.selv.org.mz</string>
+    <string name="nav_header_subtitle" translatable="false">test.selv.org.mz</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Definicoes</string>
 
     <string name="menu_home">Inicio</string>
     <string name="menu_requisition">Requisicoes</string>
@@ -14,11 +14,11 @@
     <string name="menu_sync">Sincronizacao</string>
     <string name="menu_auth">Iniciar sessão</string>
 
+    <string name="string_log_in">Iniciar sessão</string>
+
     <string name="string_sync_metadata">Configuracoes e Metadados</string>
     <string name="string_sync_data">Dados de Apliciacao</string>
     <string name="string_sync_delete">Apagar tudo e Sincronizar</string>
-
-    <string name="string_log_in">Iniciar sessão</string>
 
     <string name="string_receive">Entradas</string>
     <string name="string_issue">Saidas</string>
@@ -64,5 +64,4 @@
     <string name="string_login_success">Sessão iniciada!</string>
     <string name="string_login_failed">Sessão não iniciada.</string>
     <string name="string_forgot_password"><a href="https://test.selv.org.mz/#!/forgotPassword">Esqueceu-se da palavra-passe?</a></string>
-
 </resources>

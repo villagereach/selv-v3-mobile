@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SELV - Mobile</string>
-    <string name="string_date" translatable="false">Date</string>
-    <string name="string_reason">Reason</string>
-    <string name="string_quantity">Quantity</string>
-    <string name="string_destination">Destiantion</string>
-    <string name="string_source">Source</string>
-    <string name="string_lot">Lot</string>
-    <string name="string_expiration_date">Expiration Date</string>
-    <string name="string_program">Program</string>
-    <string name="string_product">Product</string>
-    <string name="string_ok">Ok</string>
-    <string name="string_adjustments">Adjustments</string>
-    <string name="string_soh">Stock on Hand</string>
-    <string name="string_inventory">Inventory</string>
-    <string name="string_issue">Issues</string>
-    <string name="string_receive">Receive</string>
-    <string name="string_sync_delete">Delete All and Sync</string>
-    <string name="string_sync_data">Application Data</string>
-    <string name="string_sync_metadata">Configuration and Metada</string>
-    <string name="string_log_in">Log in</string>
-    <string name="menu_sync">Sync</string>
-    <string name="menu_shipment">Shipments</string>
-    <string name="menu_stockmanagement">Stock Managmeent</string>
-    <string name="menu_requisition">Requisition</string>
-    <string name="action_settings">Definicoes</string>
+    <string name="action_settings">Settings</string>
+
     <string name="menu_home">Home</string>
+    <string name="menu_requisition">Requisition</string>
+    <string name="menu_stockmanagement">Stock Managmeent</string>
+    <string name="menu_shipment">Shipments</string>
+    <string name="menu_sync">Sync</string>
     <string name="menu_auth">Log in</string>
-    <string name="string_status">Status</string>
-    <string name="string_proceed">Procced</string>
-    <string name="string_return">Return</string>
-    <string name="string_signature">Signature</string>
-    <string name="string_create">Create</string>
-    <string name="string_balance">Balance</string>
-    <string name="string_physicalstock">Stock on Hand</string>
-    <string name="string_add">Add</string>
-    <string name="string_cancel">Cancel</string>
-    <string name="string_save">Save</string>
-    <string name="string_vvm">VVM</string>
-    <string name="string_comments" translatable="false">Comments</string>
+
+    <string name="string_log_in">Log in</string>
+
+    <string name="string_sync_metadata">Sync Config and Metadata</string>
+    <string name="string_sync_data">Sync Application Data</string>
+    <string name="string_sync_delete">Delete and Sync All</string>
+
+    <string name="string_receive">Receive</string>
+    <string name="string_issue">Issues</string>
+    <string name="string_inventory">Inventory</string>
+    <string name="string_soh">Stock on Hand</string>
+    <string name="string_adjustments">Adjustments</string>
+
     <string name="string_last_sync">Last sync</string>
+
+    <string name="string_ok">Ok</string>
+
+    <string name="string_product">Product</string>
+    <string name="string_program">Program</string>
+    <string name="string_expiration_date">Expiration Date</string>
+    <string name="string_lot">Lot</string>
+    <string name="string_source">Source</string>
+    <string name="string_destination">Destiantion</string>
+    <string name="string_quantity">Quantity</string>
+    <string name="string_reason">Reason</string>
+    <string name="string_date" translatable="false">Date</string>
+    <string name="string_comments" translatable="false">Comments</string>
+    <string name="string_vvm">VVM</string>
+    <string name="string_save">Save</string>
+    <string name="string_cancel">Cancel</string>
+    <string name="string_add">Add</string>
+
+    <string name="string_physicalstock">Stock on Hand</string>
+    <string name="string_balance">Balance</string>
+    <string name="string_create">Create</string>
+    <string name="string_signature">Signature</string>
+    <string name="string_return">Return</string>
+    <string name="string_proceed">Procced</string>
+    <string name="string_status">Status</string>
+
     <string name="string_username">Username</string>
     <string name="string_password">Password</string>
     <string name="string_login_success">Login successful!</string>
