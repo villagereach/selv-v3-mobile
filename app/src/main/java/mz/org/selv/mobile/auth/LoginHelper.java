@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.R;
 import org.json.JSONException;
@@ -42,7 +43,14 @@ public class LoginHelper {
         this.appContext = appContext;
     }
 
-    public void obtainAccessToken(Context context, String username, String password) {
+    /**
+     * Use to make an async login request to the auth server. If request is successful,
+     * KEY_ACCESS_TOKEN should be set to access token. Only set loginContext if logging in, in order
+     * to move to MainActivity after successful login.
+     *
+     * @param loginContext login context
+     */
+    public void obtainAccessToken(Context loginContext) {
         RequestQueue requestQueue = Volley.newRequestQueue(appContext);
 
         StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
@@ -57,15 +65,14 @@ public class LoginHelper {
                             SharedPreferences sharedPrefs = appContext.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                             Editor editor = sharedPrefs.edit();
                             editor.putString(KEY_ACCESS_TOKEN, accessToken);
-                            editor.putString(KEY_USERNAME, username);
-                            editor.putString(KEY_PASSWORD, password);
                             editor.apply();
 
                             Log.d(this.getClass().toString(), "Login successful, token = " + accessToken);
 
-                            Intent loginIntent = new Intent(context, MainActivity.class);
-                            loginIntent.putExtra("reqFrom", "login");
-                            context.startActivity(loginIntent);
+                            if (loginContext != null) {
+                                Intent loginIntent = new Intent(loginContext, MainActivity.class);
+                                loginContext.startActivity(loginIntent);
+                            }
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -93,10 +100,11 @@ public class LoginHelper {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                SharedPreferences sharedPrefs = appContext.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 Map<String, String> params = new HashMap<>();
                 params.put("grant_type", "password");
-                params.put(KEY_USERNAME, username);
-                params.put(KEY_PASSWORD, password);
+                params.put(KEY_USERNAME, sharedPrefs.getString(KEY_USERNAME, ""));
+                params.put(KEY_PASSWORD, sharedPrefs.getString(KEY_PASSWORD, ""));
                 return params;
             }
         };

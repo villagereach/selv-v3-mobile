@@ -37,7 +37,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText username = findViewById(R.id.tx_username);
                 EditText password = findViewById(R.id.tx_password);
-                loginHelper.obtainAccessToken(LoginActivity.this, username.getText().toString(), password.getText().toString());
+                SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+                Editor editor = sharedPrefs.edit();
+                editor.putString(KEY_USERNAME, username.getText().toString());
+                editor.putString(KEY_PASSWORD, password.getText().toString());
+                editor.apply();
+                loginHelper.obtainAccessToken(LoginActivity.this);
             }
         });
 

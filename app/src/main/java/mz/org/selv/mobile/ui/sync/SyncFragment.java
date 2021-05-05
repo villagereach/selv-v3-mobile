@@ -9,10 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.auth.LoginHelper;
 
 public class SyncFragment extends Fragment {
 
     private SyncViewModel syncViewModel;
+    private LoginHelper loginHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInsanceState) {
@@ -29,6 +31,13 @@ public class SyncFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        loginHelper = new LoginHelper(getActivity().getApplicationContext());
+        loginHelper.obtainAccessToken(null);
+        super.onResume();
     }
 }
 
