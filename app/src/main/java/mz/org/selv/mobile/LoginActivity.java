@@ -10,8 +10,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,8 +18,6 @@ import mz.org.selv.mobile.auth.LoginHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginHelper loginHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,21 +25,18 @@ public class LoginActivity extends AppCompatActivity {
 
         clearCredentials();
 
-        loginHelper = new LoginHelper(getApplicationContext());
+        LoginHelper loginHelper = new LoginHelper(getApplicationContext());
 
         Button btLogIn = findViewById(R.id.bt_log_in);
-        btLogIn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText username = findViewById(R.id.tx_username);
-                EditText password = findViewById(R.id.tx_password);
-                SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-                Editor editor = sharedPrefs.edit();
-                editor.putString(KEY_USERNAME, username.getText().toString());
-                editor.putString(KEY_PASSWORD, password.getText().toString());
-                editor.apply();
-                loginHelper.obtainAccessToken(LoginActivity.this);
-            }
+        btLogIn.setOnClickListener(v -> {
+            EditText username = findViewById(R.id.tx_username);
+            EditText password = findViewById(R.id.tx_password);
+            SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+            Editor editor = sharedPrefs.edit();
+            editor.putString(KEY_USERNAME, username.getText().toString());
+            editor.putString(KEY_PASSWORD, password.getText().toString());
+            editor.apply();
+            loginHelper.obtainAccessToken(LoginActivity.this);
         });
 
         TextView linkTextView = findViewById(R.id.tv_forgot_password);

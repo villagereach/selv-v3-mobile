@@ -12,18 +12,14 @@ import android.content.SharedPreferences.Editor;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.R;
 import org.json.JSONException;
@@ -79,16 +75,13 @@ public class LoginHelper {
                     }
                 }
             },
-            new ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(appContext, R.string.string_login_failed, Toast.LENGTH_SHORT).show();
-                    error.printStackTrace();
-                    Log.e("error", "" + error);
-                }
+            error -> {
+                Toast.makeText(appContext, R.string.string_login_failed, Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                Log.e("error", "" + error);
             }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String plainCreds = CLIENT_ID + ":" + CLIENT_SECRET;
                 String base64Creds = Base64
@@ -99,7 +92,7 @@ public class LoginHelper {
             }
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 SharedPreferences sharedPrefs = appContext.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 Map<String, String> params = new HashMap<>();
                 params.put("grant_type", "password");
