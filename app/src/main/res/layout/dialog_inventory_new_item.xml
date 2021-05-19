@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-
-    android:layout_weight="1"
     android:background="#FFFFFF"
     android:orientation="vertical">
 
@@ -61,6 +58,13 @@
             android:layout_weight="1"
             android:text="@string/string_expiration_date"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+        <TextView
+            android:id="@+id/label_stock_management_inventory_new_item_soh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/string_theoric_stock"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
     </LinearLayout>
 
     <LinearLayout
@@ -70,6 +74,14 @@
 
         <TextView
             android:id="@+id/tv_stock_management_inventory_add_product_expiration_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/tv_stock_management_inventory_add_product_theoric_stock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

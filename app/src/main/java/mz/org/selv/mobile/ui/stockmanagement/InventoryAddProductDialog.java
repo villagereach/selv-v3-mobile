@@ -1,7 +1,5 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.model.referencedata.Lot;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 
 public class InventoryAddProductDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
@@ -34,6 +30,7 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
     private AutoCompleteTextView acReason;
     private EditText etQuantity;
     private TextView product;
+    private TextView tvTheoricStock;
     private TextView tvExpirationDate;
     private Button btSave;
 
@@ -57,17 +54,27 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
         acProduct = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_product);
         acLotNumber = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_lot);
         tvExpirationDate = (TextView) view.findViewById(R.id.tv_stock_management_inventory_add_product_expiration_date);
+        tvTheoricStock = (TextView) view.findViewById(R.id.tv_stock_management_inventory_add_product_theoric_stock);
         //AC Adapters
         List orderables = inventoryViewModel.getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
         ArrayAdapter<String> orderableAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
         orderableAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         acProduct.setAdapter(orderableAdapter);
 
+        if(!getArguments().getBoolean("newItem")){
+            acProduct.setText(getArguments().getString("orderableName"));
+            acProduct.setEnabled(false);
+            acLotNumber.setText(getArguments().getString("lotCode"));
+            acLotNumber.setEnabled(false);
+            tvExpirationDate.setText(getArguments().getString("expirationDate"));
+            tvTheoricStock.setText(getArguments().getString("stockOnHand"));
+        }
 
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveProduct(acProduct.getText().toString(), acLotNumber.getText().toString(), Integer.parseInt(etQuantity.getText().toString()), -1);
+                System.out.println("Position in Dialogn: "+getArguments().getInt("itemPosition"));
+                saveProduct(acProduct.getText().toString(), acLotNumber.getText().toString(), Integer.parseInt(etQuantity.getText().toString()), -1, getArguments().getInt("itemPosition"));
             }
         });
 
@@ -107,17 +114,17 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
 
 
     public interface DialogListener {
-        void addProduct(String orderableName, String lotCode, int quantity, int soh);
+        void addProduct(String orderableName, String lotCode, int quantity, int soh, int position);
         void addLineItemAdjustmets(String orderable, String lotCode, List adjustments);
     }
 
-    public void saveProduct(String orderableName, String lotCode, int quantity, int soh) {
+    public void saveProduct(String orderableName, String lotCode, int quantity, int soh, int position) {
         DialogListener listener = (DialogListener) getParentFragment();
-        listener.addProduct(orderableName, lotCode, quantity, soh);
+        listener.addProduct(orderableName, lotCode, quantity, soh, position);
     }
 
-    public void saveAdjustment(String orderableName, String lotCode, int quantity, int soh) {
+    public void saveAdjustment(String orderableName, String lotCode, int quantity, int soh, int position) {
         DialogListener listener = (DialogListener) getParentFragment();
-        listener.addProduct(orderableName, lotCode, quantity, soh);
+        listener.addProduct(orderableName, lotCode, quantity, soh, position);
     }
 }

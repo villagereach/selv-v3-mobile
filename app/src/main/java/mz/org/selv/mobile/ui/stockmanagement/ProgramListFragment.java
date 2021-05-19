@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.ui.adapters.ProgramListAdapter;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.ProgramListViewModel;
 
 public class ProgramListFragment extends Fragment {
     private ProgramListViewModel programListViewModel;

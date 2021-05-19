@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventDialogViewModel;
 
 public class StockEventDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
     private StockEventDialogViewModel stockEventDialogViewModel;

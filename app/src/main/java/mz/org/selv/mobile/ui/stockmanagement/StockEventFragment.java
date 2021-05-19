@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventViewModel;
 
 public class StockEventFragment extends Fragment {
 

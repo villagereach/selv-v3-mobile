@@ -1,4 +1,4 @@
-package mz.org.selv.mobile.ui.stockmanagement;
+package mz.org.selv.mobile.ui.stockmanagement.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

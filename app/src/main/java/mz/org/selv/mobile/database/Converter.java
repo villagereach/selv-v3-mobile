@@ -94,7 +94,7 @@ public class Converter {
         stockCard.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_ORDERABLE_ID)));
         stockCard.setLotId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_LOT_ID)));
         stockCard.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_FACILITY_ID)));
-        //stockCard.setStockOnHand(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_PROGRAM_ID)));
+        stockCard.setId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_ID)));
         return stockCard;
     }
 

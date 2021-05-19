@@ -43,7 +43,9 @@
     <string name="string_save">Salvar</string>
     <string name="string_cancel">Cancelar</string>
     <string name="string_add">Adicionar</string>
-
+    <string name="string_theoric_stock">Stock Teorico</string>
+    <string name="string_delete">Eliminar</string>
+    <string name="string_adjusted_total">Total Ajustado</string>
     <string name="string_physicalstock">Stock Fisico</string>
     <string name="string_balance">Balanco</string>
     <string name="string_create">Criar</string>

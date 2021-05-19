@@ -1,4 +1,4 @@
-package mz.org.selv.mobile.ui.stockmanagement;
+package mz.org.selv.mobile.ui.stockmanagement.viewmodel;
 
 import android.app.Application;
 import android.widget.ArrayAdapter;
@@ -75,7 +75,7 @@ public class InventoryViewModel extends AndroidViewModel {
         return lineItems;
     }
 
-    public void updateInventoryLineItems(String orderableName, String lotCode, int quantity, int soh, List adjustments) {
+    public void updateInventoryLineItems(String orderableName, String lotCode, int quantity, int soh, int position, List adjustments) {
         JSONObject lineItem = new JSONObject();
         Lot lot = referenceDataService.getLotByCode(lotCode);
         Orderable orderable = referenceDataService.getOrderableByName(orderableName);
@@ -91,30 +91,43 @@ public class InventoryViewModel extends AndroidViewModel {
             lineItem.put("stockOnHand", soh);
 
 
+            List currentItems = getLastLineUpdatedItem().getValue();
+
+            if (currentItems == null) {
+                currentItems = new ArrayList<JSONObject>();
+            }
+
+
+
+            if (position > -1) {
+                JSONObject currentItem = (JSONObject) currentItems.get(position);
+                currentItem.put("physicalStock", quantity);
+                System.out.println("Position A: "+position);
+                currentItems.remove(position);
+                currentItems.add(position, currentItem);
+            } else {
+                currentItems.add(lineItem);
+            }
+            lineItems.setValue(currentItems);
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
-        List currentItems = getLastLineUpdatedItem().getValue();
-        if (currentItems == null) {
-            currentItems = new ArrayList<JSONObject>();
-        }
-        currentItems.add(lineItem);
-        lineItems.setValue(currentItems);
+
     }
 
-    public int saveInventory(String signature, String programId, String facilityId, String occuredDate, InventoryItemsAdapter lineItemsAdapter) {
+    public int saveInventory(String signature, String programId, String facilityId, String occurredDate, InventoryItemsAdapter lineItemsAdapter) {
         List<PhysicalInventoryLineItem> lineItems = new ArrayList<>();
         String inventoryId = UUID.randomUUID().toString();
         PhysicalInventory inventory = new PhysicalInventory();
         inventory.setSignature(signature);
         inventory.setProgramId(programId);
-        inventory.setOccurredDate(occuredDate);
+        inventory.setOccurredDate(occurredDate);
         inventory.setFacilityId(facilityId);
         inventory.setId(inventoryId);
-        for(int i = 0; i < lineItemsAdapter.getCount(); i++){
+        for (int i = 0; i < lineItemsAdapter.getCount(); i++) {
             PhysicalInventoryLineItem lineItem = new PhysicalInventoryLineItem();
             System.out.println(lineItemsAdapter.getItem(i).toString());
-            try{
+            try {
                 lineItem.setOrderableId(lineItemsAdapter.getItem(i).getString("orderableId"));
                 lineItem.setLotId(lineItemsAdapter.getItem(i).getString("lotId"));
                 lineItem.setPhysicalStock(lineItemsAdapter.getItem(i).getInt("physicalStock"));
@@ -122,18 +135,18 @@ public class InventoryViewModel extends AndroidViewModel {
                 //lineItem.setPreviousStockOnHand();
                 lineItem.setPhysicalInventoryId(inventoryId);
                 lineItems.add(lineItem);
-            } catch (JSONException ex){
+            } catch (JSONException ex) {
                 ex.printStackTrace();
             }
         }
-        if(lineItems.size() > 0) {
+        if (lineItems.size() > 0) {
             stockManagementService = new StockManagementService(getApplication());
-            stockManagementService.saveInventory(inventory, lineItems,  null);
+            stockManagementService.saveInventory(inventory, lineItems, null);
         }
         return 1;
     }
 
-    public void getInventoryLineItems(String programId, String facilityId){
+    public void getInventoryLineItems(String programId, String facilityId) {
         getLastLineUpdatedItem().getValue();
         lineItems.setValue(stockManagementService.getNewInventoryLineItem(programId, facilityId));
     }

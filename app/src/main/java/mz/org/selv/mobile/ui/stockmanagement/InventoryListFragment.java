@@ -12,15 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.ui.adapters.InventoryListAdapter;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryListViewModel;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.ProgramListViewModel;
 
 public class InventoryListFragment extends Fragment {
     private InventoryListViewModel inventoryListViewModel;

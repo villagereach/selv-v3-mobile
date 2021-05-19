@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +26,7 @@ import mz.org.selv.mobile.model.stockmanagement.CalculatedStockOnHand;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustments;
+import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.StockCard;
 import mz.org.selv.mobile.model.stockmanagement.StockCardLineItem;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
@@ -127,11 +129,12 @@ public class StockManagementService {
 
     public boolean updateStockCards(Database database, StockEvent event, List<StockEventLineItem> lineItems) {
 
+        Map<StockCard, List<StockCardLineItem>> mapStockCardLineItems = new HashMap<>();
         List<StockCard> stockCardList = new ArrayList<>();
         List<StockCardLineItem> stockCardLineItems = new ArrayList<>();
         Map<String, List<StockEventLineItem>> lineItemsMap = formatStockEventLineItems(lineItems);
 
-        for(Map.Entry<String, List<StockEventLineItem>> entry: lineItemsMap.entrySet()){
+        for (Map.Entry<String, List<StockEventLineItem>> entry : lineItemsMap.entrySet()) {
             StockCard stockCard = getStockCard(database, event.getFacilityId(), event.getProgramId(), entry.getKey());
             if (stockCard.getFacilityId() == null) {
                 stockCard.setFacilityId(event.getFacilityId());
@@ -145,7 +148,7 @@ public class StockManagementService {
             //get calculated stock on hand to update values
 
             //loop through line items
-            for(int i = 0; i < entry.getValue().size(); i ++){
+            for (int i = 0; i < entry.getValue().size(); i++) {
                 StockCardLineItem stockCardLineItem = new StockCardLineItem();
                 stockCardLineItem.setId(UUID.randomUUID().toString());
                 stockCardLineItem.setOrderableId(entry.getValue().get(i).getOrderableId());
@@ -158,11 +161,17 @@ public class StockManagementService {
                 stockCardLineItems.add(stockCardLineItem);
             }
             stockCardList.add(stockCard);
+            mapStockCardLineItems.put(stockCard, stockCardLineItems);
         }
 
 
         if (database.insert(stockCardList) > 0) {
             if (database.insert(stockCardLineItems) > 0) {
+                if (updateStockOnHand(database, mapStockCardLineItems)) {
+                    //System.out.println("");
+                } else {
+
+                }
                 return true;
             } else {
                 return false;
@@ -172,36 +181,63 @@ public class StockManagementService {
         }
     }
 
-    public boolean updateStockOnHand(Database database, List<StockCardLineItem> lineItems){
-        Map<String, List<StockCardLineItem>> stockCardlineItemsMap = formatStockCardLineItems(lineItems);
-        for(Map.Entry<String, List<StockCardLineItem>> entry: stockCardlineItemsMap.entrySet()){
+    public boolean updateStockOnHand(Database database, Map<StockCard, List<StockCardLineItem>> mapStockCardLineItems) {
+        List<CalculatedStockOnHand> calculatedStockOnHandList = new ArrayList<>();
+        for (Map.Entry<StockCard, List<StockCardLineItem>> entry : mapStockCardLineItems.entrySet()) {
+            CalculatedStockOnHand calculatedStockOnHand = new CalculatedStockOnHand();
+            int lastStockOnHand = 0;
 
-            for(int i = 0; i < entry.getValue().size(); i ++){
-                CalculatedStockOnHand calculatedStockOnHand;
-                int lastStockOnHand;
-                Cursor cursorLastStockOnHandId = database.rawQuery("SELECT "+Database.CalculatedStockOnHand.COLUMN_ID +", MAX(DATE( "+Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE+")) " +
-                        "FROM "+Database.CalculatedStockOnHand.TABLE_NAME+" WHERE DATE("+Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE+") <= DATE(?) AND "+Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID+
-                        "= ? GROUP BY "+Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID, new String[]{entry.getValue().get(i).getOccurredDate(), entry.getValue().get(i).getStockcardId()});
-                String lastStockOnHandId;
-                if(cursorLastStockOnHandId.getCount() > 0){
+            String lastStockOnHandId;
+            for (int i = 0; i < entry.getValue().size(); i++) {
+                Cursor cursorLastStockOnHandId = database.rawQuery("SELECT " + Database.CalculatedStockOnHand.COLUMN_ID + ", MAX(DATE( " + Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE + ")) " +
+                        "FROM " + Database.CalculatedStockOnHand.TABLE_NAME + " WHERE DATE(" + Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE + ") <= DATE(?) AND " + Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID +
+                        "= ? GROUP BY " + Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID, new String[]{entry.getValue().get(i).getOccurredDate(), entry.getKey().getId()});
+                if (cursorLastStockOnHandId.getCount() > 0) {
                     cursorLastStockOnHandId.moveToFirst();
                     lastStockOnHandId = cursorLastStockOnHandId.getString(cursorLastStockOnHandId.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_ID));
-                    Cursor cursor = database.select(CalculatedStockOnHand.class, Database.CalculatedStockOnHand.COLUMN_ID+"=?", new String[]{lastStockOnHandId}, null, null, null);
+                    Cursor cursor = database.select(CalculatedStockOnHand.class, Database.CalculatedStockOnHand.COLUMN_ID + "=?", new String[]{lastStockOnHandId}, null, null, null);
                     cursor.moveToFirst();
-                    lastStockOnHand = cursor.getInt(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_ID));
+                    lastStockOnHand = cursor.getInt(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_STOCK_ON_HAND));
                 } else {
-
+                    //
                 }
+
+                if (entry.getValue().get(i).getReasonId() != null) { // if null is inventory
+
+                    Cursor reasonCursor = database.select(Reason.class, Database.Reason.COLUMN_NAME_UUID + "=?", new String[]{entry.getValue().get(i).getReasonId()}, null, null, null);
+                    if (reasonCursor.moveToFirst()) {
+                        Reason reason = Converter.cursorToReason(reasonCursor);
+                        if (reason.getType().equals("DEBIT")) {
+                            lastStockOnHand = lastStockOnHand - entry.getValue().get(i).getQuantity();
+                        } else {
+                            lastStockOnHand = lastStockOnHand + entry.getValue().get(i).getQuantity();
+                        }
+                    }
+                    reasonCursor.close();
+                } else { // is inventory
+                    lastStockOnHand = lastStockOnHand + entry.getValue().get(i).getQuantity();
+                }
+
+                cursorLastStockOnHandId.close();
+
             }
+            calculatedStockOnHand.setStockOnHand(lastStockOnHand);
+            calculatedStockOnHand.setStockCardId(entry.getKey().getId());
+            calculatedStockOnHand.setOccuredDate(entry.getValue().get(0).getOccurredDate());
+            calculatedStockOnHandList.add(calculatedStockOnHand);
         }
 
-        return false;
+        if (database.insert(calculatedStockOnHandList) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public Map formatStockEventLineItems(List<StockEventLineItem>lineItems){
+    public Map formatStockEventLineItems(List<StockEventLineItem> lineItems) {
         List<String> lotIds = new ArrayList<>();
-        for(int i = 0; i < lineItems.size(); i++){
-            if(!lotIds.contains(lineItems.get(i).getLotId())){
+        for (int i = 0; i < lineItems.size(); i++) {
+            if (!lotIds.contains(lineItems.get(i).getLotId())) {
                 lotIds.add(lineItems.get(i).getLotId());
             }
         }
@@ -209,10 +245,10 @@ public class StockManagementService {
         //loopt through lots and not line items to get just 1 stock card
 
         Map<String, List<StockEventLineItem>> lineItemsByLotMap = new HashMap<>();
-        for(int i = 0; i < lotIds.size(); i++){
+        for (int i = 0; i < lotIds.size(); i++) {
             List<StockEventLineItem> lineItemsByLot = new ArrayList<>();
-            for(int j = 0; j < lineItems.size(); j++){
-                if(lineItems.get(j).getLotId().equals(lotIds.get(i))){
+            for (int j = 0; j < lineItems.size(); j++) {
+                if (lineItems.get(j).getLotId().equals(lotIds.get(i))) {
                     lineItemsByLot.add(lineItems.get(j));
                 }
             }
@@ -221,10 +257,10 @@ public class StockManagementService {
         return lineItemsByLotMap;
     }
 
-    public Map formatStockCardLineItems(List<StockCardLineItem> lineItems){
+    public Map formatStockCardLineItems(List<StockCardLineItem> lineItems) {
         List<String> stockCardIds = new ArrayList<>();
-        for(int i = 0; i < lineItems.size(); i++){
-            if(!stockCardIds.contains(lineItems.get(i).getStockcardId())){
+        for (int i = 0; i < lineItems.size(); i++) {
+            if (!stockCardIds.contains(lineItems.get(i).getStockcardId())) {
                 stockCardIds.add(lineItems.get(i).getStockcardId());
             }
         }
@@ -232,10 +268,10 @@ public class StockManagementService {
         //loopt through lots and not line items to get just 1 stock card
 
         Map<String, List<StockCardLineItem>> lineItemsByStockCardMap = new HashMap<>();
-        for(int i = 0; i < stockCardIds.size(); i++){
+        for (int i = 0; i < stockCardIds.size(); i++) {
             List<StockCardLineItem> lineItemsByLot = new ArrayList<>();
-            for(int j = 0; j < lineItems.size(); j++){
-                if(lineItems.get(j).getLotId().equals(stockCardIds.get(i))){
+            for (int j = 0; j < lineItems.size(); j++) {
+                if (lineItems.get(j).getLotId().equals(stockCardIds.get(i))) {
                     lineItemsByLot.add(lineItems.get(j));
                 }
             }
@@ -309,19 +345,71 @@ public class StockManagementService {
         for (int i = 0; i < stockCards.size(); i++) {
             JSONObject inventoryLineItem = new JSONObject();
             Lot lot = referenceDataService.getLotById(stockCards.get(i).getLotId());
+            int stockOnHand = getStockOnHand(stockCards.get(i).getId(), null);
             try {
-                System.out.println("ITEM 2"+stockCards.get(i).getOrderableId());
-                System.out.println("ITEM "+referenceDataService.getOrderableById(stockCards.get(i).getOrderableId()).getName());
                 inventoryLineItem.put("orderableName", referenceDataService.getOrderableById(stockCards.get(i).getOrderableId()).getName());
                 inventoryLineItem.put("lotCode", lot.getLotCode());
                 inventoryLineItem.put("expirationDate", lot.getExpirationDate());
                 inventoryLineItem.put("physicalStock", "");
-                inventoryLineItem.put("stockOnHand", stockCards.get(i).getStockOnHand() + "");
+
+                if(stockOnHand >= 0){
+                    inventoryLineItem.put("stockOnHand", stockOnHand);
+                } else {
+                    inventoryLineItem.put("stockOnHand", "");
+                }
+
                 inventoryLineItems.add(inventoryLineItem);
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }
         }
+
         return inventoryLineItems;
+    }
+
+    public int getStockOnHand(String stockCardId, String date) {
+
+        SimpleDateFormat dateFormar = new SimpleDateFormat("dd-MM-yyyy");
+
+        CalculatedStockOnHand lastStockOnHand =  new CalculatedStockOnHand();
+        if (date == null) {
+            Database database = new Database(mContext);
+            database.open();
+            Cursor cursor = database.select(CalculatedStockOnHand.class, Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID + "=?", new String[]{stockCardId}, null, null, null);
+
+            if (cursor.getCount() > 0) {
+                try {
+
+                    Date maxDate = dateFormar.parse("2000-01-01");
+
+                    while (cursor.moveToNext()) {
+                        CalculatedStockOnHand calculatedStockOnHand = Converter.cursorToCalculatedStockOnHand(cursor);
+                        Date occurredDate = dateFormar.parse(calculatedStockOnHand.getOccuredDate());
+
+                        if (occurredDate.after(maxDate) || occurredDate.equals(maxDate)) {
+                            maxDate = occurredDate;
+                            lastStockOnHand = calculatedStockOnHand;
+                        }
+                    }
+
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+                cursor.close();
+                database.close();
+            } else {
+                System.out.println("No stock on hand information");
+            }
+
+        } else {
+
+        }
+
+        if(lastStockOnHand.getStockCardId()!= null){
+            System.out.println("CurrentStockOnHand"+lastStockOnHand.getStockOnHand());
+            return lastStockOnHand.getStockOnHand();
+        } else {
+            return -1;
+        }
     }
 }

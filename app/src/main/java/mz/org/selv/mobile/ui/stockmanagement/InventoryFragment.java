@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
@@ -28,6 +28,8 @@ import java.util.List;
 
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryAddProductDialogViewModel;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 
 
 public class InventoryFragment extends Fragment  implements InventoryAddProductDialog.DialogListener{
@@ -75,7 +77,7 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
                 Bundle bundle = new Bundle();
                 bundle.putString("programId", selectedProgram);
                 bundle.putString("facilityTypeId", selectedFacility);
-
+                bundle.putBoolean("newItem", true);
                 InventoryAddProductDialog inventoryAddProductDialog = InventoryAddProductDialog.newInstance();
                 FragmentManager fm = getChildFragmentManager();
                 inventoryAddProductDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
@@ -153,34 +155,59 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
         lvInventoryItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("Working");
+                Bundle bundle = new Bundle();
+                bundle.putString("programId", selectedProgram);
+                bundle.putString("facilityTypeId", selectedFacility);
+                JSONObject selectedItem = (JSONObject) parent.getItemAtPosition(position);
+                try{
+                    bundle.putBoolean("newItem", false);
+                    System.out.println(selectedItem.toString());
+                    bundle.putString("orderableName", selectedItem.getString("orderableName"));
+                    bundle.putString("lotCode", selectedItem.getString("lotCode"));
+                    bundle.putString("expirationDate", selectedItem.getString("expirationDate"));
+                    bundle.putString("stockOnHand", selectedItem.getString("stockOnHand"));
+                    bundle.putString("physicalStock", selectedItem.getString("physicalStock"));
+                    bundle.putInt("itemPosition", position);
+                } catch (JSONException exception){
+                    exception.printStackTrace();
+                }
+
+                InventoryAddProductDialog inventoryAddProductDialog = InventoryAddProductDialog.newInstance();
+                FragmentManager fm = getChildFragmentManager();
+                inventoryAddProductDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
+                inventoryAddProductDialog.setArguments(bundle);
+
+                inventoryAddProductDialog.show(fm, "tag");
+
             }
         });
 
         return root;
     }
 
-    public void addInventoryLineItem(String orderableName, String lotCode, int quantity, int soh) {
-       inventoryViewModel.updateInventoryLineItems(orderableName, lotCode, quantity, -1, null);
+
+    public void addInventoryLineItem(String orderableName, String lotCode, int quantity, int soh, int position) {
+       inventoryViewModel.updateInventoryLineItems(orderableName, lotCode, quantity, -1, position,null);
     }
 
    // public void addInventoryLineItemAdjustments(String orderable, String lotCode, List adjustments){
 
    // }
 
+
+
     public void updateInventoryItemList(List<JSONObject> lineItems){
-        inventoryItemsAdapter = new InventoryItemsAdapter(getContext(), lineItems);
+        inventoryItemsAdapter = new InventoryItemsAdapter(getActivity(), getContext(), lineItems, selectedFacility, selectedProgram);
         lvInventoryItems.setAdapter(inventoryItemsAdapter);
     }
 
     public void createInventory(String facilityId, String selectedProgramId){
         inventoryViewModel.getInventoryLineItems(selectedProgramId, facilityId);
-
     }
 
     @Override
-    public void addProduct(String orderableName, String lotCode, int quantity, int soh) {
-        addInventoryLineItem(orderableName, lotCode, quantity, soh);
+    public void addProduct(String orderableName, String lotCode, int quantity, int soh, int position) {
+        addInventoryLineItem(orderableName, lotCode, quantity, soh, position);
     }
 
     @Override

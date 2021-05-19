@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockOnHandViewModel;
 
 public class StockOnHandFragment extends Fragment {
 
