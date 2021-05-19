@@ -150,4 +150,8 @@ public class InventoryViewModel extends AndroidViewModel {
         getLastLineUpdatedItem().getValue();
         lineItems.setValue(stockManagementService.getNewInventoryLineItem(programId, facilityId));
     }
+
+    public String getReasonType(String reasonName){
+        return referenceDataService.getReasonByName(reasonName).getType();
+    }
 }

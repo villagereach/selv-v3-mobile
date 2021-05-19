@@ -31,7 +31,7 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
     private String selectedFacilityId;
     private String selectedProgramId;
    // private
-    public InventoryItemsAdapter(Activity activity, @NonNull Context context, @NonNull List<JSONObject> lineItems, String selectedFacilityId, String selectedProgramId) {
+    public InventoryItemsAdapter(@NonNull Context context, @NonNull List<JSONObject> lineItems, String selectedFacilityId, String selectedProgramId) {
         super(context, 0, lineItems);
         this.selectedFacilityId = selectedFacilityId;
         this.selectedProgramId = selectedProgramId;

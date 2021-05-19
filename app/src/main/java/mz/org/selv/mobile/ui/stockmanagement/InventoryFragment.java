@@ -161,7 +161,6 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
                 JSONObject selectedItem = (JSONObject) parent.getItemAtPosition(position);
                 try{
                     bundle.putBoolean("newItem", false);
-                    System.out.println(selectedItem.toString());
                     bundle.putString("orderableName", selectedItem.getString("orderableName"));
                     bundle.putString("lotCode", selectedItem.getString("lotCode"));
                     bundle.putString("expirationDate", selectedItem.getString("expirationDate"));
@@ -197,7 +196,7 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
 
 
     public void updateInventoryItemList(List<JSONObject> lineItems){
-        inventoryItemsAdapter = new InventoryItemsAdapter(getActivity(), getContext(), lineItems, selectedFacility, selectedProgram);
+        inventoryItemsAdapter = new InventoryItemsAdapter(getContext(), lineItems, selectedFacility, selectedProgram);
         lvInventoryItems.setAdapter(inventoryItemsAdapter);
     }
 

@@ -180,6 +180,19 @@ public class ReferenceDataService {
         return reason;
     }
 
+    public Reason getReasonByName(String reasonName){
+        Database database = new Database(mContext);
+        database.open();
+        Cursor cursor = database.select(Reason.class, Database.Reason.COLUMN_NAME_NAME +"=?", new String[]{reasonName}, null, null, null);
+        Reason reason = new Reason();
+        if (cursor.moveToFirst()){
+            reason = Converter.cursorToReason(cursor);
+        }
+        cursor.close();
+        database.close();
+        return reason;
+    }
+
     public List<String> getReasonNameByValidReason(String facilityTypeId, String programId){
         List reasonNames = new ArrayList<>();
         List<ValidReasons> validReasons = getValidReasons(facilityTypeId, programId);
