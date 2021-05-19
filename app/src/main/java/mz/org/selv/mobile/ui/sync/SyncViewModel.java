@@ -1,11 +1,14 @@
 package mz.org.selv.mobile.ui.sync;
 
-import android.app.Application;
-import android.util.Log;
+import static mz.org.selv.mobile.auth.LoginHelper.APP_SHARED_PREFS;
+import static mz.org.selv.mobile.auth.LoginHelper.KEY_ACCESS_TOKEN;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -14,16 +17,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
+import java.util.HashMap;
+import java.util.Map;
+import mz.org.selv.mobile.model.Entity;
+import mz.org.selv.mobile.service.openlmis.SyncEntities;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import mz.org.selv.mobile.model.Entity;
-import mz.org.selv.mobile.service.openlmis.SyncEntities;
 
 public class SyncViewModel extends AndroidViewModel {
 
@@ -40,7 +40,6 @@ public class SyncViewModel extends AndroidViewModel {
     public void sync(int type){
         switch (type){
             case 1: // sync metadata
-
                 syncEntities(Entity.PROGRAM, "https://test.selv.org.mz/api/programs");
                 syncEntities(Entity.ORDERABLES, "https://test.selv.org.mz/api/orderables");
                 syncEntities(Entity.LOTS, "https://test.selv.org.mz/api/lots");
@@ -110,9 +109,8 @@ public class SyncViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                //String credentials = String.format("%s:%s", "admin", "password");
-                String auth = "Bearer d1545b77-2faf-4246-bab8-ef3d61c79b3e";
-                //String auth = "Bearer 9f81cba6-0462-42e7-8e32-9fbbd2941b57";
+                SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+                String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
                 params.put("Authorization", auth);
                 return params;
             }
@@ -120,9 +118,6 @@ public class SyncViewModel extends AndroidViewModel {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("grant_type", "client_credentials");
-                params.put("username", "admin");
-                params.put("password", "password");
                 params.put("facilityId","8e498daf-cdff-48b2-971f-0c53ef66e14d");
 
                 return params;

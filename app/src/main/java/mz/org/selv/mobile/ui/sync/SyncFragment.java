@@ -5,19 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.auth.LoginHelper;
 
 public class SyncFragment extends Fragment {
 
     private SyncViewModel syncViewModel;
+    private LoginHelper loginHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInsanceState) {
@@ -34,6 +31,13 @@ public class SyncFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        loginHelper = new LoginHelper(getActivity().getApplicationContext());
+        loginHelper.obtainAccessToken(null);
+        super.onResume();
     }
 }
 

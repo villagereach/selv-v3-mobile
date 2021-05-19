@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+    android:id="@+id/tv_username"
+    android:layout_width="359dp"
+    android:layout_height="32dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="26dp"
+    android:text="@string/string_username"
+    android:textSize="22sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <EditText
+    android:id="@+id/tx_username"
+    android:layout_width="359dp"
+    android:layout_height="52dp"
+    android:layout_marginStart="26dp"
+    android:ems="10"
+    android:inputType="textPersonName"
+    android:text=""
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tv_username"
+    android:autofillHints="@string/string_username">
+    <requestFocus/>
+  </EditText>
+
+  <TextView
+    android:id="@+id/tv_password"
+    android:layout_width="359dp"
+    android:layout_height="32dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="26dp"
+    android:text="@string/string_password"
+    android:textSize="22sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tx_username"/>
+
+  <EditText
+    android:id="@+id/tx_password"
+    android:layout_width="359dp"
+    android:layout_height="52dp"
+    android:layout_marginStart="26dp"
+    android:ems="10"
+    android:inputType="textPassword"
+    android:text=""
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tv_password"
+    android:autofillHints="@string/string_password"/>
+
+  <TextView
+    android:id="@+id/tv_forgot_password"
+    android:layout_width="359dp"
+    android:layout_height="26dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="26dp"
+    android:text="@string/string_forgot_password"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tx_password"/>
+
+  <Button
+    android:id="@+id/bt_log_in"
+    android:layout_width="359dp"
+    android:layout_height="52dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="26dp"
+    android:text="@string/string_log_in"
+    android:textSize="18sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tv_forgot_password"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
