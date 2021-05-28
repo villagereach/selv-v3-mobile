@@ -63,7 +63,6 @@ public class LoginHelper {
                 public void onResponse(String response) {
                     if (response != null) {
                         try {
-                            Toast.makeText(appContext, R.string.string_login_success, Toast.LENGTH_SHORT).show();
                             JSONObject responseObject = new JSONObject(response);
                             String accessToken = responseObject.getString(KEY_ACCESS_TOKEN);
                             String userId = responseObject.getString(KEY_USER_ID);
@@ -75,6 +74,7 @@ public class LoginHelper {
                             Log.d(this.getClass().toString(), "Login successful, token = " + accessToken);
 
                             if (loginContext != null) {
+                                Toast.makeText(appContext, R.string.string_login_success, Toast.LENGTH_SHORT).show();
                                 Intent loginIntent = new Intent(loginContext, MainActivity.class);
                                 loginContext.startActivity(loginIntent);
                             }
