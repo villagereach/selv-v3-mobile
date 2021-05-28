@@ -208,14 +208,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/bt_stock_management_inventory_add_product_add"
+        android:id="@+id/bt_stock_event_line_item_add"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center"
-        android:text="@string/string_cancel" />
+        android:text="@string/string_add" />
 
     <Button
-        android:id="@+id/bt_stock_event_cancel"
+        android:id="@+id/bt_stock_event_line_item_cancel"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center"

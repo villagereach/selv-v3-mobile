@@ -12,8 +12,8 @@ import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
 
-public class StockEventDialogViewModel extends AndroidViewModel {
-    public StockEventDialogViewModel(@NonNull Application application) {
+public class StockEventLineItemViewModel extends AndroidViewModel {
+    public StockEventLineItemViewModel(@NonNull Application application) {
         super(application);
     }
 

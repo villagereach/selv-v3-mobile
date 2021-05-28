@@ -2,13 +2,16 @@ package mz.org.selv.mobile.ui.stockmanagement;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,14 +25,18 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
-import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventDialogViewModel;
+import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventLineItemViewModel;
 
-public class StockEventDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
-    private StockEventDialogViewModel stockEventDialogViewModel;
+public class StockEventLineItemDialog extends DialogFragment {
+    private StockEventLineItemViewModel stockEventLineItemViewModel;
     private AutoCompleteTextView acLotNumber;
     private String action;
-    public static StockEventDialog newInstance(){
-        return new StockEventDialog();
+
+    private Button btAdd;
+    private Button btCancel;
+
+    public static StockEventLineItemDialog newInstance(){
+        return new StockEventLineItemDialog();
     }
 
 
@@ -37,15 +44,17 @@ public class StockEventDialog extends DialogFragment implements AdapterView.OnIt
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(StockEventDialog.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_DialogWhenLarge);
+        setStyle(StockEventLineItemDialog.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_DialogWhenLarge);
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        stockEventDialogViewModel = new ViewModelProvider(this).get(StockEventDialogViewModel.class);
-        View view = inflater.inflate(R.layout.dialog_new_event_item, container, false);
-        List orderables = stockEventDialogViewModel.getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
-        List reasonNames = stockEventDialogViewModel.getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
+        stockEventLineItemViewModel = new ViewModelProvider(this).get(StockEventLineItemViewModel.class);
+        View view = inflater.inflate(R.layout.dialog_new_stock_event_line_item, container, false);
+        List orderables = stockEventLineItemViewModel
+            .getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
+        List reasonNames = stockEventLineItemViewModel
+            .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
 
         ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
         ArrayAdapter<String> orderableAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
@@ -65,26 +74,39 @@ public class StockEventDialog extends DialogFragment implements AdapterView.OnIt
         TextView tvStockOnHand = view.findViewById(R.id.tv_stock_event_soh);
         TextView tvExpirationDate = view.findViewById(R.id.tv_stock_management_inventory_add_product_expiration_date);
         acLotNumber = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_lot);
-        acProduct.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(position > 0){
-                        List lots = stockEventDialogViewModel.getLots(parent.getItemAtPosition(position).toString());
-                        System.out.println(lots);
-                        ArrayAdapter<String> lotAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lots);
-                        acLotNumber.setAdapter(lotAdapter);
-                    } else {
 
-                    }
+        btAdd = view.findViewById(R.id.bt_stock_event_line_item_add);
+        btCancel = view.findViewById(R.id.bt_stock_event_line_item_cancel);
+
+        acProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    List lots = stockEventLineItemViewModel
+                        .getLots(parent.getItemAtPosition(position).toString());
+                    Log.d(this.getClass().toString(), "Lots = " + lots);
+                    ArrayAdapter<String> lotAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lots);
+                    acLotNumber.setAdapter(lotAdapter);
+                }
             }
+        });
 
+        btAdd.setOnClickListener(new OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
+        btCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
 
         //
+        assert getArguments() != null;
         if(getArguments().getString("action").equals("adjustment")){
             TextInputLayout sourceDestinationLayout = (TextInputLayout) view.findViewById(R.id.til_stock_event_dialog_source_destination);
             TextInputLayout sourceDestinationCommentLayout = (TextInputLayout) view.findViewById(R.id.til_stock_event_dialog_source_destination_comment);
@@ -97,17 +119,6 @@ public class StockEventDialog extends DialogFragment implements AdapterView.OnIt
         return view;
 
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
 
     @Override
     public void onStart() {
