@@ -95,8 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/string_quantity"
-        app:layout_constraintTop_toBottomOf="@id/til_stock_event_dialog_reason_comment">
+        android:hint="@string/string_quantity">
 
         <EditText
             android:id="@+id/et_stock_management_inventory_add_product_quantity"

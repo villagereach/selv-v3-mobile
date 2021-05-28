@@ -29,9 +29,8 @@ import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventLineItemViewMod
 
 public class StockEventLineItemDialog extends DialogFragment {
     private StockEventLineItemViewModel stockEventLineItemViewModel;
-    private AutoCompleteTextView acLotNumber;
-    private String action;
 
+    private AutoCompleteTextView acLotNumber;
     private Button btAdd;
     private Button btCancel;
 
@@ -39,41 +38,47 @@ public class StockEventLineItemDialog extends DialogFragment {
         return new StockEventLineItemDialog();
     }
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(StockEventLineItemDialog.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_DialogWhenLarge);
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         stockEventLineItemViewModel = new ViewModelProvider(this).get(StockEventLineItemViewModel.class);
         View view = inflater.inflate(R.layout.dialog_new_stock_event_line_item, container, false);
+
+        AutoCompleteTextView acProduct = view.findViewById(R.id.ac_stock_event_line_item_product);
         List orderables = stockEventLineItemViewModel
             .getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
-        List reasonNames = stockEventLineItemViewModel
-            .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
-
-        ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
         ArrayAdapter<String> orderableAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
-        reasonAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        orderableAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-        AutoCompleteTextView acVVM = view.findViewById(R.id.ac_stock_event_vvm);
-        AutoCompleteTextView acProduct = view.findViewById(R.id.ac_stock_management_inventory_add_product_product);
         acProduct.setAdapter(orderableAdapter);
 
-        AutoCompleteTextView acSourceDestination = view.findViewById(R.id.ac_stock_event_source_destination);
-        AutoCompleteTextView acReason = view.findViewById(R.id.ac_stock_event_reason);
+        acLotNumber = view.findViewById(R.id.ac_stock_event_line_item_lot);
+
+        TextView tvStockOnHand = view.findViewById(R.id.tv_stock_event_line_item_soh);
+        tvStockOnHand.setText("");
+        TextView tvExpirationDate = view.findViewById(R.id.tv_stock_event_line_item_expiration_date);
+        tvExpirationDate.setText("");
+
+        AutoCompleteTextView acSourceDestination = view.findViewById(R.id.ac_stock_event_line_item_source_destination);
+        EditText etSourceDestinationComments = view.findViewById(R.id.et_stock_event_line_item_source_destination_comments);
+
+        AutoCompleteTextView acReason = view.findViewById(R.id.ac_stock_event_line_item_reason);
+        List reasonNames = stockEventLineItemViewModel
+            .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
+        ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
         acReason.setAdapter(reasonAdapter);
-        EditText etSourceDestinationComments = view.findViewById(R.id.et_stock_event_source_destination_comments);
-        EditText etReasonComments = view.findViewById(R.id.et_stock_event_reason_comment);
-        EditText etDate = view.findViewById(R.id.tv_stock_event_date);
-        TextView tvStockOnHand = view.findViewById(R.id.tv_stock_event_soh);
-        TextView tvExpirationDate = view.findViewById(R.id.tv_stock_management_inventory_add_product_expiration_date);
-        acLotNumber = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_lot);
+
+        EditText etReasonComments = view.findViewById(R.id.et_stock_event_line_item_reason_comment);
+
+        EditText etQuantity = view.findViewById(R.id.et_stock_event_line_item_quantity);
+
+        AutoCompleteTextView acVVM = view.findViewById(R.id.ac_stock_event_line_item_vvm);
+
+        EditText etOccurredDate = view.findViewById(R.id.et_stock_event_line_item_occurred_date);
 
         btAdd = view.findViewById(R.id.bt_stock_event_line_item_add);
         btCancel = view.findViewById(R.id.bt_stock_event_line_item_cancel);
@@ -82,9 +87,9 @@ public class StockEventLineItemDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= 0) {
+                    acLotNumber.setText("");
                     List lots = stockEventLineItemViewModel
-                        .getLots(parent.getItemAtPosition(position).toString());
-                    Log.d(this.getClass().toString(), "Lots = " + lots);
+                        .getLotCodes(parent.getItemAtPosition(position).toString());
                     ArrayAdapter<String> lotAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lots);
                     acLotNumber.setAdapter(lotAdapter);
                 }
@@ -107,9 +112,9 @@ public class StockEventLineItemDialog extends DialogFragment {
 
         //
         assert getArguments() != null;
-        if(getArguments().getString("action").equals("adjustment")){
-            TextInputLayout sourceDestinationLayout = (TextInputLayout) view.findViewById(R.id.til_stock_event_dialog_source_destination);
-            TextInputLayout sourceDestinationCommentLayout = (TextInputLayout) view.findViewById(R.id.til_stock_event_dialog_source_destination_comment);
+        if (getArguments().getString("action").equals("adjustment")) {
+            TextInputLayout sourceDestinationLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination);
+            TextInputLayout sourceDestinationCommentLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination_comment);
             sourceDestinationLayout.setVisibility(View.GONE);
             sourceDestinationCommentLayout.setVisibility(View.GONE);
             sourceDestinationLayout.setVisibility(View.GONE);
