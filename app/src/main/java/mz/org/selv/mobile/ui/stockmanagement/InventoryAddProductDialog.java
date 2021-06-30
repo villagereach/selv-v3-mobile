@@ -47,14 +47,14 @@ public class InventoryAddProductDialog extends DialogFragment implements Adapter
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inventoryViewModel = new ViewModelProvider(this).get(InventoryViewModel.class);
-        View view = inflater.inflate(R.layout.dialog_inventory_new_item, container, false);
+        View view = inflater.inflate(R.layout.dialog_inventory_adjustements, container, false);
 
         btSave = (Button) view.findViewById(R.id.bt_stock_management_inventory_add_product_add);
         etQuantity = (EditText) view.findViewById(R.id.et_stock_management_inventory_add_product_quantity);
         acProduct = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_product);
         acLotNumber = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_add_product_lot);
         tvExpirationDate = (TextView) view.findViewById(R.id.tv_stock_management_inventory_add_product_expiration_date);
-        tvTheoricStock = (TextView) view.findViewById(R.id.tv_stock_management_inventory_add_product_theoric_stock);
+      //  tvTheoricStock = (TextView) view.findViewById(R.id.tv_stock_management_inventory_add_product_theoric_stock);
         //AC Adapters
         List orderables = inventoryViewModel.getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
         ArrayAdapter<String> orderableAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);

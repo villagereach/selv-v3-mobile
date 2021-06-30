@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryAddProductDialog
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 
 
-public class InventoryFragment extends Fragment  implements InventoryAddProductDialog.DialogListener{
+public class InventoryFragment extends Fragment  implements  InventoryItemDialog.DialogListener{
     private InventoryViewModel inventoryViewModel;
     private InventoryAddProductDialogViewModel inventoryAddProductDialogViewModel;
     private Button addProduct;
@@ -55,9 +56,6 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
         selectedFacility = getArguments().getString("facilityTypeId");
 
         inventoryViewModel = new ViewModelProvider(this).get(InventoryViewModel.class);
-
-
-
 
         View root = inflater.inflate(R.layout.fragment_inventory, container, false);
         lvInventoryItems = (ListView) root.findViewById(R.id.lv_stock_management_inventory_line_items);
@@ -158,6 +156,7 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
                 Bundle bundle = new Bundle();
                 bundle.putString("programId", selectedProgram);
                 bundle.putString("facilityTypeId", selectedFacility);
+                bundle.putBoolean("newItem", false);
                 JSONObject selectedItem = (JSONObject) parent.getItemAtPosition(position);
                 try{
                     bundle.putBoolean("newItem", false);
@@ -171,13 +170,11 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
                     exception.printStackTrace();
                 }
 
-                InventoryAddProductDialog inventoryAddProductDialog = InventoryAddProductDialog.newInstance();
+                InventoryItemDialog inventoryItemDialog = InventoryItemDialog.newInstance();
                 FragmentManager fm = getChildFragmentManager();
-                inventoryAddProductDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
-                inventoryAddProductDialog.setArguments(bundle);
-
-                inventoryAddProductDialog.show(fm, "tag");
-
+                inventoryItemDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
+                inventoryItemDialog.setArguments(bundle);
+                inventoryItemDialog.show(fm, "tag");
             }
         });
 
@@ -185,13 +182,9 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
     }
 
 
-    public void addInventoryLineItem(String orderableName, String lotCode, int quantity, int soh, int position) {
-       inventoryViewModel.updateInventoryLineItems(orderableName, lotCode, quantity, -1, position,null);
+    public void saveInventoryLineItem(String orderableName, String lotCode, String quantity, String soh, JSONArray adjustments,int position) {
+       inventoryViewModel.updateInventoryLineItems(orderableName, lotCode, quantity, soh, position,adjustments);
     }
-
-   // public void addInventoryLineItemAdjustments(String orderable, String lotCode, List adjustments){
-
-   // }
 
 
 
@@ -205,13 +198,7 @@ public class InventoryFragment extends Fragment  implements InventoryAddProductD
     }
 
     @Override
-    public void addProduct(String orderableName, String lotCode, int quantity, int soh, int position) {
-        addInventoryLineItem(orderableName, lotCode, quantity, soh, position);
+    public void saveProduct(String orderableName, String lotCode, String quantity, String soh, JSONArray adjustments, int position) {
+        saveInventoryLineItem(orderableName, lotCode, quantity, soh, adjustments, position);
     }
-
-    @Override
-    public void addLineItemAdjustmets(String orderable, String lotCode, List adjustments) {
-
-    }
-
 }

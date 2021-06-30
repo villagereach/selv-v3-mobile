@@ -8,11 +8,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import mz.org.selv.mobile.model.referencedata.Lot;
@@ -68,14 +70,14 @@ public class InventoryViewModel extends AndroidViewModel {
         return reasonNames;
     }
 
-    public LiveData<List<JSONObject>> getLastLineUpdatedItem() {
+    public MutableLiveData<List<JSONObject>> getLastLineUpdatedItem() {
         if (lineItems == null) {
             lineItems = new MutableLiveData<>();
         }
         return lineItems;
     }
 
-    public void updateInventoryLineItems(String orderableName, String lotCode, int quantity, int soh, int position, List adjustments) {
+    public void updateInventoryLineItems(String orderableName, String lotCode, String quantity, String soh, int position, JSONArray adjustments) {
         JSONObject lineItem = new JSONObject();
         Lot lot = referenceDataService.getLotByCode(lotCode);
         Orderable orderable = referenceDataService.getOrderableByName(orderableName);
@@ -87,9 +89,7 @@ public class InventoryViewModel extends AndroidViewModel {
             lineItem.put("physicalStock", quantity);
             lineItem.put("orderableName", orderable.getName());
             lineItem.put("adjustments", adjustments);
-            //if not available
             lineItem.put("stockOnHand", soh);
-
 
             List currentItems = getLastLineUpdatedItem().getValue();
 
@@ -97,14 +97,9 @@ public class InventoryViewModel extends AndroidViewModel {
                 currentItems = new ArrayList<JSONObject>();
             }
 
-
-
             if (position > -1) {
-                JSONObject currentItem = (JSONObject) currentItems.get(position);
-                currentItem.put("physicalStock", quantity);
-                System.out.println("Position A: "+position);
                 currentItems.remove(position);
-                currentItems.add(position, currentItem);
+                currentItems.add(position, lineItem);
             } else {
                 currentItems.add(lineItem);
             }
@@ -126,7 +121,6 @@ public class InventoryViewModel extends AndroidViewModel {
         inventory.setId(inventoryId);
         for (int i = 0; i < lineItemsAdapter.getCount(); i++) {
             PhysicalInventoryLineItem lineItem = new PhysicalInventoryLineItem();
-            System.out.println(lineItemsAdapter.getItem(i).toString());
             try {
                 lineItem.setOrderableId(lineItemsAdapter.getItem(i).getString("orderableId"));
                 lineItem.setLotId(lineItemsAdapter.getItem(i).getString("lotId"));
