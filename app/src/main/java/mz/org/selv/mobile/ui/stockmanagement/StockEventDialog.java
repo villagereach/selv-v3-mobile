@@ -32,6 +32,8 @@ public class StockEventDialog extends DialogFragment implements AdapterView.OnIt
         return new StockEventDialog();
     }
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,6 @@ public class StockEventDialog extends DialogFragment implements AdapterView.OnIt
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         stockEventDialogViewModel = new ViewModelProvider(this).get(StockEventDialogViewModel.class);
         View view = inflater.inflate(R.layout.dialog_new_event_item, container, false);
-
         List orderables = stockEventDialogViewModel.getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
         List reasonNames = stockEventDialogViewModel.getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
 

@@ -18,7 +18,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_stock_event_dialog_product"
+            android:id="@+id/til_stock_event_line_item_product"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:hint="@string/string_product">
 
             <AutoCompleteTextView
-                android:id="@+id/ac_stock_management_inventory_add_product_product"
+                android:id="@+id/ac_stock_event_line_item_product"
                 android:layout_width="match_parent"
                 android:inputType="none"
                 android:focusable="false"
@@ -34,7 +34,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_stock_event_dialog_lot"
+            android:id="@+id/til_stock_event_line_item_lot"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:hint="@string/string_lot">
 
             <AutoCompleteTextView
-                android:id="@+id/ac_stock_management_inventory_add_product_lot"
+                android:id="@+id/ac_stock_event_line_item_lot"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -56,15 +56,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/label_stock_event_quantity"
+            android:id="@+id/label_stock_event_line_item_soh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/string_quantity"
+            android:text="@string/string_available_soh"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
-            android:id="@+id/label_stock_event_expiration_date"
+            android:id="@+id/label_stock_event_line_item_expiration_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -79,7 +79,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_stock_event_soh"
+            android:id="@+id/tv_stock_event_line_item_soh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -87,7 +87,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <TextView
-            android:id="@+id/tv_stock_management_inventory_add_product_expiration_date"
+            android:id="@+id/tv_stock_event_line_item_expiration_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -96,7 +96,7 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_source_destination"
+        android:id="@+id/til_stock_event_line_item_source_destination"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
         android:hint="Origem/Destino">
 
         <AutoCompleteTextView
-            android:id="@+id/ac_stock_event_source_destination"
+            android:id="@+id/ac_stock_event_line_item_source_destination"
             android:layout_width="match_parent"
             android:layout_height="50dp"
 
@@ -112,14 +112,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_source_destination_comment"
+        android:id="@+id/til_stock_event_line_item_source_destination_comment"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
         <EditText
-            android:id="@+id/et_stock_event_source_destination_comments"
+            android:id="@+id/et_stock_event_line_item_source_destination_comments"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -128,7 +128,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_reason"
+        android:id="@+id/til_stock_event_line_item_reason"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -136,13 +136,13 @@
         android:hint="@string/string_reason">
 
         <AutoCompleteTextView
-            android:id="@+id/ac_stock_event_reason"
+            android:id="@+id/ac_stock_event_line_item_reason"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_reason_comment"
+        android:id="@+id/til_stock_event_line_item_reason_comment"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
         android:hint="@string/string_comments">
 
         <EditText
-            android:id="@+id/et_stock_event_reason_comment"
+            android:id="@+id/et_stock_event_line_item_reason_comment"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -159,16 +159,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_quantity"
+        android:id="@+id/til_stock_event_line_item_quantity"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/string_quantity"
-        app:layout_constraintTop_toBottomOf="@id/til_stock_event_dialog_reason_comment">
+        app:layout_constraintTop_toBottomOf="@id/til_stock_event_line_item_reason_comment">
 
         <EditText
-            android:id="@+id/et_stock_management_inventory_add_product_quantity"
+            android:id="@+id/et_stock_event_line_item_quantity"
             android:layout_width="match_parent"
             android:layout_height="50dp"
 
@@ -176,7 +176,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_vvm"
+        android:id="@+id/til_stock_event_line_item_vvm"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -184,14 +184,14 @@
         android:hint="@string/string_vvm">
 
         <AutoCompleteTextView
-            android:id="@+id/ac_stock_event_vvm"
+            android:id="@+id/ac_stock_event_line_item_vvm"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_stock_event_dialog_reason_date"
+        android:id="@+id/til_stock_event_line_item_occurred_date"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
         android:hint="@string/string_date">
 
         <EditText
-            android:id="@+id/et_stock_event_dialog_reason_comment"
+            android:id="@+id/et_stock_event_line_item_occurred_date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
 
@@ -208,14 +208,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/bt_stock_management_inventory_add_product_add"
+        android:id="@+id/bt_stock_event_line_item_add"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center"
-        android:text="@string/string_cancel" />
+        android:text="@string/string_add" />
 
     <Button
-        android:id="@+id/bt_stock_event_cancel"
+        android:id="@+id/bt_stock_event_line_item_cancel"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center"

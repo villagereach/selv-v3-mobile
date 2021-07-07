@@ -5,15 +5,20 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
+import org.json.JSONObject;
 
-public class StockEventDialogViewModel extends AndroidViewModel {
-    public StockEventDialogViewModel(@NonNull Application application) {
+public class StockEventLineItemViewModel extends AndroidViewModel {
+
+    private MutableLiveData<JSONObject> lineItemMutableLiveData;
+
+    public StockEventLineItemViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -27,7 +32,7 @@ public class StockEventDialogViewModel extends AndroidViewModel {
         return orderableNames;
     }
 
-    public List getLots(String orderableName){
+    public List getLotCodes(String orderableName){
         ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
         List<String> lotCodes = new ArrayList<String>();
         List<Lot> lots = referenceDataService.getLotsByOrderableName(orderableName);

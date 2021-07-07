@@ -34,6 +34,7 @@
 
     <string name="string_product">Produto</string>
     <string name="string_program">Programa</string>
+    <string name="string_available_soh">Stock disponível</string>
     <string name="string_expiration_date">Data de Validade</string>
     <string name="string_lot">Lote</string>
     <string name="string_source">Origem</string>

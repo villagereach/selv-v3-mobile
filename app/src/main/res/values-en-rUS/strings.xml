@@ -28,6 +28,7 @@
 
     <string name="string_product">Product</string>
     <string name="string_program">Program</string>
+    <string name="string_available_soh">Stock on hand</string>
     <string name="string_expiration_date">Expiration Date</string>
     <string name="string_lot">Lot</string>
     <string name="string_source">Source</string>

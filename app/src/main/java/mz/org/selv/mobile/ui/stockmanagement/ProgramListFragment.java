@@ -1,6 +1,7 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.ui.adapters.ProgramListAdapter;
@@ -30,7 +32,7 @@ public class ProgramListFragment extends Fragment {
 
         if (getArguments() != null) {
             action = getArguments().getString("action");
-            System.out.println("action:"+ action);
+            Log.d(this.getClass().toString(), "action: " + action);
             if (action.equals("issue")) {
 
                 getActivity().setTitle(R.string.string_adjustments);
@@ -47,7 +49,7 @@ public class ProgramListFragment extends Fragment {
                 //   actionBar.setTitle(R.string.string_soh);
             } else if (action.equals("adjustment")) {
 
-                getActivity().setTitle(R.string.string_adjustments);
+                ((MainActivity) requireActivity()).getSupportActionBar().setTitle(R.string.string_adjustments);
                 //   actionBar.setTitle(R.string.string_adjustments);
             }
 
@@ -69,6 +71,7 @@ public class ProgramListFragment extends Fragment {
                     bundle.putString("action", action);
                     bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
                     bundle.putString("programId", program.getUuid());
+                    bundle.putString("programName", program.getName());
                     StockEventFragment stockEventFragment = new StockEventFragment();
                     stockEventFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getParentFragmentManager();
