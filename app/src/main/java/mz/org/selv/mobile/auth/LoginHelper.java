@@ -114,6 +114,58 @@ public class LoginHelper {
         requestQueue.add(loginRequest);
     }
 
+    public void refreshToken() {
+        StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
+                new Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response != null) {
+                            try {
+                                JSONObject responseObject = new JSONObject(response);
+                                String accessToken = responseObject.getString(KEY_ACCESS_TOKEN);
+                                String userId = responseObject.getString(KEY_USER_ID);
+                                Editor editor = sharedPrefs.edit();
+                                editor.putString(KEY_ACCESS_TOKEN, accessToken);
+                                editor.putString(KEY_USER_ID, userId);
+                                editor.apply();
+
+                                Log.d(this.getClass().toString(), "token refreshed successful, token = " + accessToken);
+
+                            } catch (JSONException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                error -> {
+                    Toast.makeText(appContext, R.string.string_login_failed, Toast.LENGTH_SHORT).show();
+                    error.printStackTrace();
+                    Log.e("error", "" + error);
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String plainCreds = CLIENT_ID + ":" + CLIENT_SECRET;
+                String base64Creds = Base64
+                        .encodeToString(plainCreds.getBytes(StandardCharsets.UTF_8), DEFAULT);
+                headers.put("Authorization", "Basic " + base64Creds);
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("grant_type", "password");
+                params.put(KEY_USERNAME, sharedPrefs.getString(KEY_USERNAME, ""));
+                params.put(KEY_PASSWORD, sharedPrefs.getString(KEY_PASSWORD, ""));
+                return params;
+            }
+        };
+        requestQueue.add(loginRequest);
+    }
+
+
     private void obtainUserInfo() {
         String userId = sharedPrefs.getString(KEY_USER_ID, "");
         StringRequest userInfoRequest = new StringRequest(Method.GET, USERS_BASE_URI + userId,

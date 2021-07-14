@@ -1,11 +1,9 @@
 package mz.org.selv.mobile.ui.stockmanagement.viewmodel;
 
 import android.app.Application;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONArray;
@@ -14,17 +12,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
-import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustments;
+import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustment;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
 import mz.org.selv.mobile.service.stockmanagement.StockManagementService;
-import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
 
 public class InventoryViewModel extends AndroidViewModel {
     public InventoryViewModel(@NonNull Application application) {
@@ -110,8 +106,9 @@ public class InventoryViewModel extends AndroidViewModel {
 
     }
 
-    public int saveInventory(String signature, String programId, String facilityId, String occurredDate, InventoryItemsAdapter lineItemsAdapter) {
-        List<PhysicalInventoryLineItem> lineItems = new ArrayList<>();
+    public int saveInventory(String signature, String programId, String facilityId, String occurredDate, List<JSONObject> lineItems) {
+        List<PhysicalInventoryLineItem> inventoryLineItems = new ArrayList<>();
+        List<PhysicalInventoryLineItemAdjustment> inventoryLineItemAdjustments = new ArrayList<>();
         String inventoryId = UUID.randomUUID().toString();
         PhysicalInventory inventory = new PhysicalInventory();
         inventory.setSignature(signature);
@@ -119,23 +116,33 @@ public class InventoryViewModel extends AndroidViewModel {
         inventory.setOccurredDate(occurredDate);
         inventory.setFacilityId(facilityId);
         inventory.setId(inventoryId);
-        for (int i = 0; i < lineItemsAdapter.getCount(); i++) {
+        for (int i = 0; i < lineItems.size(); i++) {
             PhysicalInventoryLineItem lineItem = new PhysicalInventoryLineItem();
             try {
-                lineItem.setOrderableId(lineItemsAdapter.getItem(i).getString("orderableId"));
-                lineItem.setLotId(lineItemsAdapter.getItem(i).getString("lotId"));
-                lineItem.setPhysicalStock(lineItemsAdapter.getItem(i).getInt("physicalStock"));
-
+                System.out.println(lineItem);
+                lineItem.setOrderableId(lineItems.get(i).getString("orderableId"));
+                lineItem.setLotId(lineItems.get(i).getString("lotId"));
+                lineItem.setPhysicalStock(lineItems.get(i).getInt("physicalStock"));
                 //lineItem.setPreviousStockOnHand();
                 lineItem.setPhysicalInventoryId(inventoryId);
-                lineItems.add(lineItem);
+                if (lineItems.get(i).has("adjustments")) {
+                    JSONArray jsonLineItemAdjustments = lineItems.get(i).getJSONArray("adjustments");
+                    for (int j = 0; j < jsonLineItemAdjustments.length(); j++) {
+                        PhysicalInventoryLineItemAdjustment lineItemAdjustment = new PhysicalInventoryLineItemAdjustment();
+                        lineItemAdjustment.setPhysicalInventoryLineItemId(inventory.getId());
+                        lineItemAdjustment.setQuantity(jsonLineItemAdjustments.getJSONObject(j).getInt("quantity"));
+                        lineItemAdjustment.setReasonId(jsonLineItemAdjustments.getJSONObject(j).getString("reasonName"));
+                        inventoryLineItemAdjustments.add(lineItemAdjustment);
+                    }
+                }
+                inventoryLineItems.add(lineItem);
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }
         }
         if (lineItems.size() > 0) {
             stockManagementService = new StockManagementService(getApplication());
-            stockManagementService.saveInventory(inventory, lineItems, null);
+            stockManagementService.saveInventory(inventory, inventoryLineItems, inventoryLineItemAdjustments);
         }
         return 1;
     }
@@ -145,7 +152,7 @@ public class InventoryViewModel extends AndroidViewModel {
         lineItems.setValue(stockManagementService.getNewInventoryLineItem(programId, facilityId));
     }
 
-    public String getReasonType(String reasonName){
+    public String getReasonType(String reasonName) {
         return referenceDataService.getReasonByName(reasonName).getType();
     }
 }

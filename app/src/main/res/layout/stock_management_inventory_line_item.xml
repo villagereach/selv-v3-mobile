@@ -50,8 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/string_expiration_date"
-        app:layout_constraintEnd_toStartOf="@+id/bt_stock_management_inventory_linte_item_adjustments"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,18 +112,5 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/textView17"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-    <Button
-        android:id="@+id/bt_stock_management_inventory_linte_item_adjustments"
-        android:layout_width="99dp"
-        android:layout_height="98dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Button"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

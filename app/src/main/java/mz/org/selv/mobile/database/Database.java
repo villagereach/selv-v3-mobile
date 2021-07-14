@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class Database {
     public final static String DATABASE_NAME = "SELV_MOBILE";
-    public final static int  DATABASE_VERSION = 32;
+    public final static int  DATABASE_VERSION = 33;
 
     public static  class User implements BaseColumns {
 

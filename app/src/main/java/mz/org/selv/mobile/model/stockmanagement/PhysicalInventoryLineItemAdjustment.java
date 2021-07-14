@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 
-public class PhysicalInventoryLineItemAdjustments implements Table {
+public class PhysicalInventoryLineItemAdjustment implements Table {
     String reasonId;
     String id;
     String physicalInventoryLineItemId;

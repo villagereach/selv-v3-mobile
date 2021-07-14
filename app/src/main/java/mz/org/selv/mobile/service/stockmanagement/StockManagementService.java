@@ -2,7 +2,6 @@ package mz.org.selv.mobile.service.stockmanagement;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.ContactsContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,13 +10,11 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.DoubleAccumulator;
 
 import mz.org.selv.mobile.database.Converter;
 import mz.org.selv.mobile.database.Database;
@@ -25,7 +22,7 @@ import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.stockmanagement.CalculatedStockOnHand;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
-import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustments;
+import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItemAdjustment;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.StockCard;
 import mz.org.selv.mobile.model.stockmanagement.StockCardLineItem;
@@ -42,7 +39,7 @@ public class StockManagementService {
         this.mContext = context;
     }
 
-    public int saveInventory(PhysicalInventory physicalInventory, List<PhysicalInventoryLineItem> lineItems, List<PhysicalInventoryLineItemAdjustments> lineItemAdjustments) {
+    public int saveInventory(PhysicalInventory physicalInventory, List<PhysicalInventoryLineItem> lineItems, List<PhysicalInventoryLineItemAdjustment> lineItemAdjustments) {
 
         int status = 0;
         if (validateInventoryDate(physicalInventory.getOccurredDate())) {
@@ -53,6 +50,7 @@ public class StockManagementService {
             if (database.insert(physicalInventory) > 0) {
 
                 if (database.insert(lineItems) > 0) {
+
                     if (lineItemAdjustments != null && lineItemAdjustments.size() > 0) {
                         if (database.insert(lineItemAdjustments) > 0) {
                             //save events
@@ -74,6 +72,7 @@ public class StockManagementService {
                             status = -1;
                         }
                     }
+
                 }
             }
             database.endTransaction();
@@ -92,7 +91,7 @@ public class StockManagementService {
             List<StockEventLineItem> eventLineItems = new ArrayList<>();
             for (int i = 0; i < lineItems.size(); i++) {
                 StockEventLineItem stockEventLineItem = new StockEventLineItem();
-                List<PhysicalInventoryLineItemAdjustments> adjustments = lineItems.get(i).getAdjustmentLineItems();
+                List<PhysicalInventoryLineItemAdjustment> adjustments = lineItems.get(i).getAdjustmentLineItems();
                 //check if physical inventory have adjustments
                 if (lineItems.get(i).getAdjustmentLineItems() != null && lineItems.get(i).getAdjustmentLineItems().size() > 0) {
 

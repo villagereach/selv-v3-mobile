@@ -28,11 +28,12 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
     private Context context;
     private String selectedFacilityId;
     private String selectedProgramId;
-
+    private List lineItems;
     public InventoryItemsAdapter(@NonNull Context context, @NonNull List<JSONObject> lineItems, String selectedFacilityId, String selectedProgramId) {
         super(context, 0, lineItems);
         this.selectedFacilityId = selectedFacilityId;
         this.selectedProgramId = selectedProgramId;
+        this.lineItems = lineItems;
     }
 
     @NonNull
@@ -50,9 +51,6 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
         TextView tvExpirationDate = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_linte_item_expiration_date);
         TextView tvPhysicalStock = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_line_item_physical_stock);
         TextView tvBalance = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_linte_item_stock_balance);
-        Button btAdjustments = (Button) convertView.findViewById(R.id.bt_stock_management_inventory_linte_item_adjustments);
-
-        btAdjustments.setEnabled(false);
 
         try {
             tvExpirationDate.setText(lineItem.getString("expirationDate"));
@@ -62,14 +60,12 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
             if (lineItem.getString("stockOnHand").isEmpty()) {
                 tvStockOnHand.setText("");
                 tvBalance.setText("");
-                btAdjustments.setText(R.string.string_adjustments);
-                btAdjustments.setEnabled(false);
             } else if (lineItem.getInt("stockOnHand") >= 0) {
                 tvStockOnHand.setText("" + lineItem.getInt("stockOnHand"));
                 if (!lineItem.getString("physicalStock").equals("")) {
                     tvBalance.setText("" + (lineItem.getInt("physicalStock") - lineItem.getInt("stockOnHand")));
                     if(lineItem.getInt("stockOnHand") != lineItem.getInt("physicalStock")){
-                        btAdjustments.setEnabled(true);
+
                     }
                 }
             }
@@ -90,33 +86,11 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
             ex.printStackTrace();
         }
 
-        // button click
-        btAdjustments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                try{
-                    bundle.putString("orderableName", lineItem.getString("orderableName"));
-                    bundle.putString("lotCode", lineItem.getString("lotCode"));
-                    bundle.putString("facilityTypeId", selectedFacilityId);
-                    bundle.putString("programId", selectedProgramId);
-                    bundle.putInt("physicalStock", lineItem.getInt("physicalStock"));
-                    bundle.putInt("stockOnHand", lineItem.getInt("stockOnHand"));
-                    bundle.putInt("position", position);
-                } catch (JSONException ex){
-                    ex.printStackTrace();
-                }
-
-                InventoryItemDialog inventoryItemDialog = InventoryItemDialog.newInstance();
-
-                FragmentManager fm = ((AppCompatActivity)getContext()).getSupportFragmentManager();
-                inventoryItemDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
-                inventoryItemDialog.setArguments(bundle);
-                inventoryItemDialog.show(fm, "tag");
-            }
-        });
-
         return convertView;
 
+    }
+
+    public List getItems(){
+        return lineItems;
     }
 }

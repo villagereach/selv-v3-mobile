@@ -16,14 +16,14 @@ public class PhysicalInventoryLineItem implements Table {
     private int previousStockOnHand;
 
     //thisd breaks the pattern will fix later
-    private List<PhysicalInventoryLineItemAdjustments> adjustmentLineItems;
+    private List<PhysicalInventoryLineItemAdjustment> adjustmentLineItems;
 
 
-    public List<PhysicalInventoryLineItemAdjustments> getAdjustmentLineItems() {
+    public List<PhysicalInventoryLineItemAdjustment> getAdjustmentLineItems() {
         return adjustmentLineItems;
     }
 
-    public void setAdjustmentLineItems(List<PhysicalInventoryLineItemAdjustments> adjustmentLineItems) {
+    public void setAdjustmentLineItems(List<PhysicalInventoryLineItemAdjustment> adjustmentLineItems) {
         this.adjustmentLineItems = adjustmentLineItems;
     }
 

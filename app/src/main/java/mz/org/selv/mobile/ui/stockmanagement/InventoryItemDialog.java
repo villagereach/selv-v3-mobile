@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.ui.adapters.InventoryItemAdjustmentAdapter;
 import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
@@ -89,6 +90,12 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
         acReason.setAdapter(reasonAdapter);
 
         if(getArguments().getBoolean("newItem")){ // add product dialog
+            List orderables = inventoryViewModel.getOrderables( getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
+            ArrayAdapter<String> orderableAdapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
+            acProduct.setAdapter(orderableAdapter);
+            acProduct.setEnabled(true);
+            etTheoricStock.setEnabled(false);
+            etExpirationDate.setEnabled(false);
 
         } else { // view product dialog
             acProduct.setText(getArguments().getString("orderableName"));
@@ -101,6 +108,23 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
             etExpirationDate.setText(getArguments().getString("expirationDate"));
             etExpirationDate.setEnabled(false);
             etPhysicalStock.setText(getArguments().getString("physicalStock"));
+            if(getArguments().containsKey("adjustments")){
+                try {
+
+                    List<JSONObject> adjustmentsList = new ArrayList<>();
+
+                    JSONArray adjustments = new JSONArray(getArguments().getString("adjustments"));
+                    for (int i = 0; i < adjustments.length(); i++){
+                        adjustmentsList.add(adjustments.getJSONObject(i));
+                    }
+                    InventoryItemAdjustmentAdapter adjustmentAdapter = new InventoryItemAdjustmentAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, adjustmentsList);
+                    lvAdjustments.setAdapter(adjustmentAdapter);
+
+                } catch (JSONException exception) {
+                    exception.printStackTrace();
+                }
+
+            }
         }
 
         etPhysicalStock.addTextChangedListener(new TextWatcher() {
@@ -130,6 +154,24 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
                 } else {
                     tvBalance.setText("");
                 }
+            }
+        });
+
+        acProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                List lotCodes = inventoryViewModel.getLots(parent.getItemAtPosition(position).toString());
+                acLotNumber.setText("");
+                ArrayAdapter<String> lotAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lotCodes);
+                acLotNumber.setAdapter(lotAdapter);
+            }
+        });
+
+        acLotNumber.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Lot lot = inventoryViewModel.getLotByCode(parent.getItemAtPosition(position).toString());
+                etExpirationDate.setText(lot.getExpirationDate());
             }
         });
 
@@ -184,7 +226,7 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("Item selected");
+
     }
 
     @Override

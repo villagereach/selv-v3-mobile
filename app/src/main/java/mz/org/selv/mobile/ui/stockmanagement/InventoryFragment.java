@@ -76,11 +76,12 @@ public class InventoryFragment extends Fragment  implements  InventoryItemDialog
                 bundle.putString("programId", selectedProgram);
                 bundle.putString("facilityTypeId", selectedFacility);
                 bundle.putBoolean("newItem", true);
-                InventoryAddProductDialog inventoryAddProductDialog = InventoryAddProductDialog.newInstance();
+
+                InventoryItemDialog inventoryItemDialog = InventoryItemDialog.newInstance();
                 FragmentManager fm = getChildFragmentManager();
-                inventoryAddProductDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
-                inventoryAddProductDialog.setArguments(getArguments());
-                inventoryAddProductDialog.show(fm, "tag");
+                inventoryItemDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_Dialog);
+                inventoryItemDialog.setArguments(bundle);
+                inventoryItemDialog.show(fm, "tag");
             }
         });
 
@@ -103,7 +104,7 @@ public class InventoryFragment extends Fragment  implements  InventoryItemDialog
                     tilOccuredDate.setVisibility(View.VISIBLE);
                     tilSignature.setVisibility(View.VISIBLE);
                 } else {
-                    InventoryItemsAdapter lineItems = (InventoryItemsAdapter) lvInventoryItems.getAdapter();
+                    List lineItems = ((InventoryItemsAdapter) lvInventoryItems.getAdapter()).getItems();
                     String date = etOccurredDate.getText().toString();
                     String signature = etSignature.getText().toString();
                     inventoryViewModel.saveInventory(signature, selectedProgram, selectedFacility, date, lineItems);
@@ -158,6 +159,7 @@ public class InventoryFragment extends Fragment  implements  InventoryItemDialog
                 bundle.putString("facilityTypeId", selectedFacility);
                 bundle.putBoolean("newItem", false);
                 JSONObject selectedItem = (JSONObject) parent.getItemAtPosition(position);
+                System.out.println(selectedItem);
                 try{
                     bundle.putBoolean("newItem", false);
                     bundle.putString("orderableName", selectedItem.getString("orderableName"));
@@ -165,6 +167,9 @@ public class InventoryFragment extends Fragment  implements  InventoryItemDialog
                     bundle.putString("expirationDate", selectedItem.getString("expirationDate"));
                     bundle.putString("stockOnHand", selectedItem.getString("stockOnHand"));
                     bundle.putString("physicalStock", selectedItem.getString("physicalStock"));
+                    if(selectedItem.has("adjustments")){
+                        bundle.putString("adjustments", selectedItem.getJSONArray("adjustments").toString());
+                    }
                     bundle.putInt("itemPosition", position);
                 } catch (JSONException exception){
                     exception.printStackTrace();

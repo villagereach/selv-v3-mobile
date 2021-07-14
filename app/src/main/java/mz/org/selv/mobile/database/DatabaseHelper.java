@@ -96,6 +96,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.PhysicalInventoryLineItem.COLUMN_PREVIOUS_STOCK_ON_HAND + " INTEGER," +
             Database.PhysicalInventoryLineItem.COLUMN_PHYSICAL_INVENTORY_ID + " text)";
 
+    public static final String CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT = "" +
+            "create table " + Database.PhysicalInventoryLineItemAdjustment.TABLE_NAME + " (" +
+            Database.PhysicalInventoryLineItemAdjustment.COLUMN_STOCK_CARD_LINE_ITEM_ID + " text," +
+            Database.PhysicalInventoryLineItemAdjustment.COLUMN_ID + " text," +
+            Database.PhysicalInventoryLineItemAdjustment.COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID + " text," +
+            Database.PhysicalInventoryLineItemAdjustment.COLUMN_REASON_ID + " text," +
+            Database.PhysicalInventoryLineItemAdjustment.COLUMN_QUANTITY + " INTEGER)";
+
     public static final String CREATE_TABLE_STOCK_CARD = "" +
             "create table " + Database.StockCard.TABLE_NAME + " (" +
             Database.StockCard.COLUMN_NAME_PROGRAM_ID + " text," +
@@ -169,12 +177,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DROP_TABLE_PHYSICAL_INVENTORY = "drop table if exists " + Database.PhysicalInventory.TABLE_NAME;
     public static final String DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM = "drop table if exists " + Database.PhysicalInventoryLineItem.TABLE_NAME;
+    public static final String DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT = "drop table if exists " + Database.PhysicalInventoryLineItemAdjustment.TABLE_NAME;
 
 
     public static final String DROP_TABLE_STOCK_CARD_LINE_ITEM = "drop table if exists " + Database.StockCardLineItem.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_EVENT = "drop table if exists " + Database.StockEvent.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_EVENT_LINE_ITEM = "drop table if exists " + Database.StockEventLineItem.TABLE_NAME;
     public static final String DROP_TABLE_CALCULATED_STOCK_ON_HAND = "drop table if exists " + Database.CalculatedStockOnHand.TABLE_NAME;
+
 
     public DatabaseHelper(Context context) {
         super(context, Database.DATABASE_NAME, null, Database.DATABASE_VERSION);
@@ -202,6 +212,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STOCK_EVENT_LINE_ITEM);
         db.execSQL(CREATE_TABLE_STOCK_CARD);
         db.execSQL(CREATE_TABLE_CALCULATED_STOCK_ON_HAND);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
         //    db.execSQL(CREATE_TABLE_PROCESSING_PERIOD);
 
     }
@@ -226,6 +237,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_STOCK_EVENT_LINE_ITEM);
         db.execSQL(DROP_TABLE_STOCK_CARD);
         db.execSQL(DROP_TABLE_CALCULATED_STOCK_ON_HAND);
+        db.execSQL(DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
+
 
 
         //create table
@@ -246,6 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STOCK_EVENT);
         db.execSQL(CREATE_TABLE_STOCK_CARD);
         db.execSQL(CREATE_TABLE_CALCULATED_STOCK_ON_HAND);
+        db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
 
 
     }
