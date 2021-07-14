@@ -24,7 +24,7 @@ public class SyncFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInsanceState) {
+                             ViewGroup container, Bundle savedInstanceState) {
         syncViewModel = new ViewModelProvider(this).get(SyncViewModel.class);
         View root = inflater.inflate(R.layout.fragment_sync, container, false);
         loginHelper = new LoginHelper(getContext());
@@ -39,8 +39,8 @@ public class SyncFragment extends Fragment {
         btSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                syncViewModel.sync(1);
+                loginHelper.refreshToken();
+                //syncViewModel.sync(1);
             }
         });
 
