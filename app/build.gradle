@@ -56,7 +56,7 @@ dependencies {
 def getBaseUrl() {
     def baseUrl = System.getenv("BASE_URL")
     if (baseUrl == null || baseUrl.length() == 0) {
-        def keysFile = file("keys-sample.properties")
+        def keysFile = file("keys.properties")
         def keysProperties = new Properties()
         keysProperties.load(new FileInputStream(keysFile))
         baseUrl = keysProperties['BASE_URL']
@@ -70,7 +70,7 @@ def getBaseUrl() {
 def getClientId() {
     def clientId = System.getenv("CLIENT_ID")
     if (clientId == null || clientId.length() == 0) {
-        def keysFile = file("keys-sample.properties")
+        def keysFile = file("keys.properties")
         def keysProperties = new Properties()
         keysProperties.load(new FileInputStream(keysFile))
         clientId = keysProperties['CLIENT_ID']
@@ -84,7 +84,7 @@ def getClientId() {
 def getClientSecret() {
     def clientSecret = System.getenv("CLIENT_SECRET")
     if (clientSecret == null || clientSecret.length() == 0) {
-        def keysFile = file("keys-sample.properties")
+        def keysFile = file("keys.properties")
         def keysProperties = new Properties()
         keysProperties.load(new FileInputStream(keysFile))
         clientSecret = keysProperties['CLIENT_SECRET']
