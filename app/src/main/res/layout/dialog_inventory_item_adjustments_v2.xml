@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:layout_weight="1"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_stock_management_inventory_item_adjustment_dialog_theoric_stock"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/string_theoric_stock"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_stock_management_inventory_item_adjustment_dialog_physical_stock"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/string_physicalstock">
+        <EditText
+            android:id="@+id/et_stock_management_inventory_item_adjustment_dialog_physical_stock"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/ll_stock_management_inventory_item_adjustment_dialog_stock_balance_info"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/string_balance"
+                android:layout_marginEnd="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="0"
+                android:id="@+id/tv_stock_management_inventory_item_adjustment_dialog_balance"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/string_adjusted_total"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                android:id="@+id/tv_stock_management_inventory_item_adjustment_dialog_adjusted_quantity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_stock_management_inventory_item_adjustment_dialog_reasons"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="@string/string_adjustments" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_stock_management_inventory_adjustments_reason"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:hint="@string/string_reason">
+
+            <AutoCompleteTextView
+                android:id="@+id/ac_stock_management_inventory_item_adjustment_dialog_reason"
+                android:layout_width="match_parent"
+                android:completionThreshold="0"
+                android:layout_height="50dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_stock_management_inventory_adjustments_quantity"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1.25"
+            android:hint="@string/string_quantity"
+            >
+
+            <EditText
+                android:id="@+id/et_stock_management_inventory_item_adjustment_dialog_adjustment_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/bt_stock_management_inventory_item_adjustment_dialog_add_reason"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:text="+" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_stock_management_inventory_item_adjustment_dialog_reason"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/bt_stock_management_inventory_item_adjustment_dialog_save"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center"
+        android:text="@string/string_save" />
+
+    <Button
+        android:id="@+id/bt_stock_management_inventory_item_adjustment_dialog_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center"
+        android:text="@string/string_cancel" />
+</LinearLayout>

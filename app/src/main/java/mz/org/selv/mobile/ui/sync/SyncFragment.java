@@ -39,8 +39,8 @@ public class SyncFragment extends Fragment {
         btSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginHelper.refreshToken();
-                //syncViewModel.sync(1);
+                //loginHelper.refreshToken();
+                syncViewModel.sync(1);
             }
         });
 

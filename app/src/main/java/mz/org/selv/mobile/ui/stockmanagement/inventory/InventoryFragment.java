@@ -1,4 +1,4 @@
-package mz.org.selv.mobile.ui.stockmanagement;
+package mz.org.selv.mobile.ui.stockmanagement.inventory;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -33,7 +33,7 @@ import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryAddProductDialog
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 
 
-public class InventoryFragment extends Fragment  implements  InventoryItemDialog.DialogListener{
+public class InventoryFragment extends Fragment  implements InventoryItemDialog.DialogListener {
     private InventoryViewModel inventoryViewModel;
     private InventoryAddProductDialogViewModel inventoryAddProductDialogViewModel;
     private Button addProduct;

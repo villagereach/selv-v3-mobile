@@ -2,18 +2,13 @@ package mz.org.selv.mobile.ui.adapters;
 
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +17,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
-import mz.org.selv.mobile.ui.stockmanagement.InventoryItemDialog;
 
 public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
     private Context context;
@@ -49,7 +43,7 @@ public class InventoryItemsAdapter extends ArrayAdapter<JSONObject> {
         TextView tvStockOnHand = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_line_item_soh);
         TextView tvLot = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_line_item_lot);
         TextView tvExpirationDate = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_linte_item_expiration_date);
-        TextView tvPhysicalStock = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_line_item_physical_stock);
+        TextView tvPhysicalStock = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_line_item_physical_stock_2);
         TextView tvBalance = (TextView) convertView.findViewById(R.id.tv_stock_management_inventory_linte_item_stock_balance);
 
         try {

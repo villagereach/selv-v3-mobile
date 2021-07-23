@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
             android:hint="@string/string_expiration_date">
             <EditText
                 android:id="@+id/et_stock_management_inventory_item_dialog_expiration_date"
@@ -68,85 +67,92 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_stock_management_inventory_dialog_theoric_stock"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/string_theoric_stock"
-            >
-
-            <EditText
-                android:id="@+id/et_stock_management_inventory_dialog_theoric_stock"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_stock_management_inventory_dialog_physical_stock"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:hint="@string/string_physicalstock">
-            <EditText
-                android:id="@+id/et_stock_management_inventory_dialog_physical_stock"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_stock_management_inventory_dialog_theoric_stock"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/string_theoric_stock"
+        >
+
+        <EditText
+            android:id="@+id/et_stock_management_inventory_dialog_theoric_stock"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_stock_management_inventory_dialog_physical_stock"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/string_physicalstock">
+        <EditText
+            android:id="@+id/et_stock_management_inventory_dialog_physical_stock"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:id="@+id/ll_stock_management_inventory_dialog_stock_balance_info"
         android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="@string/string_balance"
-            android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            android:orientation="vertical">
 
-        <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/string_balance"
+                android:layout_marginEnd="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="0"
+                android:id="@+id/tv_stock_management_inventory_item_dialog_balance"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="@string/string_adjusted_total"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="0"
-            android:id="@+id/tv_stock_management_inventory_item_dialog_balance"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:text="@string/string_adjusted_total"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="0"
-            android:id="@+id/tv_stock_management_inventory_item_dialog_adjusted_quantity"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                android:id="@+id/tv_stock_management_inventory_item_dialog_adjusted_quantity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <TextView

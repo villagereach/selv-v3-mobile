@@ -1,4 +1,4 @@
-package mz.org.selv.mobile.ui.stockmanagement;
+package mz.org.selv.mobile.ui.stockmanagement.inventory;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.ui.adapters.InventoryListAdapter;
+import mz.org.selv.mobile.ui.stockmanagement.inventory.InventoryFragment;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryListViewModel;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.ProgramListViewModel;
 

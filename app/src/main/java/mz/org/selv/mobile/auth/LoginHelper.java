@@ -115,10 +115,12 @@ public class LoginHelper {
     }
 
     public void refreshToken() {
+
         StringRequest loginRequest = new StringRequest(Method.POST, ACCESS_TOKEN_URI,
                 new Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        System.out.println("connecting....");
                         if (response != null) {
                             try {
                                 JSONObject responseObject = new JSONObject(response);

@@ -17,6 +17,7 @@ import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.ui.adapters.ProgramListAdapter;
+import mz.org.selv.mobile.ui.stockmanagement.inventory.InventoryListFragment;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.ProgramListViewModel;
 
 public class ProgramListFragment extends Fragment {

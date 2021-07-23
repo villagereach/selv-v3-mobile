@@ -1,4 +1,4 @@
-package mz.org.selv.mobile.ui.stockmanagement;
+package mz.org.selv.mobile.ui.stockmanagement.inventory;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +32,6 @@ import java.util.List;
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.ui.adapters.InventoryItemAdjustmentAdapter;
-import mz.org.selv.mobile.ui.adapters.InventoryItemsAdapter;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 
 public class InventoryItemDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
@@ -49,6 +51,8 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
     private Button btSave;
     private Button btCancel;
     private Button btAddReason;
+    private LinearLayout llStockBalanceInfo;
+    private TextInputLayout tilTheoricStock;
     private int itemPosition;
 
 
@@ -66,10 +70,10 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inventoryViewModel = new ViewModelProvider(this).get(InventoryViewModel.class);
-        View view = inflater.inflate(R.layout.dialog_inventory_adjustements, container, false);
+        View view = inflater.inflate(R.layout.dialog_inventory_item, container, false);
 
         btSave = (Button) view.findViewById(R.id.bt_stock_management_inventory_item_dialog_save);
-        etTheoricStock = (EditText) view.findViewById(R.id.et_stock_management_inventory_dialog_theoric_stock);
+        tilTheoricStock = (TextInputLayout) view.findViewById(R.id.til_stock_management_inventory_dialog_theoric_stock);
         btAddReason = (Button) view.findViewById(R.id.bt_stock_management_inventory_item_dialog_add_reason);
         btCancel = (Button) view.findViewById(R.id.bt_stock_management_inventory_item_dialog_cancel);
         etPhysicalStock = (EditText) view.findViewById(R.id.et_stock_management_inventory_dialog_physical_stock);
@@ -81,6 +85,7 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
         tvAdjustedStock = (TextView) view.findViewById(R.id.tv_stock_management_inventory_item_dialog_adjusted_quantity);
         acReason = (AutoCompleteTextView) view.findViewById(R.id.ac_stock_management_inventory_item_dialog_reason);
         lvAdjustments = (ListView) view.findViewById(R.id.lv_stock_management_inventory_item_dialog_reason);
+        llStockBalanceInfo = (LinearLayout) view.findViewById(R.id.ll_stock_management_inventory_dialog_stock_balance_info);
 
         //AC Adapters
 
@@ -94,8 +99,9 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
             ArrayAdapter<String> orderableAdapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
             acProduct.setAdapter(orderableAdapter);
             acProduct.setEnabled(true);
-            etTheoricStock.setEnabled(false);
+            tilTheoricStock.setVisibility(View.GONE);
             etExpirationDate.setEnabled(false);
+            llStockBalanceInfo.setVisibility(View.GONE);
 
         } else { // view product dialog
             acProduct.setText(getArguments().getString("orderableName"));
@@ -104,10 +110,11 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
             acLotNumber.setEnabled(false);
             //tvBalance.setText("" + (getArguments().getString("physicalStock") - getArguments().getString("stockOnHand")));
             etTheoricStock.setText(""+getArguments().getString("stockOnHand"));
-            etTheoricStock.setEnabled(false);
+            tilTheoricStock.setVisibility(View.VISIBLE);
             etExpirationDate.setText(getArguments().getString("expirationDate"));
             etExpirationDate.setEnabled(false);
             etPhysicalStock.setText(getArguments().getString("physicalStock"));
+            llStockBalanceInfo.setVisibility(View.VISIBLE);
             if(getArguments().containsKey("adjustments")){
                 try {
 
@@ -140,7 +147,7 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()){
+                if(!getArguments().getBoolean("newItem") && !s.toString().isEmpty()){
 
                     int theoricStock = 0;
 
@@ -196,13 +203,24 @@ public class InventoryItemDialog extends DialogFragment implements AdapterView.O
                     }
                 }
 
-                saveProduct(acProduct.getText().toString(),
+                if(getArguments().getBoolean("newItem")){
+                    saveProduct(acProduct.getText().toString(),
+                            acLotNumber.getText().toString(),
+                            etPhysicalStock.getText().toString(),
+                            "",
+                            adjustments,
+                            -1 //
+                    );
+                } else {
+                    saveProduct(acProduct.getText().toString(),
                             acLotNumber.getText().toString(),
                             etPhysicalStock.getText().toString(),
                             etTheoricStock.getText().toString(),
                             adjustments,
                             getArguments().getInt("itemPosition")
-                           );
+                    );
+                }
+
 
                 dismiss();
             }

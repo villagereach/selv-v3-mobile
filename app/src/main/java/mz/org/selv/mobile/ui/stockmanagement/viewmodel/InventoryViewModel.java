@@ -93,7 +93,7 @@ public class InventoryViewModel extends AndroidViewModel {
                 currentItems = new ArrayList<JSONObject>();
             }
 
-            if (position > -1) {
+            if (position >= 0) {
                 currentItems.remove(position);
                 currentItems.add(position, lineItem);
             } else {

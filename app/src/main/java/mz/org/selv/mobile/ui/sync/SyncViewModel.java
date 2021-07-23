@@ -109,8 +109,9 @@ public class SyncViewModel extends AndroidViewModel {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
-                String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
+               // SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+               // String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
+                String auth = "Bearer ef1babf5-a240-4419-adee-211ebd7a9355";
                 params.put("Authorization", auth);
                 return params;
             }

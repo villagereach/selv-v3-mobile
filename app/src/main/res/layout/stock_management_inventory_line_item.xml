@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/string_soh"
+        android:text="@string/string_physicalstock"
         app:layout_constraintStart_toStartOf="@id/textView5"
         app:layout_constraintTop_toBottomOf="@id/tv_stock_management_inventory_line_item_product" />
 
@@ -84,12 +84,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/string_physicalstock"
+        android:text="@string/string_soh"
         app:layout_constraintStart_toStartOf="@+id/tv_stock_management_inventory_line_item_lot"
         app:layout_constraintTop_toBottomOf="@+id/tv_stock_management_inventory_line_item_lot" />
 
     <TextView
-        android:id="@+id/tv_stock_management_inventory_line_item_physical_stock"
+        android:id="@+id/tv_stock_management_inventory_line_item_physical_stock_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
