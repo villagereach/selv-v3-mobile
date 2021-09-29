@@ -14,7 +14,10 @@ import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.StockCard;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
+import mz.org.selv.mobile.model.stockmanagement.StockEventLineItem;
+import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
+import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 
 public class Converter {
 
@@ -88,7 +91,7 @@ public class Converter {
     }
 
 
-    public static StockCard cursorToStockCard(Cursor cursor){
+    public static StockCard cursorToStockCard(Cursor cursor) {
         StockCard stockCard = new StockCard();
         stockCard.setProgramId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_PROGRAM_ID)));
         stockCard.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_ORDERABLE_ID)));
@@ -98,7 +101,7 @@ public class Converter {
         return stockCard;
     }
 
-    public static CalculatedStockOnHand cursorToCalculatedStockOnHand(Cursor cursor){
+    public static CalculatedStockOnHand cursorToCalculatedStockOnHand(Cursor cursor) {
         CalculatedStockOnHand calculatedStockOnHand = new CalculatedStockOnHand();
         calculatedStockOnHand.setOccuredDate(cursor.getString(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE)));
         calculatedStockOnHand.setStockCardId(cursor.getString(cursor.getColumnIndex(Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID)));
@@ -116,6 +119,9 @@ public class Converter {
         event.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_FACILITY_ID)));
         event.setProgramId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_PROGRAM_ID)));
         event.setId(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_UUID)));
+        event.setProcessedDate(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_PROCESSED_DATE)));
+        event.setStatus(cursor.getInt(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_STATUS)));
+        event.setType(cursor.getString(cursor.getColumnIndex(Database.StockEvent.COLUMN_NAME_TYPE)));
         return event;
     }
 
@@ -125,5 +131,50 @@ public class Converter {
         validReasons.setProgramId(cursor.getString(cursor.getColumnIndex(Database.ValidReasons.COLUMN_NAME_PROGRAM_ID)));
         validReasons.setReasonId(cursor.getString(cursor.getColumnIndex(Database.ValidReasons.COLUMN_NAME_REASON_ID)));
         return validReasons;
+    }
+
+    public static ValidSource cursorToValidSource(Cursor cursor) {
+        ValidSource validSource = new ValidSource();
+        validSource.setRefDataFacility(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY)));
+        validSource.setNodeId(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_NODE_ID)));
+        validSource.setReferenceId(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID)));
+        validSource.setName(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_NAME)));
+        validSource.setIsFreeTextAllowed(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_FREE_TEXT_ALLOWED)));
+        validSource.setFacilityTypeId(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID)));
+        validSource.setId(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_ID)));
+        validSource.setProgramId(cursor.getString(cursor.getColumnIndex(Database.ValidSources.COLUMN_NAME_PROGRAM_ID)));
+        return validSource;
+    }
+
+    public static ValidDestination cursorToValidDestinations(Cursor cursor) {
+        ValidDestination validDestination = new ValidDestination();
+        validDestination.setRefDataFacility(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_REFERENCE_DATA_FACILITY)));
+        validDestination.setNodeId(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_NODE_ID)));
+        validDestination.setReferenceId(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_NODE_REFERENCE_ID)));
+        validDestination.setName(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_NAME)));
+        validDestination.setIsFreeTextAllowed(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_FREE_TEXT_ALLOWED)));
+        validDestination.setFacilityTypeId(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_FACILITY_TYPE_ID)));
+        validDestination.setId(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_ID)));
+        validDestination.setProgramId(cursor.getString(cursor.getColumnIndex(Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID)));
+        return validDestination;
+    }
+
+    public static StockEventLineItem cursorToStockEventLineItem(Cursor cursor) {
+        StockEventLineItem stockEventLineItem = new StockEventLineItem();
+        stockEventLineItem.setSourceId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_SOURCE_ID)));
+        stockEventLineItem.setDestinationFreeText(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_DESTINATION_FREE_TEXT)));
+        stockEventLineItem.setReasonId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_REASON_ID)));
+        stockEventLineItem.setReasonFreeText(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_REASON_FREE_TEXT)));
+        stockEventLineItem.setOccurredDate(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_OCCURRED_DATE)));
+        stockEventLineItem.setProccessedDate(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_PROCCESSED_DATE)));
+        stockEventLineItem.setLotId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_LOT_ID)));
+        stockEventLineItem.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_ORDERABLE_ID)));
+        stockEventLineItem.setProgramId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_PROGRAM_ID)));
+        stockEventLineItem.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_FACILITY_ID)));
+        stockEventLineItem.setDestinationId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_DESTINATION_ID)));
+        stockEventLineItem.setId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_ID)));
+        stockEventLineItem.setQuantity(cursor.getInt(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_QUANTITY)));
+        stockEventLineItem.setStockEventId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_STOCK_EVENT_ID)));
+        return stockEventLineItem;
     }
 }

@@ -33,7 +33,6 @@ public class ProgramListFragment extends Fragment {
 
         if (getArguments() != null) {
             action = getArguments().getString("action");
-            Log.d(this.getClass().toString(), "action: " + action);
             if (action.equals("issue")) {
 
                 getActivity().setTitle(R.string.string_adjustments);
@@ -70,7 +69,8 @@ public class ProgramListFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("action", action);
-                    bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("facilityTypeId", "113db84f-b0f8-4fec-9d37-ae87fcd833d7");
+                    bundle.putString("facilityId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
                     bundle.putString("programId", program.getUuid());
                     bundle.putString("programName", program.getName());
                     StockEventFragment stockEventFragment = new StockEventFragment();
@@ -103,6 +103,4 @@ public class ProgramListFragment extends Fragment {
 
         return root;
     }
-
-
 }

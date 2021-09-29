@@ -15,6 +15,7 @@ import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.model.referencedata.TradeItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
+import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 
 public class ReferenceDataService {
     Context mContext;
@@ -167,6 +168,23 @@ public class ReferenceDataService {
         return validReasons;
     }
 
+    public List<ValidSource> getValidSources(String facilityTypeId, String programId){
+        System.out.println("facilityType"+ facilityTypeId+"   program: "+programId);
+        Database database = new Database(mContext);
+        database.open();
+        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID+"=? AND "+
+                Database.ValidSources.COLUMN_NAME_PROGRAM_ID+"=?", new String[]{"113db84f-b0f8-4fec-9d37-ae87fcd833d7", programId}, null, null, null);
+        List validSources = new ArrayList<ValidSource>();
+        System.out.println(cursor.getCount()+" rows");
+        while (cursor.moveToNext()){
+            System.out.println("facilityType"+ facilityTypeId+"   program: "+programId);
+            validSources.add(Converter.cursorToValidSource(cursor));
+        }
+        cursor.close();
+        database.close();
+        return validSources;
+    }
+
     public Reason getReasonById(String reasonId){
         Database database = new Database(mContext);
         database.open();
@@ -193,11 +211,34 @@ public class ReferenceDataService {
         return reason;
     }
 
-    public List<String> getReasonNameByValidReason(String facilityTypeId, String programId){
+    public List<String> getReasonNameByValidReason(String facilityTypeId, String programId, String category, String type){
         List reasonNames = new ArrayList<>();
         List<ValidReasons> validReasons = getValidReasons(facilityTypeId, programId);
+
         for(int i = 0; i < validReasons.size(); i++){
-            reasonNames.add(getReasonById(validReasons.get(i).getReasonId()).getName());
+            if(category != null){
+                Reason reason = getReasonById(validReasons.get(i).getReasonId());
+                if(type != null){
+                    if(reason.getCategory().equals(category) && reason.getType().equals(type)){
+                        reasonNames.add(reason.getName());
+                    }
+                } else {
+                    if(reason.getCategory().equals(category)){
+                        reasonNames.add(reason.getName());
+                    }
+                }
+            } else {
+                if(type != null){
+                    Reason reason = getReasonById(validReasons.get(i).getReasonId());
+                    if(reason.getType().equals(type)){
+                        reasonNames.add(reason.getName());
+                    } else {
+                        reasonNames.add(getReasonById(validReasons.get(i).getReasonId()).getName());
+                    }
+                } else {
+                    reasonNames.add(getReasonById(validReasons.get(i).getReasonId()).getName());
+                }
+            }
         }
         return reasonNames;
     }

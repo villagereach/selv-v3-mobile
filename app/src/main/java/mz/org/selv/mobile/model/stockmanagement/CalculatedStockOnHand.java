@@ -7,9 +7,54 @@ import mz.org.selv.mobile.database.Table;
 
 public class CalculatedStockOnHand implements Table {
     String stockCardId;
+    String orderableId;
+    String facilityId;
+    String programId;
+    String lotId;
+    String originEventId;
     int stockOnHand;
     String occuredDate;
     String id;
+
+    public String getOrderableId() {
+        return orderableId;
+    }
+
+    public void setOrderableId(String orderableId) {
+        this.orderableId = orderableId;
+    }
+
+    public String getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
+    }
+
+    public String getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(String programId) {
+        this.programId = programId;
+    }
+
+    public String getLotId() {
+        return lotId;
+    }
+
+    public void setLotId(String lotId) {
+        this.lotId = lotId;
+    }
+
+    public String getOriginEventId() {
+        return originEventId;
+    }
+
+    public void setOriginEventId(String originEventId) {
+        this.originEventId = originEventId;
+    }
 
     public String getId() {
         return id;

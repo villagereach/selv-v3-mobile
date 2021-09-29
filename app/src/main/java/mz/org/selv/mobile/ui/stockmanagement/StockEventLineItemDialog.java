@@ -1,5 +1,6 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,29 +13,37 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Calendar;
 import java.util.List;
 
 import mz.org.selv.mobile.R;
+import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventLineItemViewModel;
 
 public class StockEventLineItemDialog extends DialogFragment {
     private StockEventLineItemViewModel stockEventLineItemViewModel;
 
     private AutoCompleteTextView acLotNumber;
+    private AutoCompleteTextView acReason;
+    TextInputLayout sourceDestinationLayout;
+    TextInputLayout sourceDestinationCommentLayout;
     private Button btAdd;
     private Button btCancel;
+    private int year, month, day;
 
-    public static StockEventLineItemDialog newInstance(){
+    public static StockEventLineItemDialog newInstance() {
         return new StockEventLineItemDialog();
     }
 
@@ -46,13 +55,13 @@ public class StockEventLineItemDialog extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         stockEventLineItemViewModel = new ViewModelProvider(this).get(StockEventLineItemViewModel.class);
         View view = inflater.inflate(R.layout.dialog_new_stock_event_line_item, container, false);
 
         AutoCompleteTextView acProduct = view.findViewById(R.id.ac_stock_event_line_item_product);
         List orderables = stockEventLineItemViewModel
-            .getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
+                .getOrderables(getArguments().getString("programId"), getArguments().getString("facilityTypeId"));
         ArrayAdapter<String> orderableAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, orderables);
         acProduct.setAdapter(orderableAdapter);
 
@@ -64,13 +73,8 @@ public class StockEventLineItemDialog extends DialogFragment {
         tvExpirationDate.setText("");
 
         AutoCompleteTextView acSourceDestination = view.findViewById(R.id.ac_stock_event_line_item_source_destination);
+        acReason = view.findViewById(R.id.ac_stock_event_line_item_reason);
         EditText etSourceDestinationComments = view.findViewById(R.id.et_stock_event_line_item_source_destination_comments);
-
-        AutoCompleteTextView acReason = view.findViewById(R.id.ac_stock_event_line_item_reason);
-        List reasonNames = stockEventLineItemViewModel
-            .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
-        ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
-        acReason.setAdapter(reasonAdapter);
 
         EditText etReasonComments = view.findViewById(R.id.et_stock_event_line_item_reason_comment);
 
@@ -89,16 +93,64 @@ public class StockEventLineItemDialog extends DialogFragment {
                 if (position >= 0) {
                     acLotNumber.setText("");
                     List lots = stockEventLineItemViewModel
-                        .getLotCodes(parent.getItemAtPosition(position).toString());
+                            .getLotCodes(parent.getItemAtPosition(position).toString());
                     ArrayAdapter<String> lotAdapter = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lots);
                     acLotNumber.setAdapter(lotAdapter);
                 }
             }
         });
 
+        acSourceDestination.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    stockEventLineItemViewModel.setSelectedSource(getArguments().getString("facilityTypeId"), getArguments().getString("programId"), parent.getItemAtPosition(position).toString());
+                }
+            }
+        });
+
+        //Datepicker
+        etOccurredDate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                        if(etOccurredDate.getText().toString().equals("")){
+                            Calendar calendar = Calendar.getInstance();
+                            year = calendar.get(Calendar.YEAR);
+                            month = calendar.get(Calendar.MONTH);
+                            day = calendar.get(Calendar.DAY_OF_YEAR);
+                        } else {
+                            year = Integer.parseInt(etOccurredDate.getText().toString().substring(6));
+                            month = Integer.parseInt(etOccurredDate.getText().toString().substring(3, 5))-1;
+                            day = Integer.parseInt(etOccurredDate.getText().toString().substring(0,2));
+                        }
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                etOccurredDate.setText(dayOfMonth+"-"+(String.format("%02d",month+1))+"-"+year);
+                            }
+                        }, year, month, day );
+                        datePickerDialog.show();
+                    }
+        });
+
         btAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                stockEventLineItemViewModel.saveEvent(
+                        getArguments().getString("action"),
+                        getArguments().getString("facilityId"),
+                        getArguments().getString("facilityTypeId"),
+                        getArguments().getString("programId"),
+                        acProduct.getText().toString(),
+                        acLotNumber.getText().toString(),
+                        acSourceDestination.getText().toString(),
+                        etSourceDestinationComments.getText().toString(),
+                        acReason.getText().toString(),
+                        etReasonComments.getText().toString(),
+                        Integer.parseInt(etQuantity.getText().toString()),
+                        null,
+                        etOccurredDate.getText().toString()
+                );
                 dismiss();
             }
         });
@@ -110,16 +162,57 @@ public class StockEventLineItemDialog extends DialogFragment {
             }
         });
 
+        //observable
+        stockEventLineItemViewModel.getSelectedValidSource().observe(getViewLifecycleOwner(), new Observer<ValidSource>() {
+            @Override
+            public void onChanged(ValidSource validSource) {
+                if (validSource.getIsFreeTextAllowed().equals("true")) {
+
+                    etSourceDestinationComments.setText("");
+                    sourceDestinationCommentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    etSourceDestinationComments.setText("");
+                    sourceDestinationCommentLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
         //
         assert getArguments() != null;
         if (getArguments().getString("action").equals("adjustment")) {
-            TextInputLayout sourceDestinationLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination);
-            TextInputLayout sourceDestinationCommentLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination_comment);
+            sourceDestinationLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination);
+            sourceDestinationCommentLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination_comment);
             sourceDestinationLayout.setVisibility(View.GONE);
             sourceDestinationCommentLayout.setVisibility(View.GONE);
             sourceDestinationLayout.setVisibility(View.GONE);
             acSourceDestination.setVisibility(View.GONE);
             etSourceDestinationComments.setVisibility(View.GONE);
+            AutoCompleteTextView acReason = view.findViewById(R.id.ac_stock_event_line_item_reason);
+            List reasonNames = stockEventLineItemViewModel
+                    .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"), null, null);
+            ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
+            acReason.setAdapter(reasonAdapter);
+        } else if (getArguments().getString("action").equals("receive")) {
+            sourceDestinationLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination);
+            sourceDestinationLayout.setHint(R.string.string_source);
+            sourceDestinationCommentLayout = view.findViewById(R.id.til_stock_event_line_item_source_destination_comment);
+            sourceDestinationCommentLayout.setHint(R.string.string_comments);
+            sourceDestinationLayout.setVisibility(View.VISIBLE);
+            sourceDestinationCommentLayout.setVisibility(View.VISIBLE);
+            acSourceDestination.setVisibility(View.VISIBLE);
+            etSourceDestinationComments.setVisibility(View.VISIBLE);
+
+            // get valid sources
+            List validSources = stockEventLineItemViewModel
+                    .getValidSources(getArguments().getString("facilityTypeId"), getArguments().getString("programId"));
+            ArrayAdapter<String> validSourcesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, validSources);
+            acSourceDestination.setAdapter(validSourcesAdapter);
+
+            // valid reasons
+            List reasonNames = stockEventLineItemViewModel
+                    .getReasonNames(getArguments().getString("facilityTypeId"), getArguments().getString("programId"), "TRANSFER", "CREDIT");
+            ArrayAdapter<String> reasonAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, reasonNames);
+            acReason.setAdapter(reasonAdapter);
         }
         return view;
 
@@ -138,6 +231,5 @@ public class StockEventLineItemDialog extends DialogFragment {
             //dialog.getWindow().setWindowAnimations(R.style.AppTheme_Slide);
         }
     }
-
 
 }

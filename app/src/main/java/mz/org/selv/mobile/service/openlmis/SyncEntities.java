@@ -30,7 +30,9 @@ import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.model.referencedata.TradeItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
+import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
+import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 
 public class SyncEntities {
 
@@ -113,7 +115,7 @@ public class SyncEntities {
         List<Table> entities = readEntities(entity, objects);
         if (entities.size() > 0) {
             //remove entites saved
-            System.out.println("Saving entities");
+            System.out.println("Saving entities "+entity);
             saveEntitiesToDatabase(context, entities, false);
         } else {
             System.out.println("No entities");
@@ -216,6 +218,46 @@ public class SyncEntities {
                         validReason.setFacilitytypeId(entities.getJSONObject(i).getJSONObject("facilityType").getString(Database.FacilityType.COLUMN_UUID));
                         validReason.setReasonId(entities.getJSONObject(i).getJSONObject("reason").getString(Database.Reason.COLUMN_NAME_UUID));
                         result.add(validReason);
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+
+            case Entity.VALID_SOURCES:
+                System.out.println("Valid Sources");
+                try {
+                    for (int i = 0; i < entities.length(); i++) {
+                        ValidSource validSource = new ValidSource();
+                        validSource.setId(entities.getJSONObject(i).getString(Database.ValidReasons.COLUMN_NAME_UUID));
+                        validSource.setProgramId(entities.getJSONObject(i).getString(Database.ValidSources.COLUMN_NAME_PROGRAM_ID));
+                        validSource.setName(entities.getJSONObject(i).getString(Database.ValidSources.COLUMN_NAME_NAME));
+                        validSource.setFacilityTypeId(entities.getJSONObject(i).getString(Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID));
+                        validSource.setIsFreeTextAllowed(entities.getJSONObject(i).getString(Database.ValidSources.COLUMN_NAME_FREE_TEXT_ALLOWED));
+                        validSource.setReferenceId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
+                        validSource.setNodeId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
+                        validSource.setRefDataFacility(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY));
+                        result.add(validSource);
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+
+            case Entity.VALID_DESTINATION:
+                System.out.println("Valid Destinations");
+                try {
+                    for (int i = 0; i < entities.length(); i++) {
+                        ValidDestination validDestination = new ValidDestination();
+                        validDestination.setId(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_ID));
+                        validDestination.setProgramId(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID));
+                        validDestination.setIsFreeTextAllowed(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_FREE_TEXT_ALLOWED));
+                        validDestination.setName(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_NAME));
+                        validDestination.setFacilityTypeId(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_FACILITY_TYPE_ID));
+                        validDestination.setReferenceId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
+                        validDestination.setNodeId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
+                        validDestination.setRefDataFacility(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY));
+                        result.add(validDestination);
                     }
                 } catch (JSONException ex) {
                     ex.printStackTrace();

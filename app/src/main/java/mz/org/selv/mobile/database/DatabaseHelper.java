@@ -3,6 +3,7 @@ package mz.org.selv.mobile.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -134,15 +135,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "create table " + Database.StockEvent.TABLE_NAME + " (" +
             Database.StockEvent.COLUMN_NAME_FACILITY_ID + " text," +
             Database.StockEvent.COLUMN_NAME_PROGRAM_ID + " text," +
+            Database.StockEvent.COLUMN_NAME_TYPE + " text,"+
+            Database.StockEvent.COLUMN_ORDERABLE_ID + " text," +
+            Database.StockEvent.COLUMN_LOT_ID + " text," +
+            Database.StockEvent.COLUMN_NAME_STATUS + " text,"+
             Database.StockEvent.COLUMN_NAME_UUID + " text," +
+            Database.StockEvent.COLUMN_OCCURRED_DATE + " text," +
             Database.StockEvent.COLUMN_PROCESSED_DATE + " text)";
 
     public static final String CREATE_TABLE_STOCK_EVENT_LINE_ITEM = "" +
             "create table " + Database.StockEventLineItem.TABLE_NAME + " (" +
             Database.StockEventLineItem.COLUMN_ORDERABLE_ID + " text," +
+            Database.StockEventLineItem.COLUMN_FACILITY_ID + " text," +
             Database.StockEventLineItem.COLUMN_LOT_ID + " text," +
             Database.StockEventLineItem.COLUMN_QUANTITY + "  integer, " +
             Database.StockEventLineItem.COLUMN_DESTINATION_ID + "  text, " +
+            Database.StockEventLineItem.COLUMN_PROGRAM_ID+ "  text, " +
             Database.StockEventLineItem.COLUMN_DESTINATION_FREE_TEXT + "  text, " +
             Database.StockEventLineItem.COLUMN_EXTRA_DATA + "  text, " +
             Database.StockEventLineItem.COLUMN_SOURCE_ID + "  text, " +
@@ -151,6 +159,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockEventLineItem.COLUMN_REASON_ID + "  text, " +
             Database.StockEventLineItem.COLUMN_STOCK_EVENT_ID + "  text, " +
             Database.StockEventLineItem.COLUMN_OCCURRED_DATE + "  text, " +
+            Database.StockEventLineItem.COLUMN_PROCCESSED_DATE + "  text, " +
             Database.StockEventLineItem.COLUMN_ID + " text) ";
 
     public static final String CREATE_TABLE_CALCULATED_STOCK_ON_HAND = "" +
@@ -158,7 +167,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE + " text," +
             Database.CalculatedStockOnHand.COLUMN_STOCK_CARD_ID + " text," +
             Database.CalculatedStockOnHand.COLUMN_ID + " text," +
+            Database.CalculatedStockOnHand.COLUMN_NAME_FACILITY_ID + " text," +
+            Database.CalculatedStockOnHand.COLUMN_NAME_PROGRAM_ID + " text," +
+            Database.CalculatedStockOnHand.COLUMN_ORDERABLE_ID + " text," +
+            Database.CalculatedStockOnHand.COLUMN_LOT_ID + " text," +
             Database.CalculatedStockOnHand.COLUMN_STOCK_ON_HAND + " integer)";
+
+
+    public static final String CREATE_TABLE_VALID_SOURCES = "create table " +
+            Database.ValidSources.TABLE_NAME + "(" +
+            Database.ValidSources.COLUMN_NAME_FREE_TEXT_ALLOWED + " text," +
+            Database.ValidSources.COLUMN_NAME_PROGRAM_ID + " text," +
+            Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID + " text," +
+            Database.ValidSources.COLUMN_NAME_NODE_ID + " text," +
+            Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID + " text," +
+            Database.ValidSources.COLUMN_NAME_NAME + " text," +
+            Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY + " text," +
+            Database.ValidSources.COLUMN_NAME_ID + " text)";
+
+    public static final String CREATE_TABLE_VALID_DESTINATIONS = "create table " +
+            Database.ValidDestinations.TABLE_NAME + "(" +
+            Database.ValidDestinations.COLUMN_NAME_FREE_TEXT_ALLOWED + " text," +
+            Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID + " text," +
+            Database.ValidDestinations.COLUMN_NAME_FACILITY_TYPE_ID + " text," +
+            Database.ValidDestinations.COLUMN_NAME_NODE_ID + " text," +
+            Database.ValidDestinations.COLUMN_NAME_NODE_REFERENCE_ID + " text," +
+            Database.ValidDestinations.COLUMN_NAME_NAME + " text," +
+            Database.ValidDestinations.COLUMN_NAME_REFERENCE_DATA_FACILITY + " text," +
+            Database.ValidDestinations.COLUMN_NAME_ID + " text)";
 
 
     // Drop Database
@@ -184,6 +220,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DROP_TABLE_STOCK_EVENT = "drop table if exists " + Database.StockEvent.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_EVENT_LINE_ITEM = "drop table if exists " + Database.StockEventLineItem.TABLE_NAME;
     public static final String DROP_TABLE_CALCULATED_STOCK_ON_HAND = "drop table if exists " + Database.CalculatedStockOnHand.TABLE_NAME;
+    public static final String DROP_TABLE_VALID_SOURCES = "drop table if exists " + Database.ValidSources.TABLE_NAME;
+    public static final String DROP_TABLE_VALID_DESTINATIONS = "drop table if exists " + Database.ValidDestinations.TABLE_NAME;
 
 
     public DatabaseHelper(Context context) {
@@ -213,6 +251,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STOCK_CARD);
         db.execSQL(CREATE_TABLE_CALCULATED_STOCK_ON_HAND);
         db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
+        db.execSQL(CREATE_TABLE_VALID_SOURCES);
+        db.execSQL(CREATE_TABLE_VALID_DESTINATIONS);
         //    db.execSQL(CREATE_TABLE_PROCESSING_PERIOD);
 
     }
@@ -238,7 +278,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_STOCK_CARD);
         db.execSQL(DROP_TABLE_CALCULATED_STOCK_ON_HAND);
         db.execSQL(DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
-
+        db.execSQL(DROP_TABLE_VALID_SOURCES);
+        db.execSQL(DROP_TABLE_VALID_DESTINATIONS);
 
 
         //create table
@@ -260,7 +301,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STOCK_CARD);
         db.execSQL(CREATE_TABLE_CALCULATED_STOCK_ON_HAND);
         db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
-
+        db.execSQL(CREATE_TABLE_VALID_SOURCES);
+        db.execSQL(CREATE_TABLE_VALID_DESTINATIONS);
 
     }
 }

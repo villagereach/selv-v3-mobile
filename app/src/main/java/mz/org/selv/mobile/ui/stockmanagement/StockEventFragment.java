@@ -44,10 +44,22 @@ public class StockEventFragment extends Fragment {
 
         SharedPreferences sharedPrefs = requireActivity().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
         String homeFacilityName = sharedPrefs.getString(KEY_HOME_FACILITY_NAME, "");
+        String actionName = "";
         assert getArguments() != null;
+        if(getArguments().getString("action").equals("receive")){
+                actionName = getString(R.string.string_receive);
+        } else if(getArguments().getString("action").equals("issue")){
+            actionName = getString(R.string.string_issue);
+        } else if(getArguments().getString("action").equals("adjustments")){
+            actionName = getString(R.string.string_adjustments);
+        } else if(getArguments().getString("action").equals("inventory")){
+            actionName = getString(R.string.string_inventory);
+        } else if(getArguments().getString("action").equals("soh")){
+            actionName = getString(R.string.string_soh);
+        }
         String programName = getArguments().getString("programName");
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar())
-            .setTitle(homeFacilityName + " - " + programName);
+            .setTitle(actionName + " - " + programName + " ("+ homeFacilityName + ")");
         View root =  inflater.inflate(R.layout.fragment_stock_event, container, false);
         FloatingActionButton fab = root.findViewById(R.id.fab);
 

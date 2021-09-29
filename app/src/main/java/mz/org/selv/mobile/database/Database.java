@@ -6,18 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
-
 import java.util.Collection;
 
 public class Database {
-    public final static String DATABASE_NAME = "SELV_MOBILE";
-    public final static int  DATABASE_VERSION = 33;
+    public final static String DATABASE_NAME = "SELV_MOBILE_V2";
+    public final static int DATABASE_VERSION = 43;
 
-    public static  class User implements BaseColumns {
+    public static class User implements BaseColumns {
 
     }
 
-    public static  class Facility implements BaseColumns {
+    public static class Facility implements BaseColumns {
         public static String COLUMN_CODE = "code";
         public static String COLUMN_NAME = "name";
         public static String COLUMN_UUID = "id";
@@ -28,7 +27,7 @@ public class Database {
 
     }
 
-    public static  class FacilityType implements BaseColumns {
+    public static class FacilityType implements BaseColumns {
         public static String COLUMN_CODE = "code";
         public static String COLUMN_NAME = "name";
         public static String COLUMN_UUID = "id";
@@ -36,7 +35,7 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_NAME, COLUMN_UUID};
     }
 
-    public static  class Orderable implements BaseColumns {
+    public static class Orderable implements BaseColumns {
         public static String COLUMN_CODE = "productCode";
         public static String COLUMN_NAME = "fullProductName";
         public static String COLUMN_UUID = "id";
@@ -44,7 +43,7 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_NAME, COLUMN_UUID};
     }
 
-    public static  class Lot implements BaseColumns {
+    public static class Lot implements BaseColumns {
         public static String COLUMN_CODE = "lotCode";
         public static String COLUMN_EXPIRATION_DATE = "expirationDate";
         public static String COLUMN_UUID = "id";
@@ -53,68 +52,68 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_EXPIRATION_DATE, COLUMN_UUID, COLUMN_TRADE_ITEM_ID};
     }
 
-    public static  class ProgramOrderable implements BaseColumns {
+    public static class ProgramOrderable implements BaseColumns {
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
         public static String COLUMN_NAME_ORDERABLE_ID = "orderableid";
         public static String TABLE_NAME = "program_orderable";
         public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID};
     }
 
-    public static  class FacilityTypeApprovedProductAndProgram implements BaseColumns {
+    public static class FacilityTypeApprovedProductAndProgram implements BaseColumns {
         public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
         public static String COLUMN_NAME_ORDERABLE_ID = "orderableid";
         public static String COLUMN_NAME_PROGRAM_ID = "programId";
         public static String COLUMN_NAME_UUID = "id";
         public static String TABLE_NAME = "facility_type_approved_product_program";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID , COLUMN_NAME_UUID, COLUMN_NAME_FACILITY_TYPE_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_UUID, COLUMN_NAME_FACILITY_TYPE_ID};
     }
 
-    public static  class TradeItem implements BaseColumns {
+    public static class TradeItem implements BaseColumns {
         public static String COLUMN_ORDERABLE_ID = "orderbleId";
         public static String COLUMN_TRADE_ITEM_ID = "id";
         public static String TABLE_NAME = "tradeItem";
         public static String[] ALL_COLUMNS = {COLUMN_TRADE_ITEM_ID, COLUMN_ORDERABLE_ID};
     }
 
-    public static  class ProcessingPeriod implements BaseColumns {
+    public static class ProcessingPeriod implements BaseColumns {
 
     }
 
-    public static  class ProcessingSchedulle implements BaseColumns {
+    public static class ProcessingSchedulle implements BaseColumns {
 
     }
 
-    public static  class Program implements BaseColumns {
-        public static  String COLUMN_NAME = "name";
-        public static  String COLUMN_CODE = "code";
-        public static  String COLUMN_UUID =  "id";
-        public static  String COLUMN_STATUS =  "status";
-        public static  String COLUMN_LAST_SYNC =  "last_sync";
-        public static  String COLUMN_ACTIVE = "active";
+    public static class Program implements BaseColumns {
+        public static String COLUMN_NAME = "name";
+        public static String COLUMN_CODE = "code";
+        public static String COLUMN_UUID = "id";
+        public static String COLUMN_STATUS = "status";
+        public static String COLUMN_LAST_SYNC = "last_sync";
+        public static String COLUMN_ACTIVE = "active";
         public static String COLUMN_DESCRIPTION = "description";
         public static String TABLE_NAME = "program";
         public static String[] ALL_COLUMNS = {COLUMN_NAME, COLUMN_CODE, COLUMN_DESCRIPTION, COLUMN_UUID, COLUMN_STATUS, COLUMN_LAST_SYNC, COLUMN_ACTIVE};
     }
 
-    public static  class Requisition implements BaseColumns {
+    public static class Requisition implements BaseColumns {
 
     }
 
-    public static  class PhysicalInventory implements BaseColumns {
-        public static  String COLUMN_UUID =  "id";
-        public static  String COLUMN_STATUS =  "status";
-        public static  String COLUMN_LAST_SYNC =  "last_sync";
-        public static  String COLUMN_ACTIVE = "active";
-        public static  String COLUMN_FACILITY_ID = "facilityid";
+    public static class PhysicalInventory implements BaseColumns {
+        public static String COLUMN_UUID = "id";
+        public static String COLUMN_STATUS = "status";
+        public static String COLUMN_LAST_SYNC = "last_sync";
+        public static String COLUMN_ACTIVE = "active";
+        public static String COLUMN_FACILITY_ID = "facilityid";
         public static String COLUMN_DESCRIPTION = "description";
-        public static  String COLUMN_OCCURRED_DATE = "occurredDate";
+        public static String COLUMN_OCCURRED_DATE = "occurredDate";
         public static String COLUMN_PROGRAM_ID = "programid";
-        public static  String COLUMN_SIGNATURE = "signature";
+        public static String COLUMN_SIGNATURE = "signature";
         public static String TABLE_NAME = "physicalInventory";
-        public static String[] ALL_COLUMNS = {COLUMN_SIGNATURE, COLUMN_PROGRAM_ID, COLUMN_OCCURRED_DATE,COLUMN_FACILITY_ID , COLUMN_UUID, COLUMN_STATUS};
+        public static String[] ALL_COLUMNS = {COLUMN_SIGNATURE, COLUMN_PROGRAM_ID, COLUMN_OCCURRED_DATE, COLUMN_FACILITY_ID, COLUMN_UUID, COLUMN_STATUS};
     }
 
-    public static class PhysicalInventoryLineItem implements BaseColumns{
+    public static class PhysicalInventoryLineItem implements BaseColumns {
         public static String COLUMN_ORDERABLE_ID = "orderableId";
         public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_PHYSICAL_STOCK = "physicalStock";
@@ -122,10 +121,10 @@ public class Database {
         public static String COLUMN_PHYSICAL_INVENTORY_ID = "physicalInventoryId";
         public static String COLUMN_PHYSICAL_FACILITY_ID = "facilityId";
         public static String TABLE_NAME = "physicalInventoryLineItem";
-        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_PHYSICAL_FACILITY_ID,COLUMN_PHYSICAL_STOCK, COLUMN_PREVIOUS_STOCK_ON_HAND,COLUMN_PHYSICAL_INVENTORY_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_PHYSICAL_FACILITY_ID, COLUMN_PHYSICAL_STOCK, COLUMN_PREVIOUS_STOCK_ON_HAND, COLUMN_PHYSICAL_INVENTORY_ID};
     }
 
-    public static class PhysicalInventoryLineItemAdjustment implements BaseColumns{
+    public static class PhysicalInventoryLineItemAdjustment implements BaseColumns {
         public static String COLUMN_QUANTITY = "quantity";
         public static String COLUMN_REASON_ID = "reasonId";
         public static String COLUMN_STOCK_CARD_LINE_ITEM_ID = "stockCardLineItem_id";
@@ -133,19 +132,49 @@ public class Database {
         public static String COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID = "physicalInventoryLineItemId";
         public static String COLUMN_ID = "id";
         public static String TABLE_NAME = "physicalInventoryLineItemAdjustment";
-        public static String[] ALL_COLUMNS = {COLUMN_QUANTITY, COLUMN_REASON_ID, COLUMN_STOCK_CARD_LINE_ITEM_ID,COLUMN_STOCK_EVENT_LINE_ITEM_ID, COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID,COLUMN_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_QUANTITY, COLUMN_REASON_ID, COLUMN_STOCK_CARD_LINE_ITEM_ID, COLUMN_STOCK_EVENT_LINE_ITEM_ID, COLUMN_PHYSICAL_INVENTORY_LINE_ITEM_ID, COLUMN_ID};
+    }
+
+    public static class ValidSources implements BaseColumns {
+        public static String COLUMN_NAME_FREE_TEXT_ALLOWED = "isFreeTextAllowed";
+        public static String COLUMN_NAME_PROGRAM_ID = "programId";
+        public static String COLUMN_NAME_NODE_ID = "nodeId";
+        public static String COLUMN_NAME_NODE_REFERENCE_ID = "referenceId";
+        public static String COLUMN_NAME_NAME = "name";
+        public static String COLUMN_NAME_REFERENCE_DATA_FACILITY = "refDataFacility";
+        public static String COLUMN_NAME_ID = "id";
+        public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
+        public static String TABLE_NAME = "ValidSources";
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED, COLUMN_NAME_FACILITY_TYPE_ID,COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
+                COLUMN_NAME_ID};
+    }
+
+    public static class ValidDestinations implements BaseColumns {
+        public static String COLUMN_NAME_FREE_TEXT_ALLOWED = "isFreeTextAllowed";
+        public static String COLUMN_NAME_PROGRAM_ID = "programId";
+        public static String COLUMN_NAME_NODE_ID = "nodeId";
+        public static String COLUMN_NAME_NODE_REFERENCE_ID = "referenceId";
+        public static String COLUMN_NAME_NAME = "name";
+        public static String COLUMN_NAME_REFERENCE_DATA_FACILITY = "refDataFacility";
+        public static String COLUMN_NAME_ID = "id";
+        public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
+        public static String TABLE_NAME = "ValidDestinations";
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED,  COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
+                COLUMN_NAME_ID};
     }
 
 
-    public static  class ReasonCategory implements BaseColumns {
+    public static class ReasonType implements BaseColumns {
 
     }
 
-    public static  class ReasonType implements BaseColumns {
+
+    public static class ReasonCategory implements BaseColumns {
 
     }
 
-    public static  class Reason implements BaseColumns {
+
+    public static class Reason implements BaseColumns {
         public static String COLUMN_NAME_CATEGORY = "reasonCategory";
         public static String COLUMN_NAME_TYPE = "reasonType";
         public static String COLUMN_NAME_NAME = "name";
@@ -154,7 +183,7 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_NAME_NAME, COLUMN_NAME_TYPE, COLUMN_NAME_CATEGORY, COLUMN_NAME_UUID};
     }
 
-    public static  class ValidReasons implements BaseColumns {
+    public static class ValidReasons implements BaseColumns {
         public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilitytype";
         public static String COLUMN_NAME_REASON_ID = "reasonid";
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
@@ -163,7 +192,7 @@ public class Database {
         public static String[] ALL_COLUMNS = {COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_REASON_ID, COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_UUID};
     }
 
-    public static  class StockCard implements BaseColumns {
+    public static class StockCard implements BaseColumns {
         public static String COLUMN_NAME_ORDERABLE_ID = "orderableId";
         public static String COLUMN_NAME_LOT_ID = "lotid";
         public static String COLUMN_NAME_STOCK_ON_HAND = "stockonhand";
@@ -171,22 +200,29 @@ public class Database {
         public static String COLUMN_NAME_ID = "id";
         public static String COLUMN_NAME_FACILITY_ID = "facilityid";
         public static String TABLE_NAME = "stock_card";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_ID,COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID,COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
     }
 
-    public static  class StockEvent implements BaseColumns {
-        public static String COLUMN_NAME_FACILITY_ID = "orderableId";
+    public static class StockEvent implements BaseColumns {
+        public static String COLUMN_NAME_FACILITY_ID = "facilityId";
         public static String COLUMN_NAME_UUID = "id";
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
         public static String TABLE_NAME = "stock_event";
+        public static String COLUMN_NAME_STATUS = "status";
+        public static String COLUMN_NAME_TYPE = "type";
+        public static String COLUMN_ORDERABLE_ID = "orderableId";
+        public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_PROCESSED_DATE = "processedDate";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_PROCESSED_DATE,COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
+        public static String COLUMN_OCCURRED_DATE = "occurredDate";
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_LOT_ID, COLUMN_ORDERABLE_ID, COLUMN_PROCESSED_DATE, COLUMN_OCCURRED_DATE,COLUMN_NAME_STATUS,COLUMN_NAME_TYPE,COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
     }
 
-    public static class StockEventLineItem implements BaseColumns{
+    public static class StockEventLineItem implements BaseColumns {
         public static String COLUMN_ORDERABLE_ID = "orderableId";
         public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_QUANTITY = "quantity";
+        public static String COLUMN_FACILITY_ID = "facilityId";
+        public static String COLUMN_PROGRAM_ID = "programid";
         public static String COLUMN_DESTINATION_ID = "destinationId";
         public static String COLUMN_DESTINATION_FREE_TEXT = "destinationFreeText";
         public static String COLUMN_EXTRA_DATA = "extraData";
@@ -196,13 +232,14 @@ public class Database {
         public static String COLUMN_REASON_ID = "reasonId";
         public static String COLUMN_STOCK_EVENT_ID = "stockEventId";
         public static String COLUMN_OCCURRED_DATE = "occurredDate";
+        public static String COLUMN_PROCCESSED_DATE = "proccessedDate";
         public static String COLUMN_ID = "id";
         public static String TABLE_NAME = "stockEventLineItem";
-        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID,COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_PROCCESSED_DATE,COLUMN_FACILITY_ID, COLUMN_PROGRAM_ID,COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID, COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
                 COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_REASON_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_STOCK_EVENT_ID};
     }
 
-    public static class StockCardLineItem implements BaseColumns{
+    public static class StockCardLineItem implements BaseColumns {
         public static String COLUMN_ORDERABLE_ID = "orderableId";
         public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_QUANTITY = "quantity";
@@ -218,23 +255,27 @@ public class Database {
         public static String COLUMN_ID = "id";
         public static String COLUMN_STOCK_CARD_ID = "stockCardId";
         public static String TABLE_NAME = "stockCardLineItem";
-        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID,COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
+        public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID, COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
                 COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_REASON_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_ORIGIN_EVENT_ID};
     }
 
-    public static class CalculatedStockOnHand implements BaseColumns{
+    public static class CalculatedStockOnHand implements BaseColumns {
         public static String COLUMN_ID = "id";
         public static String COLUMN_STOCK_CARD_ID = "stockCardId";
+        public static String COLUMN_NAME_FACILITY_ID = "facilityId";
+        public static String COLUMN_NAME_PROGRAM_ID = "programId";
         public static String COLUMN_STOCK_ON_HAND = "stockOnHand";
         public static String COLUMN_OCCURRED_DATE = "occuredDate";
         public static String TABLE_NAME = "calculatedStockOnHand";
-        public static String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE,COLUMN_STOCK_ON_HAND};
+        public static String COLUMN_ORDERABLE_ID = "orderableId";
+        public static String COLUMN_LOT_ID = "lotid";
+        public static String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_NAME_PROGRAM_ID,COLUMN_NAME_FACILITY_ID,  COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE, COLUMN_STOCK_ON_HAND};
     }
 
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase sqLiteDatabase;
 
-    public Database(Context context){
+    public Database(Context context) {
         try {
             databaseHelper = new DatabaseHelper(context);
         } catch (Exception ex) {
@@ -250,15 +291,15 @@ public class Database {
         }
     }
 
-    public void beginTransaction(){
+    public void beginTransaction() {
         sqLiteDatabase.beginTransaction();
     }
 
-    public void endTransaction(){
+    public void endTransaction() {
         sqLiteDatabase.endTransaction();
     }
 
-    public void setTransactionSuccessful(){
+    public void setTransactionSuccessful() {
         sqLiteDatabase.setTransactionSuccessful();
     }
 
@@ -301,12 +342,12 @@ public class Database {
 
     // another custom delete method
 
-    public void deleteTable(String tableName){
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " +tableName);
+    public void deleteTable(String tableName) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableName);
     }
 
-    public void deleteAll(String tableName){
-        sqLiteDatabase.execSQL("DELETE FROM  " +tableName);
+    public void deleteAll(String tableName) {
+        sqLiteDatabase.execSQL("DELETE FROM  " + tableName);
     }
 
     public int delete(Class<? extends Table> table, ContentValues contentValues, String whereClause, String[] whereArgs) {
@@ -344,7 +385,6 @@ public class Database {
     }
 
     //transaction methods
-
 }
 
 

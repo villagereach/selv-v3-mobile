@@ -47,7 +47,7 @@ public class InventoryAddProductDialogViewModel extends AndroidViewModel {
 
     public List getReasonNames(String facilityTypeId, String programId){
         ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
-        List<String> reasonNames = referenceDataService.getReasonNameByValidReason(facilityTypeId, programId);
+        List<String> reasonNames = referenceDataService.getReasonNameByValidReason(facilityTypeId, programId, null, null);
         return reasonNames;
     }
 

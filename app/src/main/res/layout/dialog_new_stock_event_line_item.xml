@@ -100,14 +100,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Origem/Destino">
+        android:layout_marginTop="16dp">
 
         <AutoCompleteTextView
             android:id="@+id/ac_stock_event_line_item_source_destination"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-
             />
     </com.google.android.material.textfield.TextInputLayout>
 

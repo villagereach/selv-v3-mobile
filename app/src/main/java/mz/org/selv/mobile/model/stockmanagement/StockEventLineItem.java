@@ -8,11 +8,14 @@ import mz.org.selv.mobile.database.Table;
 public class StockEventLineItem implements Table {
 
     private String orderableId;
+    private String facilityId;
+    private String programId;
     private String lotId;
     private int quantity;
     private String occurredDate;
+    private String proccessedDate;
     private String extraData;
-    private String stockcardId;
+    private String stockCardId;
     private String destinationId;
     private String destinationFreeText;
     private String sourceId;
@@ -21,6 +24,30 @@ public class StockEventLineItem implements Table {
     private String reasonFreeText;
     private String reasonId;
     private String id;
+
+    public String getProccessedDate() {
+        return proccessedDate;
+    }
+
+    public void setProccessedDate(String proccessedDate) {
+        this.proccessedDate = proccessedDate;
+    }
+
+    public String getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
+    }
+
+    public String getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(String programId) {
+        this.programId = programId;
+    }
 
     public String getOrderableId() {
         return orderableId;
@@ -62,12 +89,12 @@ public class StockEventLineItem implements Table {
         this.extraData = extraData;
     }
 
-    public String getStockcardId() {
-        return stockcardId;
+    public String getStockCardId() {
+        return stockCardId;
     }
 
-    public void setStockcardId(String stockcardId) {
-        this.stockcardId = stockcardId;
+    public void setStockCardId(String stockCardId) {
+        this.stockCardId = stockCardId;
     }
 
     public String getDestinationId() {
@@ -154,7 +181,10 @@ public class StockEventLineItem implements Table {
         cv.put(Database.StockEventLineItem.COLUMN_REASON_ID, reasonId);
         cv.put(Database.StockEventLineItem.COLUMN_STOCK_EVENT_ID, stockEventId);
         cv.put(Database.StockEventLineItem.COLUMN_OCCURRED_DATE, occurredDate);
+        cv.put(Database.StockEventLineItem.COLUMN_PROCCESSED_DATE, proccessedDate);
         cv.put(Database.StockEventLineItem.COLUMN_ID, id);
+        cv.put(Database.StockEventLineItem.COLUMN_PROGRAM_ID, programId);
+        cv.put(Database.StockEventLineItem.COLUMN_FACILITY_ID, facilityId);
         return cv;
     }
 

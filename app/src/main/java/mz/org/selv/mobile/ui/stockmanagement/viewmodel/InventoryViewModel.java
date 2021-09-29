@@ -62,7 +62,7 @@ public class InventoryViewModel extends AndroidViewModel {
 
     public List getReasonNames(String facilityTypeId, String programId) {
         ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
-        List<String> reasonNames = referenceDataService.getReasonNameByValidReason(facilityTypeId, programId);
+        List<String> reasonNames = referenceDataService.getReasonNameByValidReason(facilityTypeId, programId, null, null);
         return reasonNames;
     }
 
@@ -103,7 +103,6 @@ public class InventoryViewModel extends AndroidViewModel {
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
-
     }
 
     public int saveInventory(String signature, String programId, String facilityId, String occurredDate, List<JSONObject> lineItems) {
@@ -119,7 +118,6 @@ public class InventoryViewModel extends AndroidViewModel {
         for (int i = 0; i < lineItems.size(); i++) {
             PhysicalInventoryLineItem lineItem = new PhysicalInventoryLineItem();
             try {
-                System.out.println(lineItem);
                 lineItem.setOrderableId(lineItems.get(i).getString("orderableId"));
                 lineItem.setLotId(lineItems.get(i).getString("lotId"));
                 lineItem.setPhysicalStock(lineItems.get(i).getInt("physicalStock"));
@@ -137,7 +135,9 @@ public class InventoryViewModel extends AndroidViewModel {
                 }
                 inventoryLineItems.add(lineItem);
             } catch (JSONException ex) {
+
                 ex.printStackTrace();
+
             }
         }
         if (lineItems.size() > 0) {

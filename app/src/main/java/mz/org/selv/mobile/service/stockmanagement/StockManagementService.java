@@ -15,10 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 import mz.org.selv.mobile.database.Converter;
 import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.model.referencedata.Lot;
+import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.stockmanagement.CalculatedStockOnHand;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
@@ -28,6 +30,8 @@ import mz.org.selv.mobile.model.stockmanagement.StockCard;
 import mz.org.selv.mobile.model.stockmanagement.StockCardLineItem;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
 import mz.org.selv.mobile.model.stockmanagement.StockEventLineItem;
+import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
+import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
 
 public class StockManagementService {
@@ -37,6 +41,7 @@ public class StockManagementService {
 
     public StockManagementService(Context context) {
         this.mContext = context;
+
     }
 
     public int saveInventory(PhysicalInventory physicalInventory, List<PhysicalInventoryLineItem> lineItems, List<PhysicalInventoryLineItemAdjustment> lineItemAdjustments) {
@@ -180,6 +185,37 @@ public class StockManagementService {
         }
     }
 
+    public boolean updateStockCard(Database database, StockCard stockCard, StockEvent event, StockEventLineItem stockEventLineItem) {
+
+        //get calculated stock on hand to update values
+
+        //loop through line items
+        StockCardLineItem stockCardLineItem = new StockCardLineItem();
+        stockCardLineItem.setId(UUID.randomUUID().toString());
+        stockCardLineItem.setOrderableId(stockEventLineItem.getOrderableId());
+        stockCardLineItem.setQuantity(stockEventLineItem.getQuantity());
+        stockCardLineItem.setOccurredDate(stockEventLineItem.getOccurredDate());
+        stockCardLineItem.setDestinationId(stockEventLineItem.getDestinationId());
+        stockCardLineItem.setDestinationFreeText(stockEventLineItem.getDestinationFreeText());
+        stockCardLineItem.setSourceId(stockEventLineItem.getSourceId());
+        stockCardLineItem.setSourceFreeText(stockEventLineItem.getSourceFreeText());
+        stockCardLineItem.setLotId(stockEventLineItem.getLotId());
+        stockCardLineItem.setStockcardId(stockCard.getId());
+        stockCardLineItem.setExtraData("");
+        stockCardLineItem.setOriginEventId(event.getId());
+        stockCardLineItem.setReasonId(stockEventLineItem.getReasonId());
+        stockCardLineItem.setReasonFreeText(stockEventLineItem.getReasonFreeText());
+        stockCardLineItem.setStockcardId(stockCard.getId());
+
+        if (database.insert(stockCardLineItem) > 0) {
+            System.out.println("stock card line item saved");
+            return true;
+        } else {
+            System.out.println("stock card line item not saved");
+            return false;
+        }
+    }
+
     public boolean updateStockOnHand(Database database, Map<StockCard, List<StockCardLineItem>> mapStockCardLineItems) {
         List<CalculatedStockOnHand> calculatedStockOnHandList = new ArrayList<>();
         for (Map.Entry<StockCard, List<StockCardLineItem>> entry : mapStockCardLineItems.entrySet()) {
@@ -291,6 +327,27 @@ public class StockManagementService {
         return stockCard;
     }
 
+    public StockCard getOrCreateStockCard(String facilityId, String programId, String lotId, String orderableId) {
+        StockCard stockCard = new StockCard();
+        Database database = new Database(mContext);
+        database.open();
+        Cursor cursor = database.select(StockCard.class, Database.StockCard.COLUMN_NAME_FACILITY_ID + "=? AND " + Database.StockCard.COLUMN_NAME_PROGRAM_ID + "=? AND " + Database.StockCard.COLUMN_NAME_LOT_ID + "=?",
+                new String[]{facilityId, programId, lotId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            stockCard = Converter.cursorToStockCard(cursor);
+        } else {
+            stockCard.setId(UUID.randomUUID().toString());
+            stockCard.setFacilityId(facilityId);
+            stockCard.setLotId(lotId);
+            stockCard.setProgramId(programId);
+            stockCard.setOrderableId(orderableId);
+            database.insert(stockCard);
+        }
+        database.close();
+        cursor.close();
+        return stockCard;
+    }
+
     public List<JSONArray> formatStockCard(List<StockEventLineItem> eventLineItems) {
         JSONArray stockCardsJSON = new JSONArray();
         //  List
@@ -351,7 +408,7 @@ public class StockManagementService {
                 inventoryLineItem.put("expirationDate", lot.getExpirationDate());
                 inventoryLineItem.put("physicalStock", "");
 
-                if(stockOnHand >= 0){
+                if (stockOnHand >= 0) {
                     inventoryLineItem.put("stockOnHand", stockOnHand);
                 } else {
                     inventoryLineItem.put("stockOnHand", "");
@@ -370,7 +427,7 @@ public class StockManagementService {
 
         SimpleDateFormat dateFormar = new SimpleDateFormat("dd-MM-yyyy");
 
-        CalculatedStockOnHand lastStockOnHand =  new CalculatedStockOnHand();
+        CalculatedStockOnHand lastStockOnHand = new CalculatedStockOnHand();
         if (date == null) {
             Database database = new Database(mContext);
             database.open();
@@ -404,11 +461,162 @@ public class StockManagementService {
 
         }
 
-        if(lastStockOnHand.getStockCardId()!= null){
-            System.out.println("CurrentStockOnHand"+lastStockOnHand.getStockOnHand());
+        if (lastStockOnHand.getStockCardId() != null) {
+            System.out.println("CurrentStockOnHand" + lastStockOnHand.getStockOnHand());
             return lastStockOnHand.getStockOnHand();
         } else {
             return -1;
         }
+    }
+
+    public ValidSource getValidSourceByName(String facilityTypeId, String programId, String sourceName) {
+        Database database = new Database(mContext);
+        database.open();
+        ValidSource validSource;
+        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID + "=? AND " + Database.ValidSources.COLUMN_NAME_PROGRAM_ID + "= ? AND " +
+                Database.ValidSources.COLUMN_NAME_NAME + "=? ", new String[]{facilityTypeId, programId, sourceName}, null, null, null);
+        if (cursor.moveToFirst()) {
+            validSource = Converter.cursorToValidSource(cursor);
+        } else {
+            return null;
+        }
+
+        cursor.close();
+        database.close();
+        return validSource;
+    }
+
+
+    public int saveEvent(String action, String facilityId, String facilityTypeId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments,
+                         int quantity, String vvm, String occurredDate) {
+
+
+        if (action.equals("receive")) {
+            Reason reason = new ReferenceDataService(mContext).getReasonByName(reasonName);
+            ValidSource validSource = getValidSourceByName(facilityTypeId, programId, validSourceOrDestinationName);
+            referenceDataService = new ReferenceDataService(mContext);
+            Orderable orderable = referenceDataService.getOrderableByName(orderableName);
+            Lot lot = referenceDataService.getLotByCode(lotCode);
+            int validateEventStatus = validateEvent(action, orderable.getUuid(), lot.getId(), facilityId, programId, occurredDate, reason, quantity);
+            if (validateEventStatus == 1) {
+                StockCard stockCard = getOrCreateStockCard(programId, facilityId, lot.getId(), orderable.getUuid());
+                StockEvent event = new StockEvent();
+                event.setType(action);
+                event.setFacilityId(facilityId);
+                event.setProgramId(programId);
+                event.setOrderableId(orderable.getUuid());
+                event.setId(UUID.randomUUID().toString());
+                StockEventLineItem eventLineItem = new StockEventLineItem();
+                eventLineItem.setId(UUID.randomUUID().toString());
+                eventLineItem.setReasonId(reason.getId());
+                eventLineItem.setOrderableId(orderable.getUuid());
+                eventLineItem.setQuantity(quantity);
+                eventLineItem.setLotId(lot.getId());
+                eventLineItem.setOccurredDate(occurredDate);
+                eventLineItem.setSourceFreeText(sourceDestinationComments);
+                eventLineItem.setReasonFreeText(reasonComments);
+                eventLineItem.setSourceId(validSource.getId());
+                eventLineItem.setProgramId(programId);
+                eventLineItem.setStockEventId(event.getId());
+                eventLineItem.setStockCardId(stockCard.getId());
+                Database database = new Database(mContext);
+                database.open();
+                if (database.insert(event) > 0) {
+                    if (database.insert(eventLineItem) > 0) {
+                        System.out.println("event line item not saved");
+                        updateStockCard(database, stockCard, event, eventLineItem);
+                        database.close();
+                        return 1;
+                    } else {
+                        //delete rows
+                    }
+                } else {
+                    System.out.println("event not saved");
+                    return -2;
+                }
+
+            } else {
+                return -1;
+            }
+
+        }
+        return 0;
+    }
+
+    public int validateEvent(String action, String orderableId, String lotId, String facilityId, String programId, String date, Reason reason, int quantity) {
+
+
+        if (action.equals("receive")) {
+            //prevent creation of receive after inventory created
+            return 1;
+        } else if (action.equals("issue")) {
+            int calculatedStockOnHand = getCalculatedStockOnHand(orderableId, lotId, facilityId, programId, date);
+
+            List<StockEventLineItem> eventLineItems;
+            eventLineItems = getEventLineItemsByInterval(orderableId, lotId, programId, facilityId, date, null);
+            if (calculatedStockOnHand >= 0) {
+                for (int i = 0; i < eventLineItems.size(); i++) {
+                    if (referenceDataService.getReasonById(eventLineItems.get(i).getReasonId()).getType().equals("DEBIT")) {
+                        calculatedStockOnHand = calculatedStockOnHand - eventLineItems.get(i).getQuantity();
+                        if (calculatedStockOnHand < 0) {
+                            return -1; //add error message
+                        }
+                    } else {
+                        calculatedStockOnHand = calculatedStockOnHand + eventLineItems.get(i).getQuantity();
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
+    public int getCalculatedStockOnHand(String orderableId, String lotId, String facilityId, String programId, String date) {
+        Database database = new Database(mContext);
+        CalculatedStockOnHand calculatedStockOnHand;
+        database.open();
+        Cursor cursor = database.select(CalculatedStockOnHand.class, Database.CalculatedStockOnHand.COLUMN_ORDERABLE_ID + "=? AND " +
+                        Database.CalculatedStockOnHand.COLUMN_NAME_FACILITY_ID + "=? AND " + Database.CalculatedStockOnHand.COLUMN_NAME_PROGRAM_ID + " =? AND " +
+                        Database.CalculatedStockOnHand.COLUMN_LOT_ID + "=? AND " + Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE + " <= ? ", new String[]{orderableId, facilityId, programId, lotId, date},
+                null, null, Database.CalculatedStockOnHand.COLUMN_OCCURRED_DATE + " DESC");
+        if (cursor.moveToFirst()) {
+            calculatedStockOnHand = Converter.cursorToCalculatedStockOnHand(cursor);
+            cursor.close();
+            database.close();
+            return calculatedStockOnHand.getStockOnHand();
+        } else {
+            cursor.close();
+            database.close();
+            return 0;
+        }
+    }
+
+    public List getEventLineItemsByInterval(String orderableId, String lotId, String programId, String facilityId, String startDate, String endDate) {
+        Database database = new Database(mContext);
+        database.open();
+        List<StockEventLineItem> stockEventLineItems = new ArrayList<>();
+        Cursor cursor;
+        if (startDate != null && endDate == null) {
+            cursor = database.select(StockEventLineItem.class, Database.StockEventLineItem.COLUMN_FACILITY_ID + "=? AND " + Database.StockEventLineItem.COLUMN_PROGRAM_ID + "=? AND " +
+                            Database.StockEventLineItem.COLUMN_ORDERABLE_ID + " = ? AND " + Database.StockEventLineItem.COLUMN_LOT_ID + " = ? " + Database.StockEventLineItem.COLUMN_OCCURRED_DATE + " > ?",
+                    new String[]{facilityId, programId, orderableId, lotId, startDate}, null, null, Database.StockEventLineItem.COLUMN_OCCURRED_DATE + ",  " +
+                            Database.StockEventLineItem.COLUMN_PROCCESSED_DATE + " ASC");
+
+            return stockEventLineItems;
+        } else if (startDate == null) {
+            return stockEventLineItems;
+        } else {
+            cursor = database.select(StockEventLineItem.class, Database.StockEventLineItem.COLUMN_FACILITY_ID + "=? AND " + Database.StockEventLineItem.COLUMN_PROGRAM_ID + "=? AND " +
+                            Database.StockEventLineItem.COLUMN_ORDERABLE_ID + " = ? AND " + Database.StockEventLineItem.COLUMN_LOT_ID + " = ? AND " + Database.StockEventLineItem.COLUMN_OCCURRED_DATE + " > ?",
+                    new String[]{facilityId, programId, orderableId, lotId, startDate}, null, null, null);
+        }
+
+        if (cursor.moveToNext()) {
+            stockEventLineItems.add(Converter.cursorToStockEventLineItem(cursor));
+        }
+        cursor.close();
+        database.close();
+        return stockEventLineItems;
     }
 }
