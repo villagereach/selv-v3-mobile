@@ -21,6 +21,15 @@ public class StockCardLineItem implements Table {
     private String reasonFreeText;
     private String reasonId;
     private String id;
+    private int stockOnHand;
+
+    public int getStockOnHand() {
+        return stockOnHand;
+    }
+
+    public void setStockOnHand(int stockOnHand) {
+        this.stockOnHand = stockOnHand;
+    }
 
     public String getOrderableId() {
         return orderableId;
@@ -155,6 +164,8 @@ public class StockCardLineItem implements Table {
         cv.put(Database.StockCardLineItem.COLUMN_ORIGIN_EVENT_ID, originEventId);
         cv.put(Database.StockCardLineItem.COLUMN_OCCURRED_DATE, occurredDate);
         cv.put(Database.StockCardLineItem.COLUMN_ID, id);
+        cv.put(Database.StockCardLineItem.COLUMN_STOCK_ON_HAND, stockOnHand);
+
         return cv;
     }
 

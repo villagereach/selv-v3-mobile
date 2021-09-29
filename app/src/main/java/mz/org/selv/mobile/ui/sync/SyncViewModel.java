@@ -116,7 +116,7 @@ public class SyncViewModel extends AndroidViewModel {
                 params.put("Content-Type", "application/json");
                 // SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 // String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
-                String auth = "Bearer 90194d7a-ffde-4fcb-bc37-2fd476f3a666";
+                String auth = "Bearer 46deb2d3-3c9f-4bb9-97d4-d88cca57c9db";
                 params.put("Authorization", auth);
                 return params;
             }

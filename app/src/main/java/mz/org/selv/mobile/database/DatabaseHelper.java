@@ -119,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockCardLineItem.COLUMN_ORDERABLE_ID + " text," +
             Database.StockCardLineItem.COLUMN_LOT_ID + " text," +
             Database.StockCardLineItem.COLUMN_QUANTITY + "  integer, " +
+            Database.StockCardLineItem.COLUMN_STOCK_ON_HAND + "  integer, " +
             Database.StockCardLineItem.COLUMN_DESTINATION_ID + "  text, " +
             Database.StockCardLineItem.COLUMN_DESTINATION_FREE_TEXT + "  text, " +
             Database.StockCardLineItem.COLUMN_EXTRA_DATA + "  text, " +

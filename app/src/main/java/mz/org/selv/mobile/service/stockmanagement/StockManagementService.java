@@ -207,6 +207,9 @@ public class StockManagementService {
         stockCardLineItem.setReasonFreeText(stockEventLineItem.getReasonFreeText());
         stockCardLineItem.setStockcardId(stockCard.getId());
 
+        //If the stock card have no quantity then its a new stock card
+        //if(stockCardLineItem.ge)
+
         if (database.insert(stockCardLineItem) > 0) {
             System.out.println("stock card line item saved");
             return true;
@@ -486,6 +489,38 @@ public class StockManagementService {
         return validSource;
     }
 
+    public ValidSource getValidSourceById(String validSourceId) {
+        Database database = new Database(mContext);
+        database.open();
+        ValidSource validSource;
+        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_ID + "=?", new String[]{validSourceId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            validSource = Converter.cursorToValidSource(cursor);
+        } else {
+            return null;
+        }
+
+        cursor.close();
+        database.close();
+        return validSource;
+    }
+
+    public ValidDestination getValidDestinationById(String validDestinationId) {
+        Database database = new Database(mContext);
+        database.open();
+        ValidDestination validDestination;
+        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_ID + "=?", new String[]{validDestinationId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            validDestination = Converter.cursorToValidDestinations(cursor);
+        } else {
+            return null;
+        }
+
+        cursor.close();
+        database.close();
+        return validDestination;
+    }
+
 
     public int saveEvent(String action, String facilityId, String facilityTypeId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments,
                          int quantity, String vvm, String occurredDate) {
@@ -618,5 +653,75 @@ public class StockManagementService {
         cursor.close();
         database.close();
         return stockEventLineItems;
+    }
+
+    public List<StockEvent> getStockEventByType(String facilityId, String programId, String action){
+        Database database = new Database(mContext);
+        List<StockEvent> stockEvents = new ArrayList<StockEvent>();
+        database.open();
+        if(action.equals("receive")){
+            Cursor cursor = database.select(StockEvent.class, Database.StockEvent.COLUMN_NAME_FACILITY_ID+"=? AND "+Database.StockEvent.COLUMN_NAME_PROGRAM_ID+"=?",
+                    new String[]{facilityId, programId},null, null, Database.StockEvent.COLUMN_OCCURRED_DATE+", "+Database.StockEvent.COLUMN_PROCESSED_DATE+" DESC" );
+            if(cursor.moveToNext()){
+                stockEvents.add(Converter.cursorToStockEvent(cursor));
+            } else {
+                cursor.close();
+            }
+        }
+        database.close();
+        return stockEvents;
+    }
+
+    public List<StockEventLineItem> getStockEventLineItems(StockEvent stockEvent){
+        StockEventLineItem stockEventLineItem;
+        Database database = new Database(mContext);
+        List<StockEventLineItem> stockEventLineItemList = new ArrayList<>();
+        database.open();
+        Cursor cursor = database.select(StockEventLineItem.class, Database.StockEventLineItem.COLUMN_STOCK_EVENT_ID+"=?", new String[]{stockEvent.getId()}, null, null, null);
+        if(cursor.moveToNext()){
+            stockEventLineItem = Converter.cursorToStockEventLineItem(cursor);
+            stockEventLineItemList.add(stockEventLineItem);
+        }
+        cursor.close();
+        database.close();
+        return stockEventLineItemList;
+    }
+
+    public List<JSONObject> getStockEventLineItems(String facilityId, String programId, String action){
+        List<StockEvent> stockEvents = getStockEventByType(facilityId, programId, action);
+        List<JSONObject> eventLineItemsJson = new ArrayList<>();
+        ReferenceDataService referenceDataService = new ReferenceDataService(mContext);
+        for(int i =0; i< stockEvents.size(); i++){
+            List<StockEventLineItem> eventLineItemList = getStockEventLineItems(stockEvents.get(i));
+            for(int j = 0; j < eventLineItemList.size(); j++){
+                JSONObject eventItem = new JSONObject();
+                try{
+                    eventItem.put("orderableName", referenceDataService.getOrderableById(eventLineItemList.get(j).getOrderableId()).getName());
+                    eventItem.put("lotCode", referenceDataService.getLotById(eventLineItemList.get(j).getLotId()).getLotCode());
+                    eventItem.put("expirationDate", referenceDataService.getLotById(eventLineItemList.get(j).getLotId()).getExpirationDate());
+                    eventItem.put("reasonName", referenceDataService.getReasonById(eventLineItemList.get(j).getReasonId()).getName());
+                    eventItem.put("reasonComments", referenceDataService.getLotById(eventLineItemList.get(j).getLotId()).getLotCode());
+                    if(action.equals("receive")){
+                        eventItem.put("sourceOrDestinationName", getValidSourceById(eventLineItemList.get(j).getSourceId()).getName());
+                        eventItem.put("sourceOrDestinationComments", eventLineItemList.get(j).getSourceFreeText());
+                    } else if(action.equals("issue")){
+                        eventItem.put("sourceOrDestinationName", getValidDestinationById(eventLineItemList.get(j).getDestinationId()).getName());
+                        eventItem.put("sourceOrDestinationComments", eventLineItemList.get(j).getDestinationFreeText());
+                    } else if(action.equals("adjustment")){
+
+                    }
+
+                    eventItem.put("quantity", "");
+                    eventItem.put("stockOnHand", "");
+                    eventItem.put("status", stockEvents.get(i).getStatus());
+                    eventItem.put("occurredDate", eventLineItemList.get(j).getOccurredDate());
+                    eventLineItemsJson.add(eventItem);
+                } catch (JSONException ex){
+                    ex.printStackTrace();
+                }
+
+            }
+        }
+        return eventLineItemsJson;
     }
 }
