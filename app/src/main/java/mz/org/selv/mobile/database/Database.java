@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class Database {
     public final static String DATABASE_NAME = "SELV_MOBILE_V2";
-    public final static int DATABASE_VERSION = 44;
+    public final static int DATABASE_VERSION = 49;
 
     public static class User implements BaseColumns {
 
@@ -200,7 +200,7 @@ public class Database {
         public static String COLUMN_NAME_ID = "id";
         public static String COLUMN_NAME_FACILITY_ID = "facilityid";
         public static String TABLE_NAME = "stock_card";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID,COLUMN_NAME_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
     }
 
     public static class StockEvent implements BaseColumns {
@@ -210,11 +210,9 @@ public class Database {
         public static String TABLE_NAME = "stock_event";
         public static String COLUMN_NAME_STATUS = "status";
         public static String COLUMN_NAME_TYPE = "type";
-        public static String COLUMN_ORDERABLE_ID = "orderableId";
-        public static String COLUMN_LOT_ID = "lotid";
         public static String COLUMN_PROCESSED_DATE = "processedDate";
         public static String COLUMN_OCCURRED_DATE = "occurredDate";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_LOT_ID, COLUMN_ORDERABLE_ID, COLUMN_PROCESSED_DATE, COLUMN_OCCURRED_DATE,COLUMN_NAME_STATUS,COLUMN_NAME_TYPE,COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_UUID, COLUMN_PROCESSED_DATE, COLUMN_OCCURRED_DATE,COLUMN_NAME_STATUS,COLUMN_NAME_TYPE,COLUMN_NAME_FACILITY_ID, COLUMN_NAME_PROGRAM_ID};
     }
 
     public static class StockEventLineItem implements BaseColumns {
@@ -255,9 +253,10 @@ public class Database {
         public static String COLUMN_OCCURRED_DATE = "occurredDate";
         public static String COLUMN_ID = "id";
         public static String COLUMN_STOCK_CARD_ID = "stockCardId";
+        public static String COLUMN_PROCCESSED_DATE = "proccessedDate";
         public static String TABLE_NAME = "stockCardLineItem";
         public static String[] ALL_COLUMNS = {COLUMN_ORDERABLE_ID, COLUMN_LOT_ID, COLUMN_QUANTITY, COLUMN_DESTINATION_ID, COLUMN_DESTINATION_FREE_TEXT, COLUMN_EXTRA_DATA, COLUMN_SOURCE_ID,
-                COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_REASON_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_STOCK_ON_HAND,COLUMN_ORIGIN_EVENT_ID};
+                COLUMN_SOURCE_FREE_TEXT, COLUMN_REASON_FREE_TEXT, COLUMN_PROCCESSED_DATE,COLUMN_REASON_ID, COLUMN_STOCK_CARD_ID, COLUMN_OCCURRED_DATE, COLUMN_ID, COLUMN_STOCK_ON_HAND,COLUMN_ORIGIN_EVENT_ID};
     }
 
     public static class CalculatedStockOnHand implements BaseColumns {

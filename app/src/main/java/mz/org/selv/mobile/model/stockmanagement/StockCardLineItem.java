@@ -11,6 +11,7 @@ public class StockCardLineItem implements Table {
     private String lotId;
     private int quantity;
     private String occurredDate;
+    private String proccessedDate;
     private String extraData;
     private String stockcardId;
     private String destinationId;
@@ -22,6 +23,14 @@ public class StockCardLineItem implements Table {
     private String reasonId;
     private String id;
     private int stockOnHand;
+
+    public String getProccessedDate() {
+        return proccessedDate;
+    }
+
+    public void setProccessedDate(String proccessedDate) {
+        this.proccessedDate = proccessedDate;
+    }
 
     public int getStockOnHand() {
         return stockOnHand;
@@ -165,7 +174,8 @@ public class StockCardLineItem implements Table {
         cv.put(Database.StockCardLineItem.COLUMN_OCCURRED_DATE, occurredDate);
         cv.put(Database.StockCardLineItem.COLUMN_ID, id);
         cv.put(Database.StockCardLineItem.COLUMN_STOCK_ON_HAND, stockOnHand);
-
+        cv.put(Database.StockCardLineItem.COLUMN_PROCCESSED_DATE, proccessedDate);
+        cv.put(Database.StockCardLineItem.COLUMN_STOCK_CARD_ID, stockcardId);
         return cv;
     }
 

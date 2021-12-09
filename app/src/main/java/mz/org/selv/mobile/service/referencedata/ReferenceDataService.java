@@ -14,6 +14,7 @@ import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.referencedata.Program;
 import mz.org.selv.mobile.model.referencedata.TradeItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
+import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
 import mz.org.selv.mobile.model.stockmanagement.ValidSource;
 
@@ -169,20 +170,31 @@ public class ReferenceDataService {
     }
 
     public List<ValidSource> getValidSources(String facilityTypeId, String programId){
-        System.out.println("facilityType"+ facilityTypeId+"   program: "+programId);
         Database database = new Database(mContext);
         database.open();
         Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID+"=? AND "+
                 Database.ValidSources.COLUMN_NAME_PROGRAM_ID+"=?", new String[]{"113db84f-b0f8-4fec-9d37-ae87fcd833d7", programId}, null, null, null);
         List validSources = new ArrayList<ValidSource>();
-        System.out.println(cursor.getCount()+" rows");
         while (cursor.moveToNext()){
-            System.out.println("facilityType"+ facilityTypeId+"   program: "+programId);
             validSources.add(Converter.cursorToValidSource(cursor));
         }
         cursor.close();
         database.close();
         return validSources;
+    }
+
+    public List<ValidDestination> getValidDestinations(String facilityTypeId, String programId){
+        Database database = new Database(mContext);
+        database.open();
+        Cursor cursor = database.select(ValidDestination.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID+"=? AND "+
+                Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID+"=?", new String[]{"be01380b-4939-47a1-a5ce-72c691d63a8e", programId}, null, null, null);
+        List validDestinations = new ArrayList<ValidSource>();
+        while (cursor.moveToNext()){
+            validDestinations.add(Converter.cursorToValidDestinations(cursor));
+        }
+        cursor.close();
+        database.close();
+        return validDestinations;
     }
 
     public Reason getReasonById(String reasonId){

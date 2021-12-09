@@ -1,6 +1,5 @@
 package mz.org.selv.mobile.ui.adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,19 +43,17 @@ public class StockEventItemsAdapter extends ArrayAdapter<JSONObject> {
 
         TextView tvProduct = convertView.findViewById(R.id.tv_stock_event_product);
         TextView tvLotCode = convertView.findViewById(R.id.tv_stock_event_lot_code);
-        TextView tvExpirationDate = convertView.findViewById(R.id.tv_stock_event_row_item_expiration_date);
         TextView tvQuantity = convertView.findViewById(R.id.tv_stock_event_row_item_quantity);
-        TextView tvStockOnHand = convertView.findViewById(R.id.tv_stock_event_row_item_soh);
+        TextView tvStockOnHand = convertView.findViewById(R.id.tv_stock_event_row_item_quantity);
         TextView tvReason = convertView.findViewById(R.id.tv_stock_event_row_item_reason);
         TextView tvSourceOrDestination = convertView.findViewById(R.id.tv_stock_event_row_item_source_or_destination);
         TextView tvOccurredDate = convertView.findViewById(R.id.tv_stock_event_row_item_occurred_date);
-        ImageView ivStatus = convertView.findViewById(R.id.iv_sotck_event_row_item_status);
+        TextView labelSourceOrDestination = convertView.findViewById(R.id.label_event_row_item_source_or_destination);
+        ImageView ivStatus = convertView.findViewById(R.id.iv_event_row_item_status);
 
         try{
-            System.out.println(lineItem.toString());
             tvProduct.setText(lineItem.getString("orderableName"));
             tvLotCode.setText(lineItem.getString("lotCode"));
-            tvExpirationDate.setText(lineItem.getString("expirationDate"));
             tvOccurredDate.setText(lineItem.getString("occurredDate"));
             tvQuantity.setText(lineItem.getString("quantity"));
 
@@ -66,14 +63,30 @@ public class StockEventItemsAdapter extends ArrayAdapter<JSONObject> {
                 tvReason.setText(lineItem.getString("reasonName"));
             }
 
+            if(action.equals("receive")){
+                labelSourceOrDestination.setText(R.string.string_source);
+            } else if (action.equals("issue")){
+                labelSourceOrDestination.setText(R.string.string_destination);
+            }
+
             if(lineItem.has("sourceOrDestinationComments")){
                 tvSourceOrDestination.setText(lineItem.getString("sourceOrDestinationName")+" "+lineItem.getString("sourceOrDestinationComments"));
             }  else {
                 tvSourceOrDestination.setText(lineItem.getString("sourceOrDestinationName"));
             }
 
-            tvStockOnHand.setText(lineItem.getString("stockOnHand"));
-            tvQuantity.setText(lineItem.getString("quantity"));
+            if(lineItem.has("status")){
+
+            }
+
+            if(lineItem.has("stockOnHand")){
+                tvStockOnHand.setText(lineItem.getString("stockOnHand"));
+            }
+
+            if(lineItem.has("quantity")){
+                tvQuantity.setText(lineItem.getString("quantity"));
+            }
+
         } catch (JSONException exception){
             exception.printStackTrace();
         }

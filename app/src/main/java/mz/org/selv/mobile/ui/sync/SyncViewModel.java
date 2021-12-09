@@ -59,6 +59,15 @@ public class SyncViewModel extends AndroidViewModel {
                 break;
 
             case 3: // sync all
+                syncEntities(Entity.PROGRAM, "https://test.selv.org.mz/api/programs");
+                syncEntities(Entity.ORDERABLES, "https://test.selv.org.mz/api/orderables");
+                syncEntities(Entity.LOTS, "https://test.selv.org.mz/api/lots");
+                syncEntities(Entity.FACILITY_TYPE_APPROVED_PRODUCTS, "https://test.selv.org.mz/api/facilityTypeApprovedProducts");
+                syncEntities(Entity.FACILITY_TYPE, "https://test.selv.org.mz/api/facilityTypes");
+                syncEntities(Entity.REASON, "https://test.selv.org.mz/api/stockCardLineItemReasons");
+                syncEntities(Entity.VALID_REASONS, "https://test.selv.org.mz/api/validReasons");
+                syncEntities(Entity.VALID_SOURCES, "https://test.selv.org.mz/api/validSources");
+                syncEntities(Entity.VALID_DESTINATION, "https://test.selv.org.mz/api/validDestinations");
                 break;
         }
     }
@@ -116,7 +125,7 @@ public class SyncViewModel extends AndroidViewModel {
                 params.put("Content-Type", "application/json");
                 // SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 // String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
-                String auth = "Bearer 46deb2d3-3c9f-4bb9-97d4-d88cca57c9db";
+                String auth = "Bearer 4632b224-20fb-4aec-9131-0ff2e49bc4ab";
                 params.put("Authorization", auth);
                 return params;
             }
@@ -175,7 +184,7 @@ public class SyncViewModel extends AndroidViewModel {
                 params.put("Content-Type", "application/json");
                 // SharedPreferences sharedPrefs = getApplication().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 // String auth = "Bearer " + sharedPrefs.getString(KEY_ACCESS_TOKEN, "");
-                String auth = "Bearer 3c3eaa86-a004-4f11-8f64-3282664be2b3";
+                String auth = "Bearer be172f3f-946c-4570-b1bb-2bc7addd92bd";
                 params.put("Authorization", auth);
                 return params;
             }

@@ -129,6 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockCardLineItem.COLUMN_REASON_ID + "  text, " +
             Database.StockCardLineItem.COLUMN_ORIGIN_EVENT_ID + "  text, " +
             Database.StockCardLineItem.COLUMN_STOCK_CARD_ID + "  text, " +
+            Database.StockCardLineItem.COLUMN_PROCCESSED_DATE + "  text, " +
             Database.StockCardLineItem.COLUMN_OCCURRED_DATE + "  text, " +
             Database.StockCardLineItem.COLUMN_ID + " text) ";
 
@@ -137,8 +138,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockEvent.COLUMN_NAME_FACILITY_ID + " text," +
             Database.StockEvent.COLUMN_NAME_PROGRAM_ID + " text," +
             Database.StockEvent.COLUMN_NAME_TYPE + " text,"+
-            Database.StockEvent.COLUMN_ORDERABLE_ID + " text," +
-            Database.StockEvent.COLUMN_LOT_ID + " text," +
             Database.StockEvent.COLUMN_NAME_STATUS + " text,"+
             Database.StockEvent.COLUMN_NAME_UUID + " text," +
             Database.StockEvent.COLUMN_OCCURRED_DATE + " text," +

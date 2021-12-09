@@ -13,6 +13,7 @@ import mz.org.selv.mobile.model.stockmanagement.PhysicalInventory;
 import mz.org.selv.mobile.model.stockmanagement.PhysicalInventoryLineItem;
 import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.StockCard;
+import mz.org.selv.mobile.model.stockmanagement.StockCardLineItem;
 import mz.org.selv.mobile.model.stockmanagement.StockEvent;
 import mz.org.selv.mobile.model.stockmanagement.StockEventLineItem;
 import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
@@ -176,5 +177,24 @@ public class Converter {
         stockEventLineItem.setQuantity(cursor.getInt(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_QUANTITY)));
         stockEventLineItem.setStockEventId(cursor.getString(cursor.getColumnIndex(Database.StockEventLineItem.COLUMN_STOCK_EVENT_ID)));
         return stockEventLineItem;
+    }
+
+    public static StockCardLineItem cursorToStockCardLineItem(Cursor cursor) {
+        StockCardLineItem stockCardLineItem = new StockCardLineItem();
+        stockCardLineItem.setSourceId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_SOURCE_ID)));
+        stockCardLineItem.setDestinationFreeText(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_DESTINATION_FREE_TEXT)));
+        stockCardLineItem.setReasonId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_REASON_ID)));
+        stockCardLineItem.setReasonFreeText(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_REASON_FREE_TEXT)));
+        stockCardLineItem.setOccurredDate(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_OCCURRED_DATE)));
+        stockCardLineItem.setProccessedDate(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_PROCCESSED_DATE)));
+        stockCardLineItem.setStockcardId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_STOCK_CARD_ID)));
+        stockCardLineItem.setLotId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_LOT_ID)));
+        stockCardLineItem.setOrderableId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_ORDERABLE_ID)));
+        stockCardLineItem.setDestinationId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_DESTINATION_ID)));
+        stockCardLineItem.setId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_ID)));
+        stockCardLineItem.setQuantity(cursor.getInt(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_QUANTITY)));
+        stockCardLineItem.setOriginEventId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_ORIGIN_EVENT_ID)));
+        stockCardLineItem.setStockOnHand(cursor.getInt(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_STOCK_ON_HAND)));
+        return stockCardLineItem;
     }
 }
