@@ -10,7 +10,24 @@ public class Facility implements Table {
     private String code;
     private String name;
     private String zone;
-    private String type;
+    private String facilityTypeCode;
+    private String facilityTypeId;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFacilityTypeId() {
+        return facilityTypeId;
+    }
+
+    public void setFacilityTypeId(String facilityTypeId) {
+        this.facilityTypeId = facilityTypeId;
+    }
 
     public String getCode() {
         return code;
@@ -36,12 +53,13 @@ public class Facility implements Table {
         this.zone = zone;
     }
 
-    public String getType() {
-        return type;
+
+    public String getFacilityTypeCode() {
+        return facilityTypeCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFacilityTypeCode(String type) {
+        this.facilityTypeCode = type;
     }
 
     public String getUuid() {
@@ -62,9 +80,11 @@ public class Facility implements Table {
         ContentValues cv = new ContentValues();
         cv.put(Database.Facility.COLUMN_NAME, name);
         cv.put(Database.Facility.COLUMN_CODE, code);
-        cv.put(Database.Facility.COLUMN_TYPE, type);
+        cv.put(Database.Facility.COLUMN_FACILITY_TYPE_CODE, facilityTypeCode);
         cv.put(Database.Facility.COLUMN_UUID, id);
         cv.put(Database.Facility.COLUMN_ZONE, zone);
+        cv.put(Database.Facility.COLUMN_FACILITY_TYPE_ID, facilityTypeId);
+
 
         return cv;
     }

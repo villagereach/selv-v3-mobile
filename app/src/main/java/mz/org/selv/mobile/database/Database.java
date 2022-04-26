@@ -9,11 +9,42 @@ import android.util.Log;
 import java.util.Collection;
 
 public class Database {
-    public final static String DATABASE_NAME = "SELV_MOBILE_V2";
-    public final static int DATABASE_VERSION = 49;
+    public final static String DATABASE_NAME = "selv_mobile_v3";
+    public final static int DATABASE_VERSION = 8;
+
+    public static class SyncStatus implements BaseColumns{
+        public static String COLUMN_ENTITY = "entity";
+        public static String COLUMN_DATE = "date";
+        public static String COLUMN_USER_ID = "userId";
+        public static String COLUMN_SERVER_ID = "serverId";
+        public static String TABLE_NAME = "syncStatus";
+        public static String[] ALL_COLUMNS = {COLUMN_ENTITY, COLUMN_DATE, COLUMN_SERVER_ID, COLUMN_USER_ID};
+    }
 
     public static class User implements BaseColumns {
+        public static String COLUMN_USERNAME = "username";
+        public static String COLUMN_PASSWORD = "password";
+        public static String COLUMN_HOME_FACLITY_ID = "homeFacilityId";
+        public static String COLUMN_HOME_FACILITY_NAME = "homeFacilityName";
+        public static String COLUMN_NAME = "name";
+        public static String COLUMN_SURNAME = "surname";
+        public static String COLUMN_SERVER_ID = "serverId";
+        public static String COLUMN_TOKEN = "token";
+        public static String COLUMN_USER_ID = "userId";
+        public static String COLUMN_IS_LOGGED_IN = "isLoggedIn";
+        public static String COLUMN_LAST_TIME_LOGGED_IN_SERVER = "lastTimeLoggedInServer";
+        public static String COLUMN_TOKEN_EXPIRATION = "tokenExpiration";
+        public static String TABLE_NAME = "user";
+        public static String[] ALL_COLUMNS = {COLUMN_USERNAME, COLUMN_TOKEN_EXPIRATION,COLUMN_SERVER_ID, COLUMN_USER_ID,COLUMN_LAST_TIME_LOGGED_IN_SERVER, COLUMN_PASSWORD, COLUMN_HOME_FACLITY_ID, COLUMN_HOME_FACILITY_NAME, COLUMN_SURNAME,COLUMN_IS_LOGGED_IN , COLUMN_TOKEN, COLUMN_NAME};
 
+    }
+
+    public static class Server implements BaseColumns{
+        public static String COLUMN_URL = "url";
+        public static String COLUMN_LAST_TIME_USED = "lastTimeUsed";
+        public static String COLUMN_SERVER_ID = "serverId";
+        public static String TABLE_NAME = "server";
+        public static String[] ALL_COLUMNS = {COLUMN_URL, COLUMN_LAST_TIME_USED, COLUMN_SERVER_ID};
     }
 
     public static class Facility implements BaseColumns {
@@ -21,9 +52,10 @@ public class Database {
         public static String COLUMN_NAME = "name";
         public static String COLUMN_UUID = "id";
         public static String COLUMN_ZONE = "zoneId";
-        public static String COLUMN_TYPE = "type";
+        public static String COLUMN_FACILITY_TYPE_CODE = "type";
+        public static String COLUMN_FACILITY_TYPE_ID = "facilityTypeId";
         public static String TABLE_NAME = "facility";
-        public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_NAME, COLUMN_UUID, COLUMN_ZONE, COLUMN_TYPE};
+        public static String[] ALL_COLUMNS = {COLUMN_CODE, COLUMN_NAME, COLUMN_UUID, COLUMN_ZONE, COLUMN_FACILITY_TYPE_CODE, COLUMN_FACILITY_TYPE_ID};
 
     }
 
@@ -144,8 +176,9 @@ public class Database {
         public static String COLUMN_NAME_REFERENCE_DATA_FACILITY = "refDataFacility";
         public static String COLUMN_NAME_ID = "id";
         public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
+        public static String COLUMN_NAME_FACILITY_ID = "facilityId";
         public static String TABLE_NAME = "ValidSources";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED, COLUMN_NAME_FACILITY_TYPE_ID,COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_FACILITY_TYPE_ID,COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
                 COLUMN_NAME_ID};
     }
 
@@ -158,8 +191,9 @@ public class Database {
         public static String COLUMN_NAME_REFERENCE_DATA_FACILITY = "refDataFacility";
         public static String COLUMN_NAME_ID = "id";
         public static String COLUMN_NAME_FACILITY_TYPE_ID = "facilityTypeId";
+        public static String COLUMN_NAME_FACILITY_ID = "facilityId";
         public static String TABLE_NAME = "ValidDestinations";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED,  COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_FREE_TEXT_ALLOWED,  COLUMN_NAME_FACILITY_ID, COLUMN_NAME_FACILITY_TYPE_ID, COLUMN_NAME_PROGRAM_ID, COLUMN_NAME_NODE_ID, COLUMN_NAME_NODE_REFERENCE_ID, COLUMN_NAME_NAME, COLUMN_NAME_REFERENCE_DATA_FACILITY,
                 COLUMN_NAME_ID};
     }
 
@@ -198,9 +232,10 @@ public class Database {
         public static String COLUMN_NAME_STOCK_ON_HAND = "stockonhand";
         public static String COLUMN_NAME_PROGRAM_ID = "programid";
         public static String COLUMN_NAME_ID = "id";
+        public static String COLUMN_NAME_IS_ACTIVE = "isactive";
         public static String COLUMN_NAME_FACILITY_ID = "facilityid";
         public static String TABLE_NAME = "stock_card";
-        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID,COLUMN_NAME_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
+        public static String[] ALL_COLUMNS = {COLUMN_NAME_ORDERABLE_ID, COLUMN_NAME_IS_ACTIVE,COLUMN_NAME_ID, COLUMN_NAME_LOT_ID, COLUMN_NAME_FACILITY_ID, COLUMN_NAME_STOCK_ON_HAND, COLUMN_NAME_PROGRAM_ID};
     }
 
     public static class StockEvent implements BaseColumns {

@@ -1,6 +1,7 @@
 package mz.org.selv.mobile.service.openlmis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -24,6 +25,7 @@ import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.database.Database;
 import mz.org.selv.mobile.database.Table;
 import mz.org.selv.mobile.model.Entity;
+import mz.org.selv.mobile.model.referencedata.Facility;
 import mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProgram;
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
@@ -33,6 +35,9 @@ import mz.org.selv.mobile.model.stockmanagement.Reason;
 import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
 import mz.org.selv.mobile.model.stockmanagement.ValidReasons;
 import mz.org.selv.mobile.model.stockmanagement.ValidSource;
+
+import static mz.org.selv.mobile.auth.LoginHelper.APP_SHARED_PREFS;
+import static mz.org.selv.mobile.auth.LoginHelper.KEY_HOME_FACILITY_ID;
 
 public class SyncEntities {
 
@@ -58,7 +63,6 @@ public class SyncEntities {
         StringRequest stringRequest = new StringRequest(method, uri, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("response: " + response);
                 if (!response.equals(null)) {
                     try {
                         JSONObject jsonResponse = new JSONObject(response);
@@ -115,7 +119,7 @@ public class SyncEntities {
         List<Table> entities = readEntities(entity, objects);
         if (entities.size() > 0) {
             //remove entites saved
-            System.out.println("Saving entities "+entity);
+            System.out.println("Saving entities " + entity);
             saveEntitiesToDatabase(context, entities, false);
         } else {
             System.out.println("No entities");
@@ -146,16 +150,37 @@ public class SyncEntities {
                 for (int i = 0; i < entities.length(); i++) {
                     Lot lot = new Lot();
                     try {
-                        System.out.println(entities.getJSONObject(i));
                         lot.setId(entities.getJSONObject(i).getString(Database.Lot.COLUMN_UUID));
                         lot.setOrderableId(entities.getJSONObject(i).getString(Database.Lot.COLUMN_TRADE_ITEM_ID));
                         lot.setLotCode(entities.getJSONObject(i).getString(Database.Lot.COLUMN_CODE));
-                        lot.setExpirationDate(entities.getJSONObject(i).getString(Database.Lot.COLUMN_EXPIRATION_DATE));
+                        if (entities.getJSONObject(i).has(Database.Lot.COLUMN_EXPIRATION_DATE)) {
+                            lot.setExpirationDate(entities.getJSONObject(i).getString(Database.Lot.COLUMN_EXPIRATION_DATE));
+                        } else {
+
+                        }
                         result.add(lot);
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
                 }
+                break;
+
+            case Entity.FACILITY:
+                try {
+                    for (int i = 0; i < entities.length(); i++) {
+                        Facility facility = new Facility();
+                        facility.setUuid(entities.getJSONObject(i).getString(Database.Facility.COLUMN_UUID));
+                        facility.setName(entities.getJSONObject(i).getString(Database.Facility.COLUMN_NAME));
+                        facility.setCode(entities.getJSONObject(i).getString(Database.Facility.COLUMN_CODE));
+                        //due to JSON Format
+                        facility.setFacilityTypeCode(entities.getJSONObject(i).getJSONObject("type").getString(Database.FacilityType.COLUMN_CODE));
+                        facility.setFacilityTypeId(entities.getJSONObject(i).getJSONObject("type").getString(Database.FacilityType.COLUMN_UUID));
+                        result.add(facility);
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+
                 break;
 
             case Entity.FACILITY_TYPE_APPROVED_PRODUCTS:
@@ -226,6 +251,7 @@ public class SyncEntities {
 
             case Entity.VALID_SOURCES:
                 System.out.println("Valid Sources");
+                SharedPreferences sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                 try {
                     for (int i = 0; i < entities.length(); i++) {
                         ValidSource validSource = new ValidSource();
@@ -237,6 +263,7 @@ public class SyncEntities {
                         validSource.setReferenceId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
                         validSource.setNodeId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
                         validSource.setRefDataFacility(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY));
+                        validSource.setFacilityId(sharedPrefs.getString(KEY_HOME_FACILITY_ID, ""));
                         result.add(validSource);
                     }
                 } catch (JSONException ex) {
@@ -245,8 +272,8 @@ public class SyncEntities {
                 break;
 
             case Entity.VALID_DESTINATION:
-                System.out.println("Valid Destinations");
                 try {
+                    sharedPrefs = context.getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
                     for (int i = 0; i < entities.length(); i++) {
                         ValidDestination validDestination = new ValidDestination();
                         validDestination.setId(entities.getJSONObject(i).getString(Database.ValidDestinations.COLUMN_NAME_ID));
@@ -257,6 +284,7 @@ public class SyncEntities {
                         validDestination.setReferenceId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
                         validDestination.setNodeId(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID));
                         validDestination.setRefDataFacility(entities.getJSONObject(i).getJSONObject("node").getString(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY));
+                        validDestination.setFacilityId(sharedPrefs.getString(KEY_HOME_FACILITY_ID, ""));
                         result.add(validDestination);
                     }
                 } catch (JSONException ex) {
@@ -266,7 +294,7 @@ public class SyncEntities {
         }
 
         return result;
-}
+    }
 
     public boolean saveEntitiesToDatabase(Context context, List<Table> entities, boolean isUpdate) {
 

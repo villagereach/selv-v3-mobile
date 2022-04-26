@@ -160,7 +160,6 @@ public class StockEventLineItemDialog extends DialogFragment {
                 stockEventLineItemViewModel.saveEvent(
                         getArguments().getString("action"),
                         getArguments().getString("facilityId"),
-                        getArguments().getString("facilityTypeId"),
                         getArguments().getString("programId"),
                         acProduct.getText().toString(),
                         acLotNumber.getText().toString(),
@@ -172,7 +171,9 @@ public class StockEventLineItemDialog extends DialogFragment {
                         acVVM.getText().toString(),
                         etOccurredDate.getText().toString()
                 );
+
                 dismiss();
+
             }
         });
 

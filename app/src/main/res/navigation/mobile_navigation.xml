@@ -37,7 +37,7 @@
 
     <activity
       android:id="@+id/nav_log_out"
-      android:name="mz.org.selv.mobile.LoginActivity"
+      android:name="mz.org.selv.mobile.ui.auth.LoginActivity"
       android:label="@string/menu_log_out"
       tools:layout="@layout/activity_login" />
 </navigation>

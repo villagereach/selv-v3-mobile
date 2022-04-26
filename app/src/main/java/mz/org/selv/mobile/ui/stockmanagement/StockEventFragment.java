@@ -21,12 +21,10 @@ import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
 import java.util.Objects;
 import mz.org.selv.mobile.MainActivity;
 import mz.org.selv.mobile.R;
 import mz.org.selv.mobile.ui.adapters.StockEventItemsAdapter;
-import mz.org.selv.mobile.ui.stockmanagement.viewmodel.InventoryViewModel;
 import mz.org.selv.mobile.ui.stockmanagement.viewmodel.StockEventViewModel;
 
 public class StockEventFragment extends Fragment {
@@ -40,7 +38,6 @@ public class StockEventFragment extends Fragment {
         return new StockEventFragment();
     }
 
-    FloatingActionButton fab;
     private ListView lvStockEventLineItems;
     private StockEventViewModel stockEventViewModel;
 

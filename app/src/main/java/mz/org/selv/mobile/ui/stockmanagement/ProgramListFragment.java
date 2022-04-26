@@ -1,7 +1,6 @@
 package mz.org.selv.mobile.ui.stockmanagement;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import mz.org.selv.mobile.ui.stockmanagement.viewmodel.ProgramListViewModel;
 public class ProgramListFragment extends Fragment {
     private ProgramListViewModel programListViewModel;
     String action;
+    String homeFacilityId;
+    String homeFacilityTypeId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class ProgramListFragment extends Fragment {
             if (action.equals("issue")) {
 
                 getActivity().setTitle(R.string.string_adjustments);
-                 //  actionBar.setTitle(R.string.string_issue);
+                //  actionBar.setTitle(R.string.string_issue);
             } else if (action.equals("receive")) {
                 getActivity().setTitle(R.string.string_adjustments);
                 //  actionBar.setTitle(R.string.string_receive);
@@ -45,16 +46,17 @@ public class ProgramListFragment extends Fragment {
                 // actionBar.setTitle(R.string.string_inventory);
             } else if (action.equals("soh")) {
 
-                getActivity().setTitle(R.string.string_adjustments);
+                getActivity().setTitle(R.string.string_soh);
                 //   actionBar.setTitle(R.string.string_soh);
             } else if (action.equals("adjustment")) {
 
                 ((MainActivity) requireActivity()).getSupportActionBar().setTitle(R.string.string_adjustments);
                 //   actionBar.setTitle(R.string.string_adjustments);
             }
-
-
         }
+
+        //get logged in user facility details
+
         ProgramListAdapter programListAdapter = new ProgramListAdapter(getContext(), programListViewModel.getPrograms());
         ListView lvProgramList = (ListView) root.findViewById(R.id.lv_program_selector_programs);
         lvProgramList.setAdapter(programListAdapter);
@@ -69,8 +71,7 @@ public class ProgramListFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("action", action);
-                    bundle.putString("facilityTypeId", "113db84f-b0f8-4fec-9d37-ae87fcd833d7");
-                    bundle.putString("facilityId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("facilityId", programListViewModel.getHomeFacilityId().getValue());
                     bundle.putString("programId", program.getUuid());
                     bundle.putString("programName", program.getName());
                     StockEventFragment stockEventFragment = new StockEventFragment();
@@ -82,17 +83,29 @@ public class ProgramListFragment extends Fragment {
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();
-                } else if(action.equals("inventory")){
+                } else if (action.equals("inventory")) {
                     Bundle bundle = new Bundle();
                     bundle.putString("action", action);
-                    bundle.putString("facilityTypeId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
-                    bundle.putString("facilityId", "b5cd5c54-9cc1-4395-82e6-d9f9eb117950");
+                    bundle.putString("facilityId", programListViewModel.getHomeFacilityId().getValue());
                     bundle.putString("programId", program.getUuid());
                     InventoryListFragment inventoryListFragment = new InventoryListFragment();
                     inventoryListFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getParentFragmentManager();
                     fragmentManager.beginTransaction().
                             replace(R.id.nav_host_fragment, inventoryListFragment, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+                } else if (action.equals("soh")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("action", action);
+                    bundle.putString("facilityId", programListViewModel.getHomeFacilityId().getValue());
+                    bundle.putString("programId", program.getUuid());
+                    StockOnHandFragment stockOnHandFragment = new StockOnHandFragment();
+                    stockOnHandFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction().
+                            replace(R.id.nav_host_fragment, stockOnHandFragment, null)
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();

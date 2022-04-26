@@ -7,6 +7,10 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Definicoes</string>
 
+    <string name="string_facility">US/Deposito</string>
+    <string name="string_selv_acronym">SELV</string>
+    <string name="string_selv_full">Electronic System for Vaccine Logistics</string>
+    <string name="string_server_url">Server URL</string>
     <string name="menu_home">Inicio</string>
     <string name="menu_requisition">Requisicoes</string>
     <string name="menu_stockmanagement">Gestao de Stock</string>
@@ -26,10 +30,6 @@
     <string name="string_soh">Stock Disponivel</string>
     <string name="string_adjustments">Ajustes</string>
 
-    <!-- -->
-    <string name="string_last_sync">Ultima Sincronizacao: </string>
-
-    <!-- -->
     <string name="string_ok">Ultima Sincronizacao: </string>
 
     <string name="string_product">Produto</string>
@@ -59,6 +59,21 @@
     <string name="string_status">Estado</string>
     <string name="string_add_reasons">Adicionar Motivos</string>
     <string name="string_submitted">Submissao</string>
+    <string name="string_reference_data">Dados de Referencia</string>
+    <string name="string_ftaps">Produtos Aprovados por Tipo e Instalaco</string>
+    <string name="string_facility_types">Tipos de Instalacoes</string>
+    <string name="string_programs">Programas</string>
+    <string name="string_orderables">Produtos</string>
+    <string name="string_facilities">US / Depositos ou Armazens</string>
+    <string name="string_lots">Lotes</string>
+    <string name="string_valid_sources">Origens Validas</string>
+    <string name="string_valid_reasons">Motivos Validos</string>
+    <string name="string_reasons">Motivos</string>
+    <string name="string_valid_destinations">Destinos Validos</string>
+    <string name="string_total">Total</string>
+    <string name="string_last_sync">Ultima Sincronizacao</string>
+    <string name="string_update">Actualizar</string>
+    <string name="string_sync_all">Actualizar Tudo</string>
     <string-array name="string_array_vvm">
         <item>Estagio 1</item>
         <item>Estagio 2</item>
@@ -69,4 +84,9 @@
     <string name="string_login_success">Sessão iniciada!</string>
     <string name="string_login_failed">Sessão não iniciada.</string>
     <string name="string_forgot_password"><a href="https://test.selv.org.mz/#!/forgotPassword">Esqueceu-se da palavra-passe?</a></string>
+
+    <string name="string_preparing">Preparando...</string>
+    <string name="string_connecting">Connectando...</string>
+    <string name="string_downloading">Baixando</string>
+    <string name="string_saving">Guardando</string>
 </resources>

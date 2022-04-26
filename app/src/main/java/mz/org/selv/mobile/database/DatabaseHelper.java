@@ -7,11 +7,40 @@ import android.provider.BaseColumns;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String CREATE_TABLE_SYNC_STATUS = "" +
+            "create table " + Database.SyncStatus.TABLE_NAME + "(" +
+            Database.SyncStatus.COLUMN_SERVER_ID + " text, " +
+            Database.SyncStatus.COLUMN_ENTITY + " text, " +
+            Database.SyncStatus.COLUMN_DATE + " text, " +
+            Database.SyncStatus.COLUMN_USER_ID + " text)";
+
+    public static final String CREATE_TABLE_SERVER = "" +
+            "create table " + Database.Server.TABLE_NAME + "(" +
+            Database.Server.COLUMN_SERVER_ID + " text, " +
+            Database.Server.COLUMN_URL + " text, " +
+            Database.Server.COLUMN_LAST_TIME_USED + " text)";
+
+    public static final String CREATE_TABLE_USER = "" +
+            "create table " + Database.User.TABLE_NAME + " (" +
+            Database.User.COLUMN_USER_ID + " text," +
+            Database.User.COLUMN_SERVER_ID + " text," +
+            Database.User.COLUMN_TOKEN_EXPIRATION + " text," +
+            Database.User.COLUMN_TOKEN + " text," +
+            Database.User.COLUMN_NAME + " text," +
+            Database.User.COLUMN_SURNAME + " text," +
+            Database.User.COLUMN_HOME_FACILITY_NAME + " text," +
+            Database.User.COLUMN_HOME_FACLITY_ID + " text," +
+            Database.User.COLUMN_IS_LOGGED_IN + " text," +
+            Database.User.COLUMN_LAST_TIME_LOGGED_IN_SERVER + " text," +
+            Database.User.COLUMN_USERNAME + " text," +
+            Database.User.COLUMN_PASSWORD + " text)";
+
     public static final String CREATE_TABLE_FACILITY = "" +
             "create table " + Database.Facility.TABLE_NAME + " (" +
             Database.Facility.COLUMN_CODE + " text," +
             Database.Facility.COLUMN_NAME + " text," +
-            Database.Facility.COLUMN_TYPE + " text," +
+            Database.Facility.COLUMN_FACILITY_TYPE_CODE + " text," +
+            Database.Facility.COLUMN_FACILITY_TYPE_ID + " text," +
             Database.Facility.COLUMN_ZONE + " text," +
             Database.Facility.COLUMN_UUID + " text)";
 
@@ -112,6 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockCard.COLUMN_NAME_ORDERABLE_ID + " text," +
             Database.StockCard.COLUMN_NAME_STOCK_ON_HAND + " text," +
             Database.StockCard.COLUMN_NAME_ID + " text," +
+            Database.StockCard.COLUMN_NAME_IS_ACTIVE + " text," +
             Database.StockCard.COLUMN_NAME_FACILITY_ID + " text)";
 
     public static final String CREATE_TABLE_STOCK_CARD_LINE_ITEM = "" +
@@ -137,8 +167,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "create table " + Database.StockEvent.TABLE_NAME + " (" +
             Database.StockEvent.COLUMN_NAME_FACILITY_ID + " text," +
             Database.StockEvent.COLUMN_NAME_PROGRAM_ID + " text," +
-            Database.StockEvent.COLUMN_NAME_TYPE + " text,"+
-            Database.StockEvent.COLUMN_NAME_STATUS + " text,"+
+            Database.StockEvent.COLUMN_NAME_TYPE + " text," +
+            Database.StockEvent.COLUMN_NAME_STATUS + " text," +
             Database.StockEvent.COLUMN_NAME_UUID + " text," +
             Database.StockEvent.COLUMN_OCCURRED_DATE + " text," +
             Database.StockEvent.COLUMN_PROCESSED_DATE + " text)";
@@ -150,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.StockEventLineItem.COLUMN_LOT_ID + " text," +
             Database.StockEventLineItem.COLUMN_QUANTITY + "  integer, " +
             Database.StockEventLineItem.COLUMN_DESTINATION_ID + "  text, " +
-            Database.StockEventLineItem.COLUMN_PROGRAM_ID+ "  text, " +
+            Database.StockEventLineItem.COLUMN_PROGRAM_ID + "  text, " +
             Database.StockEventLineItem.COLUMN_DESTINATION_FREE_TEXT + "  text, " +
             Database.StockEventLineItem.COLUMN_EXTRA_DATA + "  text, " +
             Database.StockEventLineItem.COLUMN_SOURCE_ID + "  text, " +
@@ -179,6 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.ValidSources.COLUMN_NAME_FREE_TEXT_ALLOWED + " text," +
             Database.ValidSources.COLUMN_NAME_PROGRAM_ID + " text," +
             Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID + " text," +
+            Database.ValidSources.COLUMN_NAME_FACILITY_ID + " text," +
             Database.ValidSources.COLUMN_NAME_NODE_ID + " text," +
             Database.ValidSources.COLUMN_NAME_NODE_REFERENCE_ID + " text," +
             Database.ValidSources.COLUMN_NAME_NAME + " text," +
@@ -190,6 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Database.ValidDestinations.COLUMN_NAME_FREE_TEXT_ALLOWED + " text," +
             Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID + " text," +
             Database.ValidDestinations.COLUMN_NAME_FACILITY_TYPE_ID + " text," +
+            Database.ValidDestinations.COLUMN_NAME_FACILITY_ID + " text," +
             Database.ValidDestinations.COLUMN_NAME_NODE_ID + " text," +
             Database.ValidDestinations.COLUMN_NAME_NODE_REFERENCE_ID + " text," +
             Database.ValidDestinations.COLUMN_NAME_NAME + " text," +
@@ -211,6 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DROP_TABLE_REASON = "drop table if exists " + Database.Reason.TABLE_NAME;
     public static final String DROP_TABLE_STOCK_CARD = "drop table if exists " + Database.StockCard.TABLE_NAME;
 
+
     public static final String DROP_TABLE_PHYSICAL_INVENTORY = "drop table if exists " + Database.PhysicalInventory.TABLE_NAME;
     public static final String DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM = "drop table if exists " + Database.PhysicalInventoryLineItem.TABLE_NAME;
     public static final String DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT = "drop table if exists " + Database.PhysicalInventoryLineItemAdjustment.TABLE_NAME;
@@ -224,6 +257,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DROP_TABLE_VALID_DESTINATIONS = "drop table if exists " + Database.ValidDestinations.TABLE_NAME;
 
 
+    public static final String DROP_TABLE_USER = "drop table if exists " + Database.User.TABLE_NAME;
+    public static final String DROP_TABLE_SERVER = "drop table if exists " + Database.Server.TABLE_NAME;
+    public static final String DROP_TABLE_SYNC_STATUS = "drop table if exists " + Database.SyncStatus.TABLE_NAME;
+
     public DatabaseHelper(Context context) {
         super(context, Database.DATABASE_NAME, null, Database.DATABASE_VERSION);
 
@@ -233,6 +270,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Reference Data
         // CREATE TABLES
+        db.execSQL(CREATE_TABLE_SERVER);
         db.execSQL(CREATE_TABLE_FACILITY);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
         db.execSQL(CREATE_TABLE_PROGRAM);
@@ -253,13 +291,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
         db.execSQL(CREATE_TABLE_VALID_SOURCES);
         db.execSQL(CREATE_TABLE_VALID_DESTINATIONS);
-        //    db.execSQL(CREATE_TABLE_PROCESSING_PERIOD);
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_SYNC_STATUS);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // DROPB Tables
+        db.execSQL(DROP_TABLE_SERVER);
         db.execSQL(DROP_TABLE_FACILITY);
         db.execSQL(DROP_TABLE_FACILITY_TYPE);
         db.execSQL(DROP_TABLE_PROGRAM);
@@ -280,9 +320,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
         db.execSQL(DROP_TABLE_VALID_SOURCES);
         db.execSQL(DROP_TABLE_VALID_DESTINATIONS);
+        db.execSQL(DROP_TABLE_USER);
+        db.execSQL(DROP_TABLE_SYNC_STATUS);
 
 
         //create table
+        db.execSQL(CREATE_TABLE_SERVER);
         db.execSQL(CREATE_TABLE_FACILITY);
         db.execSQL(CREATE_TABLE_FACILITY_TYPE);
         db.execSQL(CREATE_TABLE_PROGRAM);
@@ -303,6 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_PHYSICAL_INVENTORY_LINE_ITEM_ADJUSTMENT);
         db.execSQL(CREATE_TABLE_VALID_SOURCES);
         db.execSQL(CREATE_TABLE_VALID_DESTINATIONS);
-
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_SYNC_STATUS);
     }
 }

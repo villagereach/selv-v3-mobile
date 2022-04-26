@@ -1,7 +1,11 @@
 package mz.org.selv.mobile.database;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 
+import mz.org.selv.mobile.model.configuration.Server;
+import mz.org.selv.mobile.model.auth.User;
+import mz.org.selv.mobile.model.configuration.SyncStatus;
 import mz.org.selv.mobile.model.referencedata.Facility;
 import mz.org.selv.mobile.model.referencedata.FacilityTypeApprovedProductAndProgram;
 import mz.org.selv.mobile.model.referencedata.Lot;
@@ -37,7 +41,7 @@ public class Converter {
         facility.setCode(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_CODE)));
         facility.setName(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_NAME)));
         facility.setUuid(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_UUID)));
-        facility.setType(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_TYPE)));
+        facility.setFacilityTypeCode(cursor.getString(cursor.getColumnIndex(Database.Facility.COLUMN_FACILITY_TYPE_CODE)));
         return facility;
     }
 
@@ -99,6 +103,7 @@ public class Converter {
         stockCard.setLotId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_LOT_ID)));
         stockCard.setFacilityId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_FACILITY_ID)));
         stockCard.setId(cursor.getString(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_ID)));
+        stockCard.setIsActive(cursor.getInt(cursor.getColumnIndex(Database.StockCard.COLUMN_NAME_IS_ACTIVE)));
         return stockCard;
     }
 
@@ -179,6 +184,7 @@ public class Converter {
         return stockEventLineItem;
     }
 
+    @SuppressLint("Range")
     public static StockCardLineItem cursorToStockCardLineItem(Cursor cursor) {
         StockCardLineItem stockCardLineItem = new StockCardLineItem();
         stockCardLineItem.setSourceId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_SOURCE_ID)));
@@ -196,5 +202,36 @@ public class Converter {
         stockCardLineItem.setOriginEventId(cursor.getString(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_ORIGIN_EVENT_ID)));
         stockCardLineItem.setStockOnHand(cursor.getInt(cursor.getColumnIndex(Database.StockCardLineItem.COLUMN_STOCK_ON_HAND)));
         return stockCardLineItem;
+    }
+
+    public static User cursorToUser(Cursor cursor){
+        User user = new User();
+        user.setHomeFacilityId(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_HOME_FACLITY_ID)));
+        user.setIsLoggedIn(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_IS_LOGGED_IN)));
+        user.setName(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_NAME)));
+        user.setToken(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_TOKEN)));
+        user.setUsername(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_USERNAME)));
+        user.setLastTimeLoggedInServer(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_LAST_TIME_LOGGED_IN_SERVER)));
+        user.setPassword(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_PASSWORD)));
+        user.setUserId(cursor.getString(cursor.getColumnIndex(Database.User.COLUMN_USER_ID)));
+        user.setTokenExpiration(cursor.getInt(cursor.getColumnIndex(Database.User.COLUMN_TOKEN_EXPIRATION)));
+        return user;
+    }
+
+    public static Server cursorToServer(Cursor cursor){
+        Server server = new Server();
+        server.setLastTimeUsed(cursor.getString(cursor.getColumnIndex(Database.Server.COLUMN_LAST_TIME_USED)));
+        server.setServerId(cursor.getString(cursor.getColumnIndex(Database.Server.COLUMN_SERVER_ID)));
+        server.setUrl(cursor.getString(cursor.getColumnIndex(Database.Server.COLUMN_URL)));
+        return server;
+    }
+
+    public static SyncStatus cursorToSyncStatus(Cursor cursor){
+        SyncStatus syncStatus = new SyncStatus();
+        syncStatus.setDate(cursor.getString(cursor.getColumnIndex(Database.SyncStatus.COLUMN_DATE)));
+        syncStatus.setServerId(cursor.getString(cursor.getColumnIndex(Database.SyncStatus.COLUMN_SERVER_ID)));
+        syncStatus.setUserId(cursor.getString(cursor.getColumnIndex(Database.SyncStatus.COLUMN_USER_ID)));
+        syncStatus.setEntity(cursor.getString(cursor.getColumnIndex(Database.SyncStatus.COLUMN_ENTITY)));
+        return syncStatus;
     }
 }

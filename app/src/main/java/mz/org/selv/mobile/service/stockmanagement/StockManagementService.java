@@ -1,5 +1,6 @@
 package mz.org.selv.mobile.service.stockmanagement;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.DoubleAccumulator;
 
 import mz.org.selv.mobile.database.Converter;
 import mz.org.selv.mobile.database.Database;
+import mz.org.selv.mobile.model.auth.User;
 import mz.org.selv.mobile.model.referencedata.Lot;
 import mz.org.selv.mobile.model.referencedata.Orderable;
 import mz.org.selv.mobile.model.stockmanagement.CalculatedStockOnHand;
@@ -35,17 +37,22 @@ import mz.org.selv.mobile.model.stockmanagement.StockEvent;
 import mz.org.selv.mobile.model.stockmanagement.StockEventLineItem;
 import mz.org.selv.mobile.model.stockmanagement.ValidDestination;
 import mz.org.selv.mobile.model.stockmanagement.ValidSource;
+import mz.org.selv.mobile.service.auth.AuthService;
+import mz.org.selv.mobile.service.openlmis.OlmisServiceCallback;
+import mz.org.selv.mobile.service.openlmis.stockmanagement.OlmisStockManagementService;
 import mz.org.selv.mobile.service.referencedata.ReferenceDataService;
 
-public class StockManagementService {
+public class StockManagementService  implements OlmisServiceCallback {
 
     private Context mContext;
     private ReferenceDataService referenceDataService;
+    private AuthService authService;
 
     public StockManagementService(Context context) {
         this.mContext = context;
-
+        authService = new AuthService(mContext);
     }
+
 
     public int saveInventory(PhysicalInventory physicalInventory, List<PhysicalInventoryLineItem> lineItems, List<PhysicalInventoryLineItemAdjustment> lineItemAdjustments) {
 
@@ -263,6 +270,7 @@ public class StockManagementService {
         }
     }
 
+    @SuppressLint("Range")
     public boolean updateStockOnHand(Database database, Map<StockCard, List<StockCardLineItem>> mapStockCardLineItems) {
         List<CalculatedStockOnHand> calculatedStockOnHandList = new ArrayList<>();
         for (Map.Entry<StockCard, List<StockCardLineItem>> entry : mapStockCardLineItems.entrySet()) {
@@ -518,15 +526,16 @@ public class StockManagementService {
         }
     }
 
-    public ValidSource getValidSourceByName(String facilityTypeId, String programId, String sourceName) {
+    public ValidSource getValidSourceByName(String facilityId, String programId, String sourceName) {
         Database database = new Database(mContext);
         database.open();
         ValidSource validSource;
-        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID + "=? AND " + Database.ValidSources.COLUMN_NAME_PROGRAM_ID + "= ? AND " +
-                Database.ValidSources.COLUMN_NAME_NAME + "=? ", new String[]{facilityTypeId, programId, sourceName}, null, null, null);
+        Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_FACILITY_ID + "=? AND " + Database.ValidSources.COLUMN_NAME_PROGRAM_ID + "= ? AND " +
+                Database.ValidSources.COLUMN_NAME_NAME + "=? ", new String[]{facilityId, programId, sourceName}, null, null, null);
         if (cursor.moveToFirst()) {
             validSource = Converter.cursorToValidSource(cursor);
         } else {
+
             return null;
         }
 
@@ -538,7 +547,6 @@ public class StockManagementService {
     public ValidSource getValidSourceById(String validSourceId) {
         Database database = new Database(mContext);
         database.open();
-        System.out.println(validSourceId);
         ValidSource validSource = new ValidSource();
         Cursor cursor = database.select(ValidSource.class, Database.ValidSources.COLUMN_NAME_ID + "=?", new String[]{validSourceId}, null, null, null);
         if (cursor.moveToFirst()) {
@@ -549,12 +557,12 @@ public class StockManagementService {
         return validSource;
     }
 
-    public ValidDestination getValidDestinationByName(String facilityTypeId, String programId, String sourceName) {
+    public ValidDestination getValidDestinationByName(String facilityId, String programId, String sourceName) {
         Database database = new Database(mContext);
         database.open();
         ValidDestination validDestination;
-        Cursor cursor = database.select(ValidDestination.class, Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID + "=? AND " + Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID + "= ? AND " +
-                Database.ValidDestinations.COLUMN_NAME_NAME + "=? ", new String[]{facilityTypeId, programId, sourceName}, null, null, null);
+        Cursor cursor = database.select(ValidDestination.class, Database.ValidSources.COLUMN_NAME_FACILITY_ID + "=? AND " + Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID + "= ? AND " +
+                Database.ValidDestinations.COLUMN_NAME_NAME + "=? ", new String[]{facilityId, programId, sourceName}, null, null, null);
         if (cursor.moveToFirst()) {
             validDestination = Converter.cursorToValidDestinations(cursor);
         } else {
@@ -567,7 +575,6 @@ public class StockManagementService {
     }
 
     public ValidDestination getValidDestinationById(String validDestinationId) {
-        System.out.println("validDestinationId: "+validDestinationId);
         Database database = new Database(mContext);
         database.open();
         ValidDestination validDestination;
@@ -584,13 +591,13 @@ public class StockManagementService {
     }
 
 
-    public int saveEvent(String action, String facilityId, String facilityTypeId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments,
+    public int saveEvent(String action, String facilityId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments,
                          int quantity, String vvm, String occurredDate) {
 
         if (action.equals("receive")) {
             SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Reason reason = new ReferenceDataService(mContext).getReasonByName(reasonName);
-            ValidSource validSource = getValidSourceByName(facilityTypeId, programId, validSourceOrDestinationName);
+            ValidSource validSource = getValidSourceByName(facilityId, programId, validSourceOrDestinationName);
             referenceDataService = new ReferenceDataService(mContext);
             Orderable orderable = referenceDataService.getOrderableByName(orderableName);
             Lot lot = referenceDataService.getLotByCode(lotCode);
@@ -641,7 +648,7 @@ public class StockManagementService {
         } else if (action.equals("issue")) {
             SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Reason reason = new ReferenceDataService(mContext).getReasonByName(reasonName);
-            ValidDestination validDestination = getValidDestinationByName(facilityTypeId, programId, validSourceOrDestinationName);
+            ValidDestination validDestination = getValidDestinationByName(facilityId, programId, validSourceOrDestinationName);
             referenceDataService = new ReferenceDataService(mContext);
             Orderable orderable = referenceDataService.getOrderableByName(orderableName);
             Lot lot = referenceDataService.getLotByCode(lotCode);
@@ -740,9 +747,17 @@ public class StockManagementService {
                     if (stockCardLineItems.size() > 0) {
                         stockCardLineItems = orderStockCardLineItems(stockCardLineItems);
 
+                        int stockOnHand = stockCardLineItems.get(0).getStockOnHand();
                         for(int i = 0; i < stockCardLineItems.size(); i++){
-
+                            stockOnHand = stockOnHand - quantity;
+                            if(stockOnHand < 0){
+                                result.put("status", "-1");
+                                result.put("message", "Este meovimento torna o stock disponivel negativo no dia "+stockCardLineItems.get(i).getOccurredDate());
+                                System.out.println(result);
+                                return result;
+                            }
                         }
+
                     } else {
                         result.put("status", "1");
                         result.put("message", "");
@@ -1059,5 +1074,30 @@ public class StockManagementService {
 
         });
         return stockCardLineItems;
+    }
+
+    public List<StockCard> getStockCardsFromServer(String server, String facilityId, String programId){
+
+        OlmisStockManagementService olmisStockManagementService = new OlmisStockManagementService(mContext, this);
+        olmisStockManagementService.getStockCardSummaries(server, facilityId, programId);
+        return null;
+    }
+
+
+
+
+    @Override
+    public void onTokenRefreshed(int response) {
+
+    }
+
+    @Override
+    public void onUserLoggedIn(JSONObject response) {
+
+    }
+
+    @Override
+    public void onStockCardSummariesResponse(JSONObject stockCardSummaries) {
+
     }
 }

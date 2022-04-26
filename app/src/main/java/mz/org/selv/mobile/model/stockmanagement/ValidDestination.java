@@ -14,7 +14,15 @@ public class ValidDestination implements Table {
     String refDataFacility;
     String id;
     String facilityTypeId;
+    String facilityId;
 
+    public String getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
+    }
 
     public String getIsFreeTextAllowed() {
         return isFreeTextAllowed;
@@ -96,6 +104,7 @@ public class ValidDestination implements Table {
         cv.put(Database.ValidDestinations.COLUMN_NAME_PROGRAM_ID, programId);
         cv.put(Database.ValidDestinations.COLUMN_NAME_REFERENCE_DATA_FACILITY, refDataFacility);
         cv.put(Database.ValidDestinations.COLUMN_NAME_FACILITY_TYPE_ID, facilityTypeId);
+        cv.put(Database.ValidDestinations.COLUMN_NAME_FACILITY_ID, facilityId);
         return cv;
     }
 

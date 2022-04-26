@@ -13,6 +13,15 @@ public class StockCard implements Table {
     String programId;
     String facilityId;
     String id;
+    int isActive;
+
+    public int getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
 
     public String getId() {
         return id;
@@ -76,6 +85,7 @@ public class StockCard implements Table {
         cv.put(Database.StockCard.COLUMN_NAME_STOCK_ON_HAND, stockOnHand);
         cv.put(Database.StockCard.COLUMN_NAME_PROGRAM_ID, programId);
         cv.put(Database.StockCard.COLUMN_NAME_ID, id);
+        cv.put(Database.StockCard.COLUMN_NAME_IS_ACTIVE, isActive);
 
         return cv;
     }

@@ -6,34 +6,685 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/bt_sync_metadata"
-        android:layout_width="359dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/string_sync_metadata"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        tools:layout_editor_absoluteX="75dp"
+        tools:layout_editor_absoluteY="98dp">
 
-    <Button
-      android:id="@+id/bt_sync_all"
-      android:layout_width="359dp"
-      android:layout_height="52dp"
-      android:layout_marginTop="32dp"
-      android:layout_marginStart="26dp"
-      android:text="@string/string_sync_data"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/bt_sync_data"/>
 
-    <Button
-      android:id="@+id/bt_sync_data"
-      android:layout_width="363dp"
-      android:layout_height="48dp"
-      android:layout_marginTop="32dp"
-      android:layout_marginStart="24dp"
-      android:text="@string/string_sync_delete"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/bt_sync_metadata"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_on_primary_disabled"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/string_sync_all"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_facilities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_facilities"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_facilities_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_facilities_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facilities" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_facilities"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facilities_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_facilities_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_facilities"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_facilities_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facilities" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_facilities"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_facilities_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facilities_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_facilities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facilities" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_programs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_programs"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_programs_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_programs_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_programs" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_programs"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_programs_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_programs_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_programs"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_programs_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_programs" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_programs"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_programs_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_programs_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_programs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_programs" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_orderables"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_orderables"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_orderables_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_orderables_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_orderables" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_orderables"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_orderables_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_orderables_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_orderables"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_orderables_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_orderables" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_orderables"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_orderables_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_orderables_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_orderables"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_orderables" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_lots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_lots"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_lots_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_lots_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_lots" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_lots"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_lots_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_lots_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_lots"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_lots_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_lots" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_lots"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_lots_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_lots_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_lots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_lots" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_facility_types"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_facility_types"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_facility_types_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_facility_types_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facility_types" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_facility_types"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facility_types_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_facility_types_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_facility_types"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_facility_types_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facility_types" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_facility_types"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_facility_types_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facility_types_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_facility_types"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_facility_types" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_ftaps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_ftaps"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_ftaps_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_ftaps_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_ftaps" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_ftaps"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_ftaps_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_ftaps_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_ftaps"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_ftaps_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_ftaps" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_ftaps"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_ftaps_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_ftaps_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_ftaps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_ftaps" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_reasons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_reasons"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_reasons_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_reasons_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_reasons" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_reasons"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_reasons_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_reasons_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_reasons"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_reasons_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_reasons" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_reasons"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_reasons_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_reasons_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_reasons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_reasons" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_valid_reasons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_valid_reasons"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_valid_reasons_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_valid_reasons_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_reasons" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_valid_reasons"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_reasons_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_valid_reasons_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_valid_reaons"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_valid_reasons_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_reasons" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_valid_reasonss"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_valid_reasons_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_reasons_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_valid_reaons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_reasons" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_valid_sources"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_valid_sources"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_valid_sources_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_valid_sources_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_sources" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_valid_sources"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_sources_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_valid_sources_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_valid_sources"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_valid_sources_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_sources" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_valid_sources"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_valid_sources_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_sources_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_valid_sources"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_sources" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_sync_valid_destinations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_valid_destinations"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/label_sync_valid_destinations_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_total"
+                    app:layout_constraintEnd_toStartOf="@+id/label_sync_valid_destinations_last_sync"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_destinations" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_total_valid_destinations"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_destinations_total"
+                    android:text="0"/>
+
+                <TextView
+                    android:id="@+id/label_sync_valid_destinations_last_sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="125dp"
+                    android:text="@string/string_last_sync"
+                    app:layout_constraintEnd_toStartOf="@+id/bt_sync_valid_destinations"
+                    app:layout_constraintStart_toEndOf="@id/label_sync_valid_destinations_total"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_destinations" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tc_sync_last_sync_valid_destinations"
+                    app:layout_constraintStart_toStartOf="@id/label_sync_valid_destinations_last_sync"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_destinations_last_sync"
+                    android:text="0"/>
+
+                <Button
+                    android:id="@+id/bt_sync_valid_destinations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_update"
+                    app:icon="@drawable/autorenew"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_sync_valid_destinations" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

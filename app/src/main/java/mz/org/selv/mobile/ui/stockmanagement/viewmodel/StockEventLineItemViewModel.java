@@ -52,12 +52,11 @@ public class StockEventLineItemViewModel extends AndroidViewModel {
         List<String> orderableNames = new ArrayList<String>();
         List<Orderable> orderables = new ArrayList<>();
         if (action.equals("issue") || action.equals("adjustment")) {
-
             orderables = stockManagementService.getAvailableOrderables(programId, facilityId);
-
         } else {
             ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
             orderables = referenceDataService.getValidOrderables(programId, facilityTypeId);
+            System.out.println(orderables.toString());
         }
         for (int i = 0; i < orderables.size(); i++) {
             orderableNames.add(orderables.get(i).getName());
@@ -167,16 +166,15 @@ public class StockEventLineItemViewModel extends AndroidViewModel {
         getSelectedLot().setValue(getLot(lotCode));
     }
 
-    public void setSelectedSource(String facilityTypeId, String programId, String sourceName) {
+    public void setSelectedSource(String facilityId, String programId, String sourceName) {
         StockManagementService stockManagementService = new StockManagementService(getApplication());
-        ValidSource validSource = stockManagementService.getValidSourceByName(facilityTypeId, programId, sourceName);
+        ValidSource validSource = stockManagementService.getValidSourceByName(facilityId, programId, sourceName);
         getSelectedValidSource().setValue(validSource);
     }
 
-    public void setSelectedDestination(String facilityTypeId, String programId, String destinationName) {
+    public void setSelectedDestination(String facilityId, String programId, String destinationName) {
         StockManagementService stockManagementService = new StockManagementService(getApplication());
-        facilityTypeId = "be01380b-4939-47a1-a5ce-72c691d63a8e";
-        ValidDestination validDestination = stockManagementService.getValidDestinationByName(facilityTypeId, programId, destinationName);
+        ValidDestination validDestination = stockManagementService.getValidDestinationByName(facilityId, programId, destinationName);
         getSelectedValidDestination().setValue(validDestination);
     }
 
@@ -202,35 +200,34 @@ public class StockEventLineItemViewModel extends AndroidViewModel {
     }
 
 
-    public List getValidSources(String facilityTypeId, String programId) {
+    public List getValidSources(String facilityId, String programId) {
         ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
         List<String> validSources = new ArrayList<String>();
-        List<ValidSource> validSourceList = referenceDataService.getValidSources(facilityTypeId, programId);
+        List<ValidSource> validSourceList = referenceDataService.getValidSources(facilityId, programId);
         for (int i = 0; i < validSourceList.size(); i++) {
             validSources.add(validSourceList.get(i).getName());
         }
         return validSources;
     }
 
-    public List getValidDestinations(String facilityTypeId, String programId) {
+    public List getValidDestinations(String facilityId, String programId) {
         ReferenceDataService referenceDataService = new ReferenceDataService(getApplication());
         List<String> validDestinations = new ArrayList<String>();
-        List<ValidDestination> validDestinationList = referenceDataService.getValidDestinations(facilityTypeId, programId);
+        List<ValidDestination> validDestinationList = referenceDataService.getValidDestinations(facilityId, programId);
         for (int i = 0; i < validDestinationList.size(); i++) {
             validDestinations.add(validDestinationList.get(i).getName());
         }
         return validDestinations;
     }
 
-    public int saveEvent(String action, String facilityId, String facilityTypeId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments, int quantity, String vvm, String occurredDate) {
+    public int saveEvent(String action, String facilityId, String programId, String orderableName, String lotCode, String validSourceOrDestinationName, String sourceDestinationComments, String reasonName, String reasonComments, int quantity, String vvm, String occurredDate) {
         if (action.equals("receive") || action.equals("issue")) {
-            facilityTypeId =  "be01380b-4939-47a1-a5ce-72c691d63a8e";
             StockManagementService stockManagementService = new StockManagementService(getApplication());
-            stockManagementService.saveEvent(action, facilityId, facilityTypeId, programId, orderableName, lotCode, validSourceOrDestinationName, sourceDestinationComments,
+            stockManagementService.saveEvent(action, facilityId, programId, orderableName, lotCode, validSourceOrDestinationName, sourceDestinationComments,
                     reasonName, reasonComments, quantity, null, occurredDate);
         } else if(action.equals("adjustment")){
             StockManagementService stockManagementService = new StockManagementService(getApplication());
-            stockManagementService.saveEvent(action, facilityId, facilityTypeId, programId, orderableName, lotCode, validSourceOrDestinationName, sourceDestinationComments,
+            stockManagementService.saveEvent(action, facilityId,  programId, orderableName, lotCode, validSourceOrDestinationName, sourceDestinationComments,
                     reasonName, reasonComments, quantity, null, occurredDate);
         }
         return -1;

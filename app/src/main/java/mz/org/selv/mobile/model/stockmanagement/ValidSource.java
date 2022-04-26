@@ -12,8 +12,17 @@ public class ValidSource implements Table {
     String referenceId;
     String name;
     String facilityTypeId;
+    String facilityId;
     String refDataFacility;
     String id;
+
+    public String getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
+    }
 
     public String getIsFreeTextAllowed() {
         return isFreeTextAllowed;
@@ -95,6 +104,7 @@ public class ValidSource implements Table {
         cv.put(Database.ValidSources.COLUMN_NAME_PROGRAM_ID, programId);
         cv.put(Database.ValidSources.COLUMN_NAME_REFERENCE_DATA_FACILITY, refDataFacility);
         cv.put(Database.ValidSources.COLUMN_NAME_FACILITY_TYPE_ID, facilityTypeId);
+        cv.put(Database.ValidSources.COLUMN_NAME_FACILITY_ID, facilityId);
         return cv;
     }
 
